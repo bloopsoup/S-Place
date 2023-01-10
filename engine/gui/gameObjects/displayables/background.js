@@ -1,5 +1,5 @@
 import GameObject from '../gameObject.js';
-import MovableBG from '../utils/movable/movableBG.js';
+import MovableBG from '../../utils/movable/movableBG.js';
 
 export default class Background extends GameObject {
     /** An infinitely scrolling background. Velocity is used to indicate a cardinal

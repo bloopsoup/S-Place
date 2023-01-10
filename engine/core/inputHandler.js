@@ -10,7 +10,7 @@ export default class InputHandler {
         window.addEventListener('keydown', e => this.addInput(e.key));
         window.addEventListener('keyup', e => this.removeInput(e.key));
         window.addEventListener('mousedown', e => this.addInput('MouseHold', [e.clientX, e.clientY]));
-        window.addEventListener('mouseup', e => this.removeInput('MouseHold'));
+        window.addEventListener('mouseup', _ => this.removeInput('MouseHold'));
     }
 
     getInputs() { return this.inputs; }

@@ -10,12 +10,15 @@ export default class Collidable {
 
     isColliding() { return this.colliding; }
     setColliding(colliding) { this.colliding = colliding; }
-    getCallable(mode) { return this.callables[mode]; }
+    getCallable(trigger) { return this.callables[trigger]; }
 
-    collides(other) {
+    collidesWith(other) {
         const thisPos = this.movable.getPos(), thisDim = this.movable.getDimensions();
         const otherPos = other.movable.getPos(), otherDim = other.movable.getDimensions();
         return thisPos[0] < otherPos[0] + otherDim[0] && thisPos[0] + thisDim[0] > otherPos[0] &&
                thisPos[1] < otherPos[1] + otherDim[1] && thisPos[1] + thisDim[1] > otherPos[1]
+    }
+    runTrigger(other, trigger) {
+        if (this.collidesWith(other)) { this.getCallable(trigger)(); other.getCallable(trigger)(); }
     }
 }

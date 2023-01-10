@@ -1,8 +1,10 @@
 import { sheets } from '../config/config.js';
 import State from '../../core/state.js';
-import Player from '../../gui/entities/player.js';
-import Enemy from '../../gui/entities/enemy.js';
-import Background from '../../gui/displayables/background.js';
+import Player from '../../gui/gameObjects/entities/player.js';
+import Enemy from '../../gui/gameObjects/entities/enemy.js';
+import Background from '../../gui/gameObjects/displayables/background.js';
+import Layer from '../../gui/pool/layer.js';
+import Pool from '../../gui/pool/pool.js';
 
 export default class Test extends State {
     /** A test state for testing displays and features. */
@@ -10,27 +12,20 @@ export default class Test extends State {
     constructor() {
         super();
         const width = 1000, height = 500;
-        this.player = new Player(width, height, sheets['player'](), null);
-        this.enemy = new Enemy(width, height, sheets['enemy'](), null);
-        this.background = new Background(width, height, sheets['background'](), null, [-7, 0]);
+        this.layers = {
+            "background": new Layer([new Background(width, height, sheets['background'](), null, [-7, 0])]),
+            "players": new Layer([new Player(width, height, sheets['player'](), null)]),
+            "enemies": new Layer([new Enemy(width, height, sheets['enemy'](), null)])
+        };
+        this.pool = new Pool(this.layers, [['players', 'enemies', 'ouch']])
     }
 
     startup() {}
     cleanup() {}
 
-    handleInputs(inputs) { 
-        this.player.handleInputs(inputs);
-    }
+    handleInputs(inputs) { this.pool.handleInputs(inputs); }
 
-    update(dt) {
-        this.background.update(dt);
-        this.player.update(dt);
-        this.enemy.update(dt);
-    }
+    update(dt) { this.pool.update(dt); }
 
-    draw(context) { 
-        this.background.draw(context);
-        this.player.draw(context);
-        this.enemy.draw(context);
-    }
+    draw(context) { this.pool.draw(context); }
 }

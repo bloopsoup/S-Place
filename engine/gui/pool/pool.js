@@ -4,15 +4,25 @@ export default class Pool {
     constructor(layers, collisionOrder) { 
         this.layers = layers;
         this.collisionOrder = collisionOrder;
+
+        this.handleLayerCollisions = this.handleLayerCollisions.bind(this);
     }
 
+    getLayer(layerName) { return this.layers[layerName]; }
     addLayer(layerName, layer) { this.layers[layerName] = layer; }
     addObjectToLayer(layerName, gameObject) { this.layers[layerName].add(gameObject); }
     removeLayer(layerName) { delete this.layers[layerName]; }
 
-    handleInputs(inputs) { this.layers.forEach(i => i.handleInputs(inputs)); }
+    handleLayerCollisions() {
+        for (let i in this.collisionOrder) {
+            const [ a, b, trigger ] = this.collisionOrder[i]
+            this.getLayer(a).handleCollisions(this.getLayer(b), trigger);
+        }
+    }
 
-    update(dt) { this.layers.forEach(i => i.update(dt)); }
+    handleInputs(inputs) { Object.keys(this.layers).forEach(key => this.layers[key].handleInputs(inputs)); }
 
-    draw(context) { this.layers.forEach(i => i.draw(context)); }
+    update(dt) { this.handleLayerCollisions(); Object.keys(this.layers).forEach(key => this.layers[key].update(dt)); }
+
+    draw(context) { Object.keys(this.layers).forEach(key => this.layers[key].draw(context)); }
 }

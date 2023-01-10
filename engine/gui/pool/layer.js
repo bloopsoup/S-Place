@@ -3,8 +3,18 @@ export default class Layer {
 
     constructor(gameObjects) { this.gameObjects = gameObjects; }
 
-    add(gameObject) { this.gameObjects.push(gameObject); }
+    addObject(gameObject) { this.gameObjects.push(gameObject); }
     clean() { this.gameObjects = this.gameObjects.filter(i => !i.canDelete()); }
+
+    handleCollisions(other, trigger) {
+        for (let i in this.gameObjects) {
+            const gameObjectA = this.gameObjects[i];
+            for (let j in other.gameObjects) {
+                const gameObjectB = other.gameObjects[j];
+                gameObjectA.getCollidable().runTrigger(gameObjectB.getCollidable(), trigger);
+            }
+        }
+    }
 
     handleInputs(inputs) { this.gameObjects.forEach(i => i.handleInputs(inputs)); }
 

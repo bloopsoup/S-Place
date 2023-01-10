@@ -1,6 +1,6 @@
 import GameObject from '../gameObject.js';
-import DeltaTimeRunner from '../utils/deltaTimeRunner.js';
-import Movable from '../utils/movable/movable.js';
+import Movable from '../../utils/movable/movable.js';
+import Collidable from '../../utils/collidable.js';
 
 export default class Enemy extends GameObject {
     /** The entities wishing upon your downfall. */
@@ -8,8 +8,8 @@ export default class Enemy extends GameObject {
     constructor(gameWidth, gameHeight, spritesheet, onDelete) {
         super(gameWidth, gameHeight, spritesheet, onDelete);
         const [ width, height ] = this.spritesheet.getUnitDimensions();
-        this.dtRunner = new DeltaTimeRunner(20, 1000);
         this.movable = new Movable(gameWidth, gameHeight, width, height, [gameWidth, gameHeight - height], [-8, 0], [0, 0], [0, 0]);
+        this.collidable = new Collidable(this.movable, {"ouch": () => console.log("ENEMY'S REE")})
     }
 
     update(dt) {
