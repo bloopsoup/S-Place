@@ -12,12 +12,11 @@ export default class Test extends State {
     constructor() {
         super();
         const width = 1000, height = 500;
-        this.layers = {
-            "background": new Layer([new Background(width, height, sheets['background'](), null, [-7, 0])]),
-            "players": new Layer([new Player(width, height, sheets['player'](), null)]),
-            "enemies": new Layer([new Enemy(width, height, sheets['enemy'](), null)])
-        };
-        this.pool = new Pool(this.layers, [['players', 'enemies', 'ouch']])
+        this.layers = {"background": new Layer(), "players": new Layer(), "enemies": new Layer()};
+        this.pool = new Pool(this.layers, [['players', 'enemies', 'ouch', true]])
+        this.pool.addObjectToLayer('background', new Background(width, height, sheets['background'](), [-7, 0]));
+        this.pool.addObjectToLayer('players', new Player(width, height, sheets['player']()))
+        this.pool.addObjectToLayer('enemies', new Enemy(width, height, sheets['enemy']()))
     }
 
     startup() {}

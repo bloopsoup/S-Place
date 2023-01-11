@@ -4,9 +4,9 @@ export default class GameObject {
     /** All game objects can handle inputs, update their own
      *  state, and draw themselves on the screen. */
 
-    constructor(gameWidth, gameHeight, spritesheet, onDelete) {
+    constructor(gameWidth, gameHeight, spritesheet) {
         this.gameWidth = gameWidth, this.gameHeight = gameHeight;
-        this.onDelete = onDelete, this.deleteFlag = false;
+        this.poolHook = null, this.deleteFlag = false;
     
         this.spritesheet = spritesheet;
         this.dtRunner = new DeltaTimeRunner(20, 1000);
@@ -14,7 +14,7 @@ export default class GameObject {
         this.collidable = null;
     }
 
-    callOnDelete() { this.onDelete(); }
+    setPoolHook(hook) { this.poolHook = hook; }
     canDelete() { return this.deleteFlag; }
     setDelete() { this.deleteFlag = true; }
 

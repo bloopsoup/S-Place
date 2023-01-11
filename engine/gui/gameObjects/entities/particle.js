@@ -6,8 +6,8 @@ export default class Particle extends GameObject {
     /** A moving effect which starts at POS and moves in a direction according to velocity. 
      *  Marks itself for deletion when out of bounds. */
 
-    constructor(gameWidth, gameHeight, spritesheet, onDelete, pos, velocity) {
-        super(gameWidth, gameHeight, spritesheet, onDelete);
+    constructor(gameWidth, gameHeight, spritesheet, pos, velocity) {
+        super(gameWidth, gameHeight, spritesheet);
         const [ width, height ] = this.spritesheet.getUnitDimensions();
         this.movable = new Movable(gameWidth, gameHeight, width, height, pos, velocity, [0, 0], [0, 0]);
         this.collidable = new Collidable(this.movable, {})

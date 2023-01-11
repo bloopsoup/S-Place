@@ -5,8 +5,8 @@ import Collidable from '../../utils/collidable.js';
 export default class Enemy extends GameObject {
     /** The entities wishing upon your downfall. */
 
-    constructor(gameWidth, gameHeight, spritesheet, onDelete) {
-        super(gameWidth, gameHeight, spritesheet, onDelete);
+    constructor(gameWidth, gameHeight, spritesheet) {
+        super(gameWidth, gameHeight, spritesheet);
         const [ width, height ] = this.spritesheet.getUnitDimensions();
         this.movable = new Movable(gameWidth, gameHeight, width, height, [gameWidth, gameHeight - height], [-8, 0], [0, 0], [0, 0]);
         this.collidable = new Collidable(this.movable, {"ouch": () => console.log("ENEMY'S REE")})

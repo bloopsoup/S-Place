@@ -10,13 +10,21 @@ export default class Pool {
 
     getLayer(layerName) { return this.layers[layerName]; }
     addLayer(layerName, layer) { this.layers[layerName] = layer; }
-    addObjectToLayer(layerName, gameObject) { this.layers[layerName].add(gameObject); }
     removeLayer(layerName) { delete this.layers[layerName]; }
+
+    addObjectToLayer(layerName, gameObject) { 
+        gameObject.setPoolHook(this.addObjectToLayer); 
+        this.layers[layerName].addObject(gameObject); 
+    }
+    addObjectsToLayer(layerName, gameObjects) {
+        gameObjects.forEach(i => i.setPoolHook(this.addObjectToLayer));
+        this.layers[layerName].addObjects(gameObjects);
+    }
 
     handleLayerCollisions() {
         for (let i in this.collisionOrder) {
-            const [ a, b, trigger ] = this.collisionOrder[i]
-            this.getLayer(a).handleCollisions(this.getLayer(b), trigger);
+            const [ a, b, trigger, buffered ] = this.collisionOrder[i]
+            this.getLayer(a).handleCollisions(this.getLayer(b), trigger, buffered);
         }
     }
 

@@ -3,8 +3,8 @@ import GameObject from '../gameObject.js';
 export default class Effect extends GameObject {
     /** A pop-up appearing at POS. Marks itself for deletion when it finishes its animation. */
 
-    constructor(pos, spritesheet, onDelete) {
-        super(0, 0, spritesheet, onDelete);
+    constructor(pos, spritesheet) {
+        super(0, 0, spritesheet);
         this.pos = pos;
     }
 

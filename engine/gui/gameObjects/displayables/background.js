@@ -5,8 +5,8 @@ export default class Background extends GameObject {
     /** An infinitely scrolling background. Velocity is used to indicate a cardinal
      *  direction of the moving background. */
 
-    constructor(gameWidth, gameHeight, spritesheet, onDelete, velocity) {
-        super(gameWidth, gameHeight, spritesheet, onDelete);
+    constructor(gameWidth, gameHeight, spritesheet, velocity) {
+        super(gameWidth, gameHeight, spritesheet);
         const [ width, height ] = this.spritesheet.getUnitDimensions();
         this.movable = new MovableBG(gameWidth, gameHeight, width, height, velocity)
         this.movable.resetPos();
