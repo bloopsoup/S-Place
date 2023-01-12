@@ -4,7 +4,7 @@ export default class Static extends GameObject {
     /** A static image. */
 
     constructor(pos, sprite) {
-        super(0, 0, sprite, null);
+        super(0, 0, sprite);
         this.pos = pos;
     }
 
