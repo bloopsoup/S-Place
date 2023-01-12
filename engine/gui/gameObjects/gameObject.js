@@ -4,11 +4,11 @@ export default class GameObject {
     /** All game objects can handle inputs, update their own
      *  state, and draw themselves on the screen. */
 
-    constructor(gameWidth, gameHeight, spritesheet) {
+    constructor(gameWidth, gameHeight, sprite) {
         this.gameWidth = gameWidth, this.gameHeight = gameHeight;
         this.poolHook = null, this.deleteFlag = false;
     
-        this.spritesheet = spritesheet;
+        this.sprite = sprite;
         this.dtRunner = new DeltaTimeRunner(20, 1000);
         this.movable = null, this.collisionManager = null;
     }

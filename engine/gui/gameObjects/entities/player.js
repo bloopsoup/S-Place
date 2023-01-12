@@ -5,9 +5,9 @@ import CollisionManager from '../../utils/collisionManager.js';
 export default class Player extends GameObject {
     /** The player character. */
 
-    constructor(gameWidth, gameHeight, spritesheet) {
-        super(gameWidth, gameHeight, spritesheet);
-        const [ width, height ] = this.spritesheet.getUnitDimensions();
+    constructor(gameWidth, gameHeight, sprite) {
+        super(gameWidth, gameHeight, sprite);
+        const [ width, height ] = this.sprite.getUnitDimensions();
         this.movable = new MovablePhysics(gameWidth, gameHeight, width, height, [0, gameHeight - height], [0, 0], [2, 2], [1, 1], -20);
         this.collisionManager = new CollisionManager(100);
     }
@@ -23,9 +23,9 @@ export default class Player extends GameObject {
     }
 
     update(dt) {
-        this.dtRunner.deltaTimeUpdate(dt, this.spritesheet.nextFrameInRow);
+        this.dtRunner.deltaTimeUpdate(dt, this.sprite.nextFrameInRow);
         this.movable.updatePhysics();
     }
 
-    draw(context) { this.spritesheet.draw(context, this.movable.getPos()); }
+    draw(context) { this.sprite.draw(context, this.movable.getPos()); }
 }

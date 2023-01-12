@@ -8,15 +8,15 @@ export default class Particle extends GameObject {
 
     constructor(gameWidth, gameHeight, spritesheet, pos, velocity) {
         super(gameWidth, gameHeight, spritesheet);
-        const [ width, height ] = this.spritesheet.getUnitDimensions();
+        const [ width, height ] = this.sprite.getUnitDimensions();
         this.movable = new Movable(gameWidth, gameHeight, width, height, pos, velocity, [0, 0], [0, 0]);
         this.collisionManager = new CollisionManager(100);
     }
 
     update(dt) {
-        this.dtRunner.deltaTimeUpdate(dt, this.spritesheet.nextFrameInRow); 
+        this.dtRunner.deltaTimeUpdate(dt, this.sprite.nextFrameInRow); 
         if (this.movable.outOfBoundsComplete()) this.setDelete();
     }
 
-    draw(context) { if (!this.deleteFlag) this.spritesheet.draw(context, this.pos); }
+    draw(context) { if (!this.deleteFlag) this.sprite.draw(context, this.pos); }
 }

@@ -1,4 +1,4 @@
-export default class Spritesheet {
+export default class Sprite {
     /** Spritesheet providing methods for displaying the proper frames. It has two 
      *  modes you can use to iterate through frames.
      *  1) ROW MODE: if your animations each take up one row. 
