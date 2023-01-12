@@ -23,8 +23,8 @@ export default class Pool {
 
     handleLayerCollisions() {
         for (let i in this.collisionOrder) {
-            const [ a, b, trigger, buffered ] = this.collisionOrder[i]
-            this.getLayer(a).handleCollisions(this.getLayer(b), trigger, buffered);
+            const [ a, b, buffered ] = this.collisionOrder[i]
+            this.getLayer(a).handleCollisions(this.getLayer(b), buffered);
         }
     }
 

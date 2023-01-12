@@ -10,15 +10,14 @@ export default class GameObject {
     
         this.spritesheet = spritesheet;
         this.dtRunner = new DeltaTimeRunner(20, 1000);
-        this.movable = null;
-        this.collidable = null;
+        this.movable = null, this.collisionManager = null;
     }
 
     setPoolHook(hook) { this.poolHook = hook; }
     canDelete() { return this.deleteFlag; }
     setDelete() { this.deleteFlag = true; }
 
-    getCollidable() { return this.collidable; }
+    handleCollisions(other, buffered) {}
 
     handleInputs(inputs) {}
 

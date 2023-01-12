@@ -1,6 +1,6 @@
 import GameObject from '../gameObject.js';
 import Movable from '../../utils/movable/movable.js';
-import Collidable from '../../utils/collidable.js';
+import CollisionManager from '../../utils/collisionManager.js';
 
 export default class Enemy extends GameObject {
     /** The entities wishing upon your downfall. */
@@ -9,7 +9,11 @@ export default class Enemy extends GameObject {
         super(gameWidth, gameHeight, spritesheet);
         const [ width, height ] = this.spritesheet.getUnitDimensions();
         this.movable = new Movable(gameWidth, gameHeight, width, height, [gameWidth, gameHeight - height], [-8, 0], [0, 0], [0, 0]);
-        this.collidable = new Collidable(this.movable, {"ouch": () => console.log("ENEMY'S REE")})
+        this.collisionManager = new CollisionManager(100);
+    }
+
+    handleCollisions(other, buffered) {
+        if (this.collisionManager.collides(this, other, buffered)) console.log('ENEMY GOES OUCH');
     }
 
     update(dt) {

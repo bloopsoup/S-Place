@@ -7,13 +7,12 @@ export default class Layer {
     addObjects(gameObjects) { this.gameObjects.push(...gameObjects); }
     clean() { this.gameObjects = this.gameObjects.filter(i => !i.canDelete()); }
 
-    handleCollisions(other, trigger, buffered) {
+    handleCollisions(other, buffered) {
         for (let i in this.gameObjects) {
             const gameObjectA = this.gameObjects[i];
             for (let j in other.gameObjects) {
                 const gameObjectB = other.gameObjects[j];
-                if (buffered) gameObjectA.getCollidable().runBufferedTrigger(gameObjectB.getCollidable(), trigger);
-                else gameObjectA.getCollidable().runTrigger(gameObjectB.getCollidable(), trigger)
+                gameObjectA.handleCollisions(gameObjectB, buffered);
             }
         }
     }

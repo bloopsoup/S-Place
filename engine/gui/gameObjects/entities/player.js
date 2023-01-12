@@ -1,6 +1,6 @@
 import GameObject from '../gameObject.js';
 import MovablePhysics from '../../utils/movable/movablePhysics.js';
-import Collidable from '../../utils/collidable.js';
+import CollisionManager from '../../utils/collisionManager.js';
 
 export default class Player extends GameObject {
     /** The player character. */
@@ -9,7 +9,11 @@ export default class Player extends GameObject {
         super(gameWidth, gameHeight, spritesheet);
         const [ width, height ] = this.spritesheet.getUnitDimensions();
         this.movable = new MovablePhysics(gameWidth, gameHeight, width, height, [0, gameHeight - height], [0, 0], [2, 2], [1, 1], -20);
-        this.collidable = new Collidable(this.movable, {"ouch": () => console.log("PLAYER'S REE")})
+        this.collisionManager = new CollisionManager(100);
+    }
+
+    handleCollisions(other, buffered) {
+        if (this.collisionManager.collides(this, other, buffered)) console.log('PLAYER GOES OUCH');
     }
 
     handleInputs(inputs) {
