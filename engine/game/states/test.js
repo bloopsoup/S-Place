@@ -12,8 +12,8 @@ export default class Test extends State {
     constructor() {
         super();
         const width = 1000, height = 500;
-        this.player = new Player(width + 1000, height, sheets['player']());
-        this.camera = new Camera(width, height, this.player, '');
+        this.player = new Player(width + 2200, height, sheets['player']());
+        this.camera = new Camera(width, height, this.player, '', [500, 500, 0, 0]);
         this.layers = {"background": new Layer(), "players": new Layer(), "enemies": new Layer()};
         this.pool = new Pool(this.layers, [['players', 'enemies', true], ['enemies', 'players', false]])
         this.pool.addObjectToLayer('background', new Static([0, 0], sheets['background']()));
