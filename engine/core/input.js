@@ -1,11 +1,14 @@
 export default class Input {
     /** Stores input related information such as mouse positions. */
 
-    constructor(inputName, pos) {
-        this.inputName = inputName
-        this.pos = pos;
+    #name
+    #pos
+
+    constructor(name, pos) {
+        this.#name = name
+        this.#pos = pos;
     }
 
-    getName() { return this.inputName; }
-    getPos() { return this.pos; }
+    get name() { return this.#name; }
+    get pos() { return this.#pos; }
 }

@@ -1,32 +1,37 @@
 export default class StateManager {
     /** Runs one state at a time, switching out states when prompted. */
 
+    #isDone
+    #currentStateName
+    #states
+    #currentState
+
     constructor(start, states) {
-        this.done = false;
-        this.states = states, this.stateName = start;
-        this.state = this.states[this.stateName];
-        this.state.startup();
+        this.#isDone = false;
+        this.#currentStateName = start, this.#states = states;
+        this.#currentState = this.#states[this.#currentStateName];
+        this.#currentState.startup();
     }
 
-    isDone() { return this.done; }
+    get isDone() { return this.#isDone; }
 
     toState() {
-        const previous = this.stateName;
-        this.state.done = false, this.stateName = this.state.next;
-        this.state.cleanup();
+        const previous = this.#currentStateName;
+        this.#currentStateName = this.#currentState.next;
+        this.#currentState.reset();
 
-        this.state = this.states[this.stateName];
-        this.state.startup();
-        this.state.previous = previous;
+        this.#currentState = this.#states[this.#currentStateName];
+        this.#currentState.previous = previous;
+        this.#currentState.startup();
     }
 
-    passInputs(inputs) { this.state.handleInputs(inputs); }
+    passInputs(inputs) { this.#currentState.handleInputs(inputs); }
 
     update(dt) {
-        if (this.state.quit) this.done = true;
-        else if (this.state.done) this.toState();
-        this.state.update(dt);
+        if (this.#currentState.isQuitting) this.#isDone = true;
+        else if (this.#currentState.isDone) this.toState();
+        this.#currentState.update(dt);
     }
 
-    draw(context) { this.state.draw(context); }
+    draw(context) { this.#currentState.draw(context); }
 }

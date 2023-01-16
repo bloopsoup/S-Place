@@ -1,10 +1,22 @@
 export default class State {
     /** A state abstract class. */
 
+    #isDone
+    #isQuitting
+    #next
+    #previous
+
     constructor() {
-        this.done = false, this.quit = false;
-        this.next = null, this.previous = null;
+        this.#isDone = false, this.#isQuitting = false;
+        this.#next = null, this.#previous = null;
     }
+
+    get isDone() { return this.#isDone; }
+    get isQuitting() { return this.#isQuitting; }
+    get next() { return this.#next; }
+    get previous() { return this.#previous; }
+
+    set previous(state) { this.#previous = state; }
 
     startup() { throw new Error('Implement!'); }
 
@@ -16,12 +28,17 @@ export default class State {
 
     draw(context) { throw new Error('Implement!'); }
 
+    reset() { 
+        this.#isDone = false; 
+        this.cleanup();
+    }
+    
+    quit() { this.#isQuitting = true; }
+
     to(dest) {
-        this.next = dest;
-        this.done = true; 
+        this.#next = dest;
+        this.#isDone = true; 
     }
 
-    back() { this.to(this.previous); }
-
-    quit() { this.quit = true; }
+    back() { this.to(this.#previous); }
 }
