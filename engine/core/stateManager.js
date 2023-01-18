@@ -15,7 +15,7 @@ export default class StateManager {
 
     get isDone() { return this.#isDone; }
 
-    toState() {
+    changeStates() {
         const previous = this.#currentStateName;
         this.#currentStateName = this.#currentState.next;
         this.#currentState.reset();
@@ -29,7 +29,7 @@ export default class StateManager {
 
     update(dt) {
         if (this.#currentState.isQuitting) this.#isDone = true;
-        else if (this.#currentState.isDone) this.toState();
+        else if (this.#currentState.isDone) this.changeStates();
         this.#currentState.update(dt);
     }
 

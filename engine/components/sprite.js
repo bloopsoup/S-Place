@@ -1,10 +1,18 @@
 export default class Sprite {
-    /** Spritesheet providing methods for displaying the proper frames. It has two 
-     *  modes you can use to iterate through frames.
+    /** The Sprite class provides methods for displaying the proper frames from an
+     *  underlying spritesheet. It has two modes you can use to iterate through frames.
      *  1) ROW MODE: if your animations each take up one row. 
      *  2) GRID MODE: if your animations don't follow the above format.*/
 
-    constructor(imageName, unitWidth, unitHeight, format) {
+    #image
+    #dimensions
+    #format
+    #animations
+
+    constructor(name, dimensions, format, animations = null) {
+        this.#image = document.getElementById(name);
+        this.#dimensions = dimensions;
+
         this.image = document.getElementById(imageName);
         this.unitWidth = unitWidth, this.unitHeight = unitHeight;
         this.frame = [0, 0], this.format = format;

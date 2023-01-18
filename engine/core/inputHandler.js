@@ -1,5 +1,5 @@
 import Vector2 from '../common/vector2.js';
-import Input from './input.js';
+import Input from '../common/input.js';
 
 export default class InputHandler {
     /** Handles all keyboard and mouse inputs. */
@@ -15,7 +15,12 @@ export default class InputHandler {
         window.addEventListener('mouseup', _ => this.removeInput('MouseHold'));
     }
 
-    get inputs() { return this.#inputs; }
+    get inputs() {
+        const inputs = {};
+        for (let name in this.#inputs)
+            inputs[name] = this.#inputs[name].copy();
+        return inputs;
+    }
 
     addInput(name, pos = null) {
         if (this.#acceptedNames.includes(name) & !(name in this.#inputs))

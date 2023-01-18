@@ -35,10 +35,10 @@ export default class State {
     
     quit() { this.#isQuitting = true; }
 
-    to(dest) {
+    goToDest(dest) {
         this.#next = dest;
         this.#isDone = true; 
     }
 
-    back() { this.to(this.#previous); }
+    goToPrevious() { this.to(this.#previous); }
 }

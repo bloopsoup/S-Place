@@ -5,10 +5,12 @@ export default class Input {
     #pos
 
     constructor(name, pos) {
-        this.#name = name
+        this.#name = name;
         this.#pos = pos;
     }
 
     get name() { return this.#name; }
-    get pos() { return this.#pos; }
+    get pos() { return this.#pos.copy(); }
+
+    copy() { return new Input(this.#name, this.#pos.copy()); }
 }
