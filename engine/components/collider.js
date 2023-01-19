@@ -1,4 +1,4 @@
-export default class CollisionManager {
+export default class Collider {
     /** Handles buffered and instant collisions between two Movable objects. */
 
     #currentTicks

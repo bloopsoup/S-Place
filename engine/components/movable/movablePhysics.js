@@ -15,7 +15,7 @@ export default class MovablePhysics extends Movable {
     jump() { if (this.pastFloor()) this.velocity = new Vector2(this.velocity.x, this.#jumpPower); }
     fall() { if (!this.pastFloor()) this.velocity = new Vector2(this.velocity.x, this.velocity.y + this.deceleration.y); }
 
-    updatePhysics() {
+    update() {
         this.incrementPos();
         this.snapPos();
         this.decrementVelocity('x');

@@ -20,6 +20,18 @@ export default class Camera {
             default: return ((this.#canvasDimensions.x - this.#anchor.dimensions.x) / 2) - this.#anchor.pos.x;
         }
     }
+    boundedHorizontalOffset(horizontalBoundary) {
+        const centerOffset = (this.#canvasDimensions.x - this.#anchor.dimensions.x) / 2;
+        if (this.#anchor.pos.x < horizontalBoundary[0]) {
+            const difference = centerOffset / (horizontalBoundary[0]) * this.#anchor.pos.x;
+            return Math.min(this.horizontalOffset('left') + difference, this.horizontalOffset(''));
+        } else if (this.#anchor.pos.x > horizontalBoundary[1]) {
+            const difference = centerOffset / (this.#anchor.maxDimensions.x - horizontalBoundary[1]) * this.#anchor.pos.x;
+            return Math.min(this.horizontalOffset('') + difference, this.horizontalOffset('right'));
+        } 
+        return this.horizontalOffset('');
+    }
+
     verticalOffset(mode) {
         switch (mode) {
             case 'up': return -this.#anchor.pos.y;
@@ -27,17 +39,12 @@ export default class Camera {
             default: return ((this.#canvasDimensions.y - this.#anchor.dimensions.y) / 2) - this.#anchor.pos.y;
         }
     }
+
     getCardinalOffset(horizontalMode, verticalMode) {
         return new Vector2(this.horizontalOffset(horizontalMode), this.verticalOffset(verticalMode));
     }
 
     getHybridOffset(horizontalBoundary, verticalBoundary) {
-        const centerOffset = (this.#canvasDimensions.x - this.#anchor.dimensions.x) / 2;
-        const leftDifference = centerOffset / (horizontalBoundary[0] - this.#anchor.maxDimensions.x) * this.#anchor.pos.x;
-        const rightDifference = centerOffset / (horizontalBoundary[1]) * Math.max(0, this.#anchor.pos.x - 2500);
-
-        const leftOffset = Math.min(this.horizontalOffset('left') + leftDifference, this.horizontalOffset(''));
-        const offset = Math.min(leftOffset + rightDifference, this.horizontalOffset('right'));
-        return new Vector2(offset, this.verticalOffset('down'));
+        return new Vector2(this.boundedHorizontalOffset(horizontalBoundary), this.verticalOffset('down'));
     }
 }
