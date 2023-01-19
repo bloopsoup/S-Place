@@ -1,50 +1,57 @@
+import Vector2 from '../common/vector2.js';
+
 export default class Sprite {
     /** The Sprite class provides methods for displaying the proper frames from an
-     *  underlying spritesheet. It has two modes you can use to iterate through frames.
-     *  1) ROW MODE: if your animations each take up one row. 
-     *  2) GRID MODE: if your animations don't follow the above format.*/
+     *  underlying spritesheet. 
+     * 
+     *  The sheet itself is arranged according to GRIDFORMAT, a list where an index i 
+     *  represents the ith row and the number at that index tells you the amount of 
+     *  frames present in that row.
+     * 
+     *  It has two modes you can use to iterate through frames.
+     *  1) ROW MODE
+     *     Iterate over and over along one row of frames and switch rows conditionally. 
+     *  2) GRID MODE
+     *     Freestyle -- anything goes. */
 
     #image
     #dimensions
-    #format
-    #animations
+    #gridFormat
+    #frame
 
-    constructor(name, dimensions, format, animations = null) {
+    constructor(name, dimensions, gridFormat) {
         this.#image = document.getElementById(name);
         this.#dimensions = dimensions;
-
-        this.image = document.getElementById(imageName);
-        this.unitWidth = unitWidth, this.unitHeight = unitHeight;
-        this.frame = [0, 0], this.format = format;
+        this.#gridFormat = gridFormat;
+        this.#frame = new Vector2(0, 0);
 
         this.nextFrameInRow = this.nextFrameInRow.bind(this);
         this.nextFrame = this.nextFrame.bind(this);
     }
 
-    getUnitDimensions() { return [this.unitWidth, this.unitHeight]; }
+    get dimensions() { return this.#dimensions.copy(); }
+    get frame() { return this.#frame.copy(); }
 
-    setFrameAxis(axis, i) { this.frame[(axis === 'x' ? 0 : 1)] = i; }
-    setFrame(frame) { this.frame = frame; }
+    set frame(frame) { this.#frame = frame; }
 
-    onLastFrameInRow() { return this.frame[0] >= this.format[this.frame[1]] - 1; }
+    onLastRow() { return this.#frame.y >= this.#gridFormat.length - 1; }
+    onLastFrameInRow() { return this.#frame.x >= this.#gridFormat[this.#frame.y] - 1; }
+    onLastFrame() { return this.onLastFrameInRow() && this.onLastRow(); }
+
     nextFrameInRow() {
-        if (this.frame[0] >= this.format[this.frame[1]] - 1) this.frame[0] = 0;
-        else this.frame[0]++;
+        if (this.onLastFrameInRow()) this.#frame.x = 0;
+        else this.#frame.x++;
     }
-
-    onLastFrame() { return this.frame[0] >= this.format[this.frame[1]] - 1 && this.frame[1] >= this.format.length - 1; }
     nextFrame() {
-        if (this.frame[0] >= this.format[this.frame[1]] - 1) { 
-            this.frame[0] = 0;
-            if (this.frame[1] >= this.format.length - 1) this.frame[1] = 0;
-            else this.frame[1]++;
-        } else { 
-            this.frame[0]++; 
-        }
+        if (this.onLastFrameInRow()) {
+            this.#frame.x = 0;
+            if (this.onLastRow()) this.#frame.y = 0;
+            else this.#frame.y++;
+        } else { this.#frame.x++; }
     }
 
     draw(context, pos) {
-        context.drawImage(this.image, this.frame[0] * this.unitWidth, this.frame[1] * this.unitHeight, 
-            this.unitWidth, this.unitHeight, pos[0], pos[1], this.unitWidth, this.unitHeight);
+        context.drawImage(this.#image, this.#frame.x * this.#dimensions.x, this.#frame.y * this.#dimensions.y, 
+            this.#dimensions.x, this.#dimensions.y, pos.x, pos.y, this.#dimensions.x, this.#dimensions.y);
     }
 }

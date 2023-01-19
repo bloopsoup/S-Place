@@ -23,7 +23,7 @@ export default class MovableBG extends Movable {
         return nextPos;
     }
 
-    resetPos() { this.pos = this.#startPos; }
+    resetPos() { this.pos = this.#startPos.copy(); }
 
     update() {
         this.incrementPos();

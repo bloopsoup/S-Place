@@ -4,7 +4,7 @@ export default class DeltaTimeRunner {
     #time
     #fps
     #requiredSeconds
-    
+
     constructor(fps, requiredFrameCount) { 
         this.#time = 0
         this.#fps = fps;

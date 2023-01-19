@@ -23,7 +23,7 @@ export default class InputHandler {
     }
 
     addInput(name, pos = null) {
-        if (this.#acceptedNames.includes(name) & !(name in this.#inputs))
+        if (this.#acceptedNames.includes(name) && !(name in this.#inputs))
             this.#inputs[name] = new Input(name, pos);
     }
     removeInput(name) {

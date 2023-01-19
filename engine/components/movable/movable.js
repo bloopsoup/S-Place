@@ -2,7 +2,7 @@ import Vector2 from '../../common/vector2.js';
 
 export default class Movable {
     /** A base 2D movement class that supports acceleration-based movement. 
-     *  Uses maxWidth and maxHeight for bounds checking and position snapping. */
+     *  Uses maxDimensions for bounds checking and position snapping. */
 
     #maxDimensions
     #dimensions
@@ -20,9 +20,12 @@ export default class Movable {
         this.#deceleration = deceleration;
     }
 
-    get dimensions() { return this.#maxDimensions.copy(); }
+    get maxDimensions() { return this.#maxDimensions.copy(); }
+    get dimensions() { return this.#dimensions.copy(); }
     get pos() { return this.#pos.copy(); }
     get velocity() { return this.#velocity.copy(); }
+    get acceleration() { return this.#acceleration.copy(); }
+    get deceleration() { return this.#deceleration.copy(); }
 
     set pos(pos) { this.#pos = pos; }
     incrementPos() { this.#pos.add(this.#velocity); }
@@ -31,6 +34,7 @@ export default class Movable {
         if (this.pastRightWall()) { this.#pos.x = this.#maxDimensions.x - this.#dimensions.x; this.#velocity.x = 0; }
         if (this.pastFloor()) { this.#pos.y = this.#maxDimensions.y - this.#dimensions.y; this.#velocity.y = 0; }
     }
+
     pastLeftWall() { return this.#pos.x <= 0; }
     pastLeftWallComplete() { return this.#pos.x <= -this.#dimensions.x; }
     pastRightWall() { return this.#pos.x >= this.#maxDimensions.x - this.#dimensions.x; }

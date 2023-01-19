@@ -30,6 +30,9 @@ export default class Vector2 {
         this.#y = selectY(this.#y, other.#y);
     }
 
+    lessThan(other) { return this.#x < other.#x && this.#y < other.#y; }
+    equals(other) { return this.#x === other.#x && this.#y === other.#y; }
+
     addCopy(other) { return new Vector2(this.#x + other.#x, this.#y + other.#y); }
     mulCopy(other) { return new Vector2(this.#x * other.#x, this.#y * other.#y); }
     copy() { return new Vector2(this.#x, this.#y); }

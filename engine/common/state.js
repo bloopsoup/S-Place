@@ -40,5 +40,5 @@ export default class State {
         this.#isDone = true; 
     }
 
-    goToPrevious() { this.to(this.#previous); }
+    goToPrevious() { this.goToDest(this.#previous); }
 }
