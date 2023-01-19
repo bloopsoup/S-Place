@@ -1,10 +1,11 @@
-import { sheets } from '../config/config.js';
-import State from '../../core/state.js';
-import Player from '../../gui/gameObjects/entities/player.js';
-import Static from '../../gui/gameObjects/displayables/static.js';
-import Layer from '../../gui/gameManagement/layer.js';
-import Pool from '../../gui/gameManagement/pool.js';
-import Camera from '../../gui/utils/camera.js';
+import { sprites } from '../config/config.js';
+import State from '../../bogJS/common/state.js';
+import Vector2 from '../../bogJS/common/vector2.js';
+import Camera from '../../bogJS/components/camera.js';
+import Player from '../../bogJS/gameObjects/entities/player.js';
+import Enemy from '../../bogJS/gameObjects/entities/enemy.js';
+import Layer from '../../bogJS/gameObjects/controller/layer.js';
+import Pool from '../../bogJS/gameObjects/controller/pool.js';
 
 export default class Test extends State {
     /** A test state for testing displays and features. */

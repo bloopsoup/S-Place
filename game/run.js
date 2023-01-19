@@ -1,6 +1,6 @@
-import Vector2 from './common/vector2.js';
-import App from './core/app.js';
-import Test from './game/states/test.js';
+import Vector2 from '../bogJS/common/vector2.js';
+import App from '../bogJS/core/app.js';
+import Test from './states/test.js';
 
 function run() {
     const canvas = document.getElementById('canvas');
