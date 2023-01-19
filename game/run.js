@@ -1,5 +1,5 @@
-import Vector2 from '../bogJS/common/vector2.js';
-import App from '../bogJS/core/app.js';
+import Vector2 from '../boggersJS/common/vector2.js';
+import App from '../boggersJS/core/app.js';
 import Test from './states/test.js';
 
 function run() {

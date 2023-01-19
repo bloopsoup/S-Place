@@ -26,7 +26,7 @@ export default class Camera {
             const difference = centerOffset / (horizontalBoundary[0]) * this.#anchor.pos.x;
             return Math.min(this.horizontalOffset('left') + difference, this.horizontalOffset(''));
         } else if (this.#anchor.pos.x > horizontalBoundary[1]) {
-            const difference = centerOffset / (this.#anchor.maxDimensions.x - horizontalBoundary[1]) * this.#anchor.pos.x;
+            const difference = centerOffset / (this.#anchor.maxDimensions.x - this.#anchor.dimensions.x - horizontalBoundary[1]) * (this.#anchor.pos.x - horizontalBoundary[1]);
             return Math.min(this.horizontalOffset('') + difference, this.horizontalOffset('right'));
         } 
         return this.horizontalOffset('');

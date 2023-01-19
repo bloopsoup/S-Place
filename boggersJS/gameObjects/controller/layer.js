@@ -7,7 +7,7 @@ export default class Layer {
 
     addObject(gameObject) { this.#gameObjects.push(gameObject); }
     addObjects(gameObjects) { this.#gameObjects.push(...gameObjects); }
-    clean() { this.#gameObjects = this.#gameObjects.filter(i => !i.canDelete()); }
+    clean() { this.#gameObjects = this.#gameObjects.filter(i => !i.canDelete); }
 
     handleCollisions(other, buffered) {
         for (let i in this.#gameObjects) {

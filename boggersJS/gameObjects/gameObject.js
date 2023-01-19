@@ -16,7 +16,7 @@ export default class GameObject {
         this.#maxDimensions = maxDimensions;
         this.#sprite = sprite;
 
-        this.#dtRunner = new DeltaTimeRunner(20, 100);
+        this.#dtRunner = new DeltaTimeRunner(20, 1000);
         this.#movable = null;
         this.#collider = null;
 

@@ -1,24 +1,25 @@
 import { sprites } from '../config/config.js';
-import State from '../../bogJS/common/state.js';
-import Vector2 from '../../bogJS/common/vector2.js';
-import Camera from '../../bogJS/components/camera.js';
-import Player from '../../bogJS/gameObjects/entities/player.js';
-import Enemy from '../../bogJS/gameObjects/entities/enemy.js';
-import Layer from '../../bogJS/gameObjects/controller/layer.js';
-import Pool from '../../bogJS/gameObjects/controller/pool.js';
+import State from '../../boggersJS/common/state.js';
+import Vector2 from '../../boggersJS/common/vector2.js';
+import Camera from '../../boggersJS/components/camera.js';
+import Player from '../../boggersJS/gameObjects/entities/player.js';
+import Static from '../../boggersJS/gameObjects/display/static.js';
+import Pool from '../../boggersJS/gameObjects/controller/pool.js';
 
 export default class Test extends State {
     /** A test state for testing displays and features. */
 
     constructor() {
         super();
-        const width = 1000, height = 500;
-        this.player = new Player(width + 2200, height, sheets['player']());
-        this.camera = new Camera(width, height, this.player, '', [500, 500, 0, 0]);
-        this.layers = {"background": new Layer(), "players": new Layer(), "enemies": new Layer()};
-        this.pool = new Pool(this.layers, [['players', 'enemies', true], ['enemies', 'players', false]])
-        this.pool.addObjectToLayer('background', new Static([0, 0], sheets['background']()));
-        this.pool.addObjectToLayer('players', new Static([1000, 0], sheets['enemy']()));
+        const mapDimensions = new Vector2(3000, 500);
+
+        this.player = new Player(mapDimensions.copy(), sprites['player']());
+        this.camera = new Camera(new Vector2(1000, 500), this.player.movable);
+ 
+        this.pool = new Pool(["background", "players", "enemies"], 
+                             [['players', 'enemies', true], ['enemies', 'players', false]]);
+        this.pool.addObjectToLayer('background', new Static(mapDimensions.copy(), sprites['background'](), new Vector2(0, 0)));
+        this.pool.addObjectToLayer('players', new Static(mapDimensions.copy(), sprites['enemy'](), new Vector2(1000, 0)));
         this.pool.addObjectToLayer('players', this.player);
     }
 
@@ -31,8 +32,8 @@ export default class Test extends State {
 
     draw(context) {
         context.save();
-        const [ x, y ] = this.camera.getOffset();
-        context.translate(x, y);
+        const offset = this.camera.getHybridOffset([500, 2000], [0, 0]);
+        context.translate(offset.x, offset.y);
         this.pool.draw(context); 
         context.restore();
     }

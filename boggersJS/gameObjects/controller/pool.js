@@ -1,11 +1,14 @@
+import Layer from "./layer.js";
+
 export default class Pool {
     /** Handles layers of gameObjects. */
 
     #layers
     #collisionOrder
 
-    constructor(layers, collisionOrder) { 
-        this.#layers = layers;
+    constructor(names, collisionOrder) { 
+        this.#layers = {};
+        names.forEach(i => this.#layers[i] = new Layer());
         this.#collisionOrder = collisionOrder;
 
         this.handleLayerCollisions = this.handleLayerCollisions.bind(this);
@@ -16,11 +19,11 @@ export default class Pool {
     removeLayer(name) { delete this.#layers[name]; }
 
     addObjectToLayer(name, gameObject) { 
-        gameObject.setPoolHook(this.addObjectToLayer); 
+        gameObject.poolHook = this.addObjectToLayer; 
         this.#layers[name].addObject(gameObject); 
     }
     addObjectsToLayer(name, gameObjects) {
-        gameObjects.forEach(i => i.setPoolHook(this.addObjectToLayer));
+        gameObjects.forEach(i => i.poolHook = this.addObjectToLayer);
         this.#layers[name].addObjects(gameObjects);
     }
 

@@ -17,7 +17,7 @@ export default class DeltaTimeRunner {
         this.#time += dt;
         if (this.#time >= this.#requiredSeconds) {
             func();
-            this.time = 0;
+            this.#time = 0;
         }
     }
 }

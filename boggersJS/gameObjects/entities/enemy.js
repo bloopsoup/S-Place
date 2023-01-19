@@ -1,7 +1,7 @@
 import GameObject from '../gameObject.js';
 import Vector2 from '../../common/vector2.js';
-import Movable from '../../components/movable/movable';
-import Collider from '../../components/collider';
+import Movable from '../../components/movable/movable.js';
+import Collider from '../../components/collider.js';
 
 export default class Enemy extends GameObject {
     /** The entities wishing upon your downfall. */

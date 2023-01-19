@@ -22,7 +22,7 @@ export default class InputHandler {
         return inputs;
     }
 
-    addInput(name, pos = null) {
+    addInput(name, pos = new Vector2(0, 0)) {
         if (this.#acceptedNames.includes(name) && !(name in this.#inputs))
             this.#inputs[name] = new Input(name, pos);
     }

@@ -1,5 +1,5 @@
-import Vector2 from '../../bogJS/common/vector2.js';
-import Sprite from '../../bogJS/components/sprite.js';
+import Vector2 from '../../boggersJS/common/vector2.js';
+import Sprite from '../../boggersJS/components/sprite.js';
 
 export const sprites = {
     'enemy': () => new Sprite('enemy', new Vector2(160, 120), [6]),
