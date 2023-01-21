@@ -8,7 +8,7 @@ export default class Player extends GameObject {
 
     constructor(maxDimensions, sprite) {
         super(maxDimensions, sprite);
-        this.movable = new MovablePhysics(maxDimensions, this.sprite.dimensions, new Vector2(100, 0), new Vector2(0, 0), new Vector2(2, 2), new Vector2(1, 1), -20);
+        this.movable = new MovablePhysics(maxDimensions, this.sprite.dimensions, new Vector2(100, 0), new Vector2(0, 0), new Vector2(2, 2), new Vector2(1, 1), -25);
         this.collider = new Collider(100);
     }
 

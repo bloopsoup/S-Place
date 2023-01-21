@@ -19,9 +19,19 @@ export default class Vector2 {
         this.#x += other.#x; 
         this.#y += other.#y; 
     }
+    sub(other) {
+        this.#x -= other.#x;
+        this.#y -= other.#y;
+    }
     mul(other) {
         this.#x *= other.#x;
         this.#y *= other.#y;
+    }
+    floorDiv(other) {
+        this.#x /= other.#x;
+        this.#x = Math.floor(this.#x);
+        this.#y /= other.#y;
+        this.#y = Math.floor(this.#y);
     }
     select(other, useMinA, useMinB) {
         const selectX = useMinA ? Math.min : Math.max;
@@ -34,6 +44,8 @@ export default class Vector2 {
     equals(other) { return this.#x === other.#x && this.#y === other.#y; }
 
     addCopy(other) { return new Vector2(this.#x + other.#x, this.#y + other.#y); }
+    subCopy(other) { return new Vector2(this.#x - other.#x, this.#y - other.#y); }
     mulCopy(other) { return new Vector2(this.#x * other.#x, this.#y * other.#y); }
+    floorDivCopy(other) { return new Vector2(Math.floor(this.#x / other.#x), Math.floor(this.#y / other.#y)); }
     copy() { return new Vector2(this.#x, this.#y); }
 }

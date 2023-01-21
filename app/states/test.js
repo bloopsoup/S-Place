@@ -5,6 +5,7 @@ import Camera from '../../boggersJS/components/camera.js';
 import Player from '../../boggersJS/gameObjects/entities/player.js';
 import Static from '../../boggersJS/gameObjects/display/static.js';
 import Pool from '../../boggersJS/gameObjects/controller/pool.js';
+import TileMap from '../../boggersJS/stateObjects/tileMap.js';
 
 export default class Test extends State {
     /** A test state for testing displays and features. */
@@ -12,8 +13,9 @@ export default class Test extends State {
     constructor() {
         super();
         const mapDimensions = new Vector2(3000, 500);
+        this.tileMap = new TileMap(mapDimensions.copy(), new Vector2(80, 80), [[6, 5, 1], [7, 5, 1], [8, 5, 1]], [sprites['test']()]);
 
-        this.player = new Player(mapDimensions.copy(), sprites['player']());
+        this.player = new Player(mapDimensions.copy(), sprites['test']());
         this.camera = new Camera(new Vector2(1000, 500), this.player.movable);
  
         this.pool = new Pool(["background", "players", "enemies"], 
@@ -28,13 +30,17 @@ export default class Test extends State {
 
     handleInputs(inputs) { this.pool.handleInputs(inputs); }
 
-    update(dt) { this.pool.update(dt); }
+    update(dt) { 
+        this.pool.update(dt);
+        this.tileMap.handleCollisions(this.player.movable);
+    }
 
     draw(context) {
         context.save();
         const offset = this.camera.getHybridOffset([500, 2000], [0, 0]);
         context.translate(offset.x, offset.y);
         this.pool.draw(context); 
+        this.tileMap.draw(context);
         context.restore();
     }
 }

@@ -45,6 +45,6 @@ export default class Camera {
     }
 
     getHybridOffset(horizontalBoundary, verticalBoundary) {
-        return new Vector2(this.boundedHorizontalOffset(horizontalBoundary), this.verticalOffset('down'));
+        return new Vector2(this.boundedHorizontalOffset(horizontalBoundary), this.verticalOffset(''));
     }
 }
