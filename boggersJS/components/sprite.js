@@ -51,6 +51,10 @@ export default class Sprite {
         } else { this.#frame.x++; }
     }
 
+    drawFrame(context, pos, frame) {
+        context.drawImage(this.#image, frame.x * this.#dimensions.x, frame.y * this.#dimensions.y, 
+            this.#dimensions.x, this.#dimensions.y, pos.x, pos.y, this.#dimensions.x, this.#dimensions.y);
+    }
     draw(context, pos) {
         context.drawImage(this.#image, this.#frame.x * this.#dimensions.x, this.#frame.y * this.#dimensions.y, 
             this.#dimensions.x, this.#dimensions.y, pos.x, pos.y, this.#dimensions.x, this.#dimensions.y);

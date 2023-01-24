@@ -12,9 +12,16 @@ export default class Test extends State {
 
     constructor() {
         super();
-        const mapDimensions = new Vector2(3000, 500);
-        this.tileMap = new TileMap(mapDimensions.copy(), new Vector2(80, 80), [[6, 5, 1], [7, 5, 1], [8, 5, 1]], [sprites['test']()]);
-
+        const mapDimensions = new Vector2(1600, 480);
+        this.grid = [
+            ["   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   "],
+            ["   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   "],
+            ["   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   "],
+            ["   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "_-^", "^^^", "^^^", "^-_", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   "],
+            ["   ", "   ", "   ", "   ", "   ", "   ", "   ", "_-^", "   ", "   ", "   ", "   ", "^-_", "   ", "   ", "   ", "   ", "   ", "   ", "   "],
+            ["   ", "   ", "   ", "   ", "   ", "   ", "_-^", "   ", "   ", "   ", "   ", "   ", "   ", "^-_", "   ", "   ", "   ", "   ", "   ", "   "]
+        ]
+        this.tileMap = new TileMap(new Vector2(80, 80), this.grid, [sprites['test']()]);
         this.player = new Player(mapDimensions.copy(), sprites['test']());
         this.camera = new Camera(new Vector2(1000, 500), this.player.movable);
  
@@ -37,7 +44,7 @@ export default class Test extends State {
 
     draw(context) {
         context.save();
-        const offset = this.camera.getHybridOffset([500, 2000], [0, 0]);
+        const offset = this.camera.getHybridOffset([500, 1100], [0, 0]);
         context.translate(offset.x, offset.y);
         this.pool.draw(context); 
         this.tileMap.draw(context);

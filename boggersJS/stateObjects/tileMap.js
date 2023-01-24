@@ -1,62 +1,49 @@
 import Vector2 from "../common/vector2.js";
 
 export default class TileMap {
-    /** A 2D-grid of tiles. Handles tile-based collision for MovablePhysics objects. */
+    /** A 2D-grid that handles drawing tiles. */
 
-    #mapDimensions
     #unitDimensions
     #grid
-    #sprites
+    #sprite
 
-    constructor(mapDimensions, unitDimensions, initialTiles, sprites) {
-        this.#mapDimensions = mapDimensions;
+    constructor(unitDimensions, grid, sprite) {
         this.#unitDimensions = unitDimensions;
-        this.#grid = Array.from({ length: Math.floor(mapDimensions.x / unitDimensions.x) }, () => 
-                     Array.from({ length: Math.floor(mapDimensions.y / unitDimensions.y) }, () => 0));
-        this.initializeGrid(initialTiles);
-        this.#sprites = sprites;
-    }
-
-    initializeGrid(initialTiles) {
-        for (let tile in initialTiles) {
-            const [ i, j, value ] = initialTiles[tile];
-            this.#grid[i][j] = value;
-        }
+        this.#grid = grid;
+        this.#sprite = sprite;
     }
 
     toGridPos(realPos) { return realPos.floorDivCopy(this.#unitDimensions); }
     toRealPos(gridPos) { return gridPos.mulCopy(this.#unitDimensions); }
-
-    collideTop(target, gridPos) {
-        const realPos = this.toRealPos(gridPos);
-        
-        if (target.pos.y + target.dimensions.y > realPos.y &&
-            target.oldPos.y + target.dimensions.y <= realPos.y) {
-            target.pos = new Vector2(target.pos.x, realPos.y - target.dimensions.y);
-            target.velocity = new Vector2(target.velocity.x, 0);
+    toFrame(symbol) {
+        switch (symbol) {
+            case "^^^": return new Vector2(2, 0);
+            case "___": return null;
+            case "|  ": return new Vector2(1, 1);
+            case "  |": return new Vector2(3, 1);
+            case "===": return null;
+            case "|^^": return new Vector2(1, 0);
+            case "^^|": return new Vector2(3, 0);
+            case "|__": return null;
+            case "__|": return null;
+            case "| |": return null;
+            case "|==": return null;
+            case "==|": return null;
+            case "|^|": return null;
+            case "|_|": return null;
+            case "XXX": return new Vector2(2, 1);
+            case "_-^": return new Vector2(0, 1);
+            case "^-_": return new Vector2(0, 0);
+            default: return null;
         }
-
-    }
-
-    callCollisionHandler(target) {
-        const newPos = new Vector2(target.pos.x, target.pos.y + target.dimensions.y);
-        const gridPos = this.toGridPos(newPos)
-        switch (this.#grid[gridPos.x][gridPos.y]) {
-            case 1:  return this.collideTop(target, gridPos);
-            default: return;
-        }
-    }
-
-    handleCollisions(target) {
-        this.callCollisionHandler(target);
     }
 
     draw(context) {
         for (let i in this.#grid) {
             for (let j in this.#grid[i]) {
-                if (!this.#grid[i][j])
+                if (this.#grid[i][j] === "   ")
                     continue;
-                this.#sprites[this.#grid[i][j] - 1].draw(context, this.toRealPos(new Vector2(i, j)));
+                this.#sprite.drawFrame(context, this.toRealPos(new Vector2(j, i)), this.toFrame(this.#grid[i][j]));
             }
         }
     }
