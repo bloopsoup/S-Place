@@ -88,7 +88,7 @@ export default class CollisionMap {
     callCollisionHandler(target, cornerPos) {
         const gridPos = this.toGridPos(cornerPos);
         const tilePos = this.toRealPos(gridPos);
-        switch (this.#grid[Math.min(this.#grid.length, gridPos.y)][Math.min(this.#grid[0].length, gridPos.x)]) {
+        switch (this.#grid[Math.min(this.#grid.length - 1, gridPos.y)][Math.min(this.#grid[0].length - 1, gridPos.x)]) {
             case "^^^": return this.collideTop(target, tilePos);
             case "___": return this.collideBottom(target, tilePos);
             case "|  ": return this.collideLeft(target, tilePos);
@@ -112,7 +112,7 @@ export default class CollisionMap {
 
     handleCollisions(targets) {
         for (let i in targets) {
-            const target = targets[i]
+            const target = targets[i];
             this.callCollisionHandler(target, target.topLeftPos);
             this.callCollisionHandler(target, target.topRightPos);
             this.callCollisionHandler(target, target.bottomLeftPos);

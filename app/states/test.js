@@ -1,10 +1,12 @@
 import { sprites } from '../config/config.js';
 import State from '../../boggersJS/common/state.js';
 import Vector2 from '../../boggersJS/common/vector2.js';
-import Camera from '../../boggersJS/components/camera.js';
+import Camera from '../../boggersJS/stateObjects/camera.js';
 import Player from '../../boggersJS/gameObjects/entities/player.js';
 import Static from '../../boggersJS/gameObjects/display/static.js';
 import Pool from '../../boggersJS/gameObjects/controller/pool.js';
+
+import CollisionMap from '../../boggersJS/stateObjects/collisionMap.js';
 import TileMap from '../../boggersJS/stateObjects/tileMap.js';
 
 export default class Test extends State {
@@ -13,21 +15,24 @@ export default class Test extends State {
     constructor() {
         super();
         const mapDimensions = new Vector2(1600, 480);
+
         this.grid = [
             ["   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   "],
             ["   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   "],
             ["   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   "],
             ["   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "_-^", "^^^", "^^^", "^-_", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   "],
-            ["   ", "   ", "   ", "   ", "   ", "   ", "   ", "_-^", "   ", "   ", "   ", "   ", "^-_", "   ", "   ", "   ", "   ", "   ", "   ", "   "],
-            ["   ", "   ", "   ", "   ", "   ", "   ", "_-^", "   ", "   ", "   ", "   ", "   ", "   ", "^-_", "   ", "   ", "   ", "   ", "   ", "   "]
+            ["   ", "   ", "   ", "   ", "   ", "|^^", "^^^", "^^^", "XXX", "XXX", "XXX", "XXX", "^-_", "   ", "   ", "   ", "   ", "   ", "   ", "   "],
+            ["   ", "   ", "   ", "   ", "   ", "|  ", "XXX", "XXX", "XXX", "XXX", "XXX", "XXX", "XXX", "^^^", "^^^", "^^|", "   ", "   ", "   ", "   "]
         ]
-        this.tileMap = new TileMap(new Vector2(80, 80), this.grid, [sprites['test']()]);
+
+        this.collisionMap = new CollisionMap(new Vector2(80, 80), this.grid);
+        this.tileMap = new TileMap(new Vector2(80, 80), this.grid, sprites['test']());
+
         this.player = new Player(mapDimensions.copy(), sprites['test']());
         this.camera = new Camera(new Vector2(1000, 500), this.player.movable);
  
         this.pool = new Pool(["background", "players", "enemies"], 
                              [['players', 'enemies', true], ['enemies', 'players', false]]);
-        this.pool.addObjectToLayer('background', new Static(mapDimensions.copy(), sprites['background'](), new Vector2(0, 0)));
         this.pool.addObjectToLayer('players', new Static(mapDimensions.copy(), sprites['enemy'](), new Vector2(1000, 0)));
         this.pool.addObjectToLayer('players', this.player);
     }
@@ -39,7 +44,7 @@ export default class Test extends State {
 
     update(dt) { 
         this.pool.update(dt);
-        this.tileMap.handleCollisions(this.player.movable);
+        this.collisionMap.handleCollisions([this.player.movable]);
     }
 
     draw(context) {
