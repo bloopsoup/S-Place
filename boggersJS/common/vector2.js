@@ -15,6 +15,8 @@ export default class Vector2 {
     set x(x) { this.#x = x; }
     set y(y) { this.#y = y; }
 
+    addToX(x) { this.#x += x; }
+    addToY(y) { this.#y += y; }
     add(other) { 
         this.#x += other.#x; 
         this.#y += other.#y; 
@@ -43,6 +45,8 @@ export default class Vector2 {
     lessThan(other) { return this.#x < other.#x && this.#y < other.#y; }
     equals(other) { return this.#x === other.#x && this.#y === other.#y; }
 
+    addToXCopy(x) { return new Vector2(this.#x + x, this.#y); }
+    addToYCopy(y) { return new Vector2(this.#x, this.#y + y); }
     addCopy(other) { return new Vector2(this.#x + other.#x, this.#y + other.#y); }
     subCopy(other) { return new Vector2(this.#x - other.#x, this.#y - other.#y); }
     mulCopy(other) { return new Vector2(this.#x * other.#x, this.#y * other.#y); }

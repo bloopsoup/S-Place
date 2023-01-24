@@ -33,6 +33,7 @@ export default class Sprite {
     get frame() { return this.#frame.copy(); }
 
     set frame(frame) { this.#frame = frame; }
+    set row(row) { this.#frame.y = row; }
 
     onLastRow() { return this.#frame.y >= this.#gridFormat.length - 1; }
     onLastFrameInRow() { return this.#frame.x >= this.#gridFormat[this.#frame.y] - 1; }

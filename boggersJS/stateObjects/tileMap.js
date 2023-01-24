@@ -1,7 +1,7 @@
 import Vector2 from "../common/vector2.js";
 
 export default class TileMap {
-    /** A 2D-grid of tiles. Handles tile-based collision for present Movable objects. */
+    /** A 2D-grid of tiles. Handles tile-based collision for MovablePhysics objects. */
 
     #mapDimensions
     #unitDimensions
@@ -27,15 +27,12 @@ export default class TileMap {
     toGridPos(realPos) { return realPos.floorDivCopy(this.#unitDimensions); }
     toRealPos(gridPos) { return gridPos.mulCopy(this.#unitDimensions); }
 
-
-
-
-
-
     collideTop(target, gridPos) {
         const realPos = this.toRealPos(gridPos);
-        if (target.pos.y + target.dimensions.y > realPos.y) {
-            target.pos = new Vector2(target.pos.x, realPos.y - target.dimensions.y - 0.0001);
+        
+        if (target.pos.y + target.dimensions.y > realPos.y &&
+            target.oldPos.y + target.dimensions.y <= realPos.y) {
+            target.pos = new Vector2(target.pos.x, realPos.y - target.dimensions.y);
             target.velocity = new Vector2(target.velocity.x, 0);
         }
 
@@ -51,7 +48,7 @@ export default class TileMap {
     }
 
     handleCollisions(target) {
-        this.callCollisionHandler(target)
+        this.callCollisionHandler(target);
     }
 
     draw(context) {
