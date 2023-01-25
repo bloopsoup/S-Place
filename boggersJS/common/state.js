@@ -49,7 +49,7 @@ export default class State {
     cleanup() { throw new Error('Implement!'); }
 
     /** Processes the inputs given by the InputHandler.
-     *  @param {Object.<string, Input>} inputs - A mapping from input names to Input objects. */
+     *  @param {Object.<string, Input>} inputs - The currently tracked inputs. */
     handleInputs(inputs) { throw new Error('Implement!'); }
 
     /** Updates frame-reliant components based on delta time.

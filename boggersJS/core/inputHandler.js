@@ -2,11 +2,14 @@ import Vector2 from '../common/vector2.js';
 import Input from '../common/input.js';
 
 export default class InputHandler {
-    /** Handles all keyboard and mouse inputs. */
+    /** Handles all keyboard and mouse inputs through event listeners. */
 
+    /** @type {Array<string>} A list of input names that is recognized by this handler. */
     #acceptedNames = ['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight', 'Enter', 'MouseHold'];
+    /** @type {Object.<string, Input>} The handler's currently tracked inputs. */
     #inputs
 
+    /** Create the InputHandler and register event listeners for keyboard and mouse inputs. */
     constructor() {
         this.#inputs = {};
         window.addEventListener('keydown', e => this.addInput(e.key));
@@ -15,6 +18,8 @@ export default class InputHandler {
         window.addEventListener('mouseup', _ => this.removeInput('MouseHold'));
     }
 
+    /** Get a copy of the InputHandler's currently tracked inputs.
+     *  @return {Object.<string, Input>} A copy of the InputHandler's currently tracked inputs. */
     get inputs() {
         const inputs = {};
         for (let name in this.#inputs)
@@ -22,10 +27,16 @@ export default class InputHandler {
         return inputs;
     }
 
+    /** Add an input to the handler's currently tracked inputs.
+     *  @param {string} name - The name of the input.
+     *  @param {Vector2} pos - The mouse position of the input. */
     addInput(name, pos = new Vector2(0, 0)) {
         if (this.#acceptedNames.includes(name) && !(name in this.#inputs))
             this.#inputs[name] = new Input(name, pos);
     }
+
+    /** Remove an input from the handler's currently tracked inputs.
+     *  @param {string} name - The name of the input to remove. */
     removeInput(name) {
         if (this.#acceptedNames.includes(name))
             delete this.#inputs[name];
