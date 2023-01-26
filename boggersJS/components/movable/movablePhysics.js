@@ -2,7 +2,8 @@ import Movable from './movable.js';
 import Vector2 from '../../common/vector2.js';
 
 /** Meant for characters that move and obey gravity. Has its own
- *  update function to handle velocity/acceleration over time. */
+ *  update function to handle velocity/acceleration over time. 
+ *  @augments Movable */
 class MovablePhysics extends Movable {
     /** @type {number} */
     #jumpPower

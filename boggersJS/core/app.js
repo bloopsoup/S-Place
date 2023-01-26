@@ -3,7 +3,8 @@ import State from '../common/state.js';
 import StateManager from './stateManager.js';
 import InputHandler from './inputHandler.js';
 
-/** Manages the game loop. */
+/** The main application which encompasses states, inputs, and the entire game loop. 
+ *  All game applications running on boggersJS must start by calling the runTick method. */
 class App {
     /** @type {Vector2} */
     #dimensions

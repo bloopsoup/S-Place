@@ -2,7 +2,8 @@ import Movable from './movable.js';
 import Vector2 from '../../common/vector2.js';
 
 /** Meant for moving backgrounds. Provides methods for determining starting positions
- *  and "next" positions such that backgrounds can be spliced together. */
+ *  and "next" positions such that backgrounds can be spliced together. 
+ *  @augments Movable */
 class MovableBG extends Movable {
     /** @type {Vector2} */
     #startPos
