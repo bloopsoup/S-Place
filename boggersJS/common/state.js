@@ -1,9 +1,8 @@
 import Input from './input.js';
 
+/** A state abstract class that is managed by a StateManager. Actual game states 
+ *  should be implemented outside of the engine. */
 class State {
-    /** A state abstract class that is managed by a StateManager. Actual game states 
-     *  should be implemented outside of the engine. */
-
     /** @type {boolean} */
     #isDone
     /** @type {boolean} */

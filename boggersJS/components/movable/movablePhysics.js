@@ -1,12 +1,13 @@
 import Movable from './movable.js';
 import Vector2 from '../../common/vector2.js';
 
+/** Meant for characters that move and obey gravity. Has its own
+ *  update function to handle velocity/acceleration over time. */
 class MovablePhysics extends Movable {
-    /** Meant for characters that move and obey gravity. Has its own
-     *  update function to handle velocity/acceleration over time. */
-
     /** @type {number} */
     #jumpPower
+    /** @type {boolean} */
+    #canJump
 
     /** Create the MovablePhysics.
      *  @param {Vector2} maxDimensions - Assuming origin is (0, 0), limits how far the Movable can go down and right.
@@ -20,15 +21,28 @@ class MovablePhysics extends Movable {
     constructor(maxDimensions, dimensions, pos, velocity, maxSpeed, acceleration, deceleration, jumpPower) {
         super(maxDimensions, dimensions, pos, velocity, maxSpeed, acceleration, deceleration);
         this.#jumpPower = jumpPower;
+        this.#canJump = true;
     }
 
-    /** */
-    jump() { if (this.pastFloor()) this.velocity.y = this.#jumpPower; }
+    /** Enable jumping. */
+    enableJump() { this.#canJump = true; }
 
-    /** */
-    fall() { if (!this.pastFloor()) this.velocity.y += this.deceleration.y; }
+    /** Jump. */
+    jump() { 
+        if (this.#canJump) {
+            this.velocity.y = this.#jumpPower; 
+            this.#canJump = false;
+        }
+    }
 
-    /** */
+    /** Fall until you hit the floor. */
+    fall() { 
+        if (!this.pastFloor()) this.velocity.y += this.deceleration.y;
+        else this.#canJump = true;
+    }
+
+    /** Increments/snaps the position when needed. 
+     *  Also accounts for deceleration and gravity. */
     update() {
         this.incrementPos();
         this.snap();

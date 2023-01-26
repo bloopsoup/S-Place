@@ -1,10 +1,9 @@
+/** A two element vector which supports various non-standard operations.
+ * 
+ *  Classes which keep track of Vector2 objects (like for position data)
+ *  should use the copy functions when making vector data accessible via 
+ *  getters to prevent unwanted/outside changes. */
 class Vector2 {
-    /** A two element vector which supports various non-standard operations.
-     * 
-     *  Classes which keep track of Vector2 objects (like for position data)
-     *  should use the copy functions when making vector data accessible via 
-     *  getters to prevent unwanted/outside changes. */
-
     /** @type {number} */
     #x
     /** @type {number} */

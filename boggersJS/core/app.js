@@ -3,9 +3,8 @@ import State from '../common/state.js';
 import StateManager from './stateManager.js';
 import InputHandler from './inputHandler.js';
 
+/** Manages the game loop. */
 class App {
-    /** Manages the game loop. */
-
     /** @type {Vector2} */
     #dimensions
     /** @type {CanvasRenderingContext2D} */

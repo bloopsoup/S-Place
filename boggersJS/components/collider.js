@@ -1,10 +1,9 @@
 import Movable from './movable/movable.js';
 
+/** Handles buffered and instant collisions between two Movable objects.
+ *  Buffered collisions have a cooldown which can be used to call collision 
+ *  events not meant to trigger every frame. */
 class Collider {
-    /** Handles buffered and instant collisions between two Movable objects.
-     *  Buffered collisions have a cooldown which can be used to call collision 
-     *  events not meant to trigger every frame. */
-
     /** @type {number} */
     #currentTicks
     /** @type {number} */

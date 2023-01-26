@@ -1,9 +1,8 @@
 import Vector2 from '../common/vector2.js';
 import Input from '../common/input.js';
 
+/** Handles all keyboard and mouse inputs through event listeners. */
 class InputHandler {
-    /** Handles all keyboard and mouse inputs through event listeners. */
-
     /** @type {Array<string>} */
     #acceptedNames = ['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight', 'Enter', 'MouseHold'];
     /** @type {Object.<string, Input>} */

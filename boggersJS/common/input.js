@@ -1,8 +1,7 @@
 import Vector2 from './vector2.js';
 
+/** Stores input related information that is managed by an InputHandler. */
 class Input {
-    /** Stores input related information that is managed by an InputHandler. */
-
     /** @type {string} */
     #name
     /** @type {Vector2} */

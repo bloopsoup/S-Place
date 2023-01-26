@@ -1,13 +1,10 @@
 import Vector2 from '../common/vector2.js';
 
+/** The Sprite class provides methods for displaying the proper frames from an
+ *  underlying spritesheet. It has two modes you can use to iterate through frames.
+ *  1) ROW MODE: Iterate over and over along one row of frames and switch rows conditionally. 
+ *  2) GRID MODE: Freestyle -- anything goes. */
 class Sprite {
-    /** The Sprite class provides methods for displaying the proper frames from an
-     *  underlying spritesheet. It has two modes you can use to iterate through frames.
-     *  1) ROW MODE
-     *     Iterate over and over along one row of frames and switch rows conditionally. 
-     *  2) GRID MODE
-     *     Freestyle -- anything goes. */
-
     /** @type {HTMLElement | null} */
     #image
     /** @type {Vector2} */

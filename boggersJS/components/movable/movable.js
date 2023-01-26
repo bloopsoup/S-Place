@@ -1,9 +1,8 @@
 import Vector2 from '../../common/vector2.js';
 
+/** A base 2D movement class that supports acceleration-based movement. 
+ *  Uses maxDimensions for basic bounds checking and position snapping. */
 class Movable {
-    /** A base 2D movement class that supports acceleration-based movement. 
-     *  Uses maxDimensions for basic bounds checking and position snapping. */
-
     /** @type {Vector2} */
     #maxDimensions
     /** @type {Vector2} */

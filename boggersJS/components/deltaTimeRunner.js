@@ -1,6 +1,5 @@
+/** Responsible for running functions periodically based on delta time. */
 class DeltaTimeRunner {
-    /** Responsible for running functions periodically based on delta time. */
-
     /** @type {number} */
     #time
     /** @type {number} */
