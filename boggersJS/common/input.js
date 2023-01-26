@@ -1,11 +1,11 @@
 import Vector2 from './vector2.js';
 
-export default class Input {
+class Input {
     /** Stores input related information that is managed by an InputHandler. */
 
-    /** @type {string} The name of the input. */
+    /** @type {string} */
     #name
-    /** @type {Vector2} The mouse position of the input. */
+    /** @type {Vector2} */
     #pos
 
     /** Create a new input object.
@@ -28,3 +28,5 @@ export default class Input {
      *  @returns {Input} The copy of the original input. */
     copy() { return new Input(this.#name, this.#pos.copy()); }
 }
+
+export default Input;

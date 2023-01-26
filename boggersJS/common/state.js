@@ -1,16 +1,16 @@
 import Input from './input.js';
 
-export default class State {
+class State {
     /** A state abstract class that is managed by a StateManager. Actual game states 
      *  should be implemented outside of the engine. */
 
-    /** @type {boolean} Indicates whether the StateManager should transition states. */
+    /** @type {boolean} */
     #isDone
-    /** @type {boolean} Indicates whether the StateManager should begin quitting. */
+    /** @type {boolean} */
     #isQuitting
-    /** @type {string} The name of the state that a StateManager would transition to from this state. */
+    /** @type {string} */
     #next
-    /** @type {string} The name of the state that a StateManager transitioned from to get to this state. */
+    /** @type {string} */
     #previous
 
     /** Create a new state object. */
@@ -79,3 +79,5 @@ export default class State {
     /** Indicate to the StateManager to transition to the previous state. */
     goToPrevious() { this.goToDest(this.#previous); }
 }
+
+export default State;

@@ -1,12 +1,12 @@
 import Vector2 from '../common/vector2.js';
 import Input from '../common/input.js';
 
-export default class InputHandler {
+class InputHandler {
     /** Handles all keyboard and mouse inputs through event listeners. */
 
-    /** @type {Array<string>} A list of input names that is recognized by this handler. */
+    /** @type {Array<string>} */
     #acceptedNames = ['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight', 'Enter', 'MouseHold'];
-    /** @type {Object.<string, Input>} The handler's currently tracked inputs. */
+    /** @type {Object.<string, Input>} */
     #inputs
 
     /** Create the InputHandler and register event listeners for keyboard and mouse inputs. */
@@ -42,3 +42,5 @@ export default class InputHandler {
             delete this.#inputs[name];
     }
 }
+
+export default InputHandler;

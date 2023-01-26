@@ -1,15 +1,16 @@
 import State from '../common/state.js';
+import Input from '../common/input.js';
 
-export default class StateManager {
+class StateManager {
     /** Runs one state at a time, switching out states when prompted. */
 
-    /** @type {boolean} Indicates whether the manager should terminate the application. */
+    /** @type {boolean} */
     #isQuitting
-    /** @type {string} The name of the current state that is running. */
+    /** @type {string} */
     #currentStateName
-    /** @type {Object.<string, State>} The states that the manager can transition to. */
+    /** @type {Object.<string, State>} */
     #states
-    /** @type {State} The current state that is running. */
+    /** @type {State} */
     #currentState
 
     /** Create the StateManager.
@@ -54,3 +55,5 @@ export default class StateManager {
      *  @param {CanvasRenderingContext2D} context - The context to draw on. */
     draw(context) { this.#currentState.draw(context); }
 }
+
+export default StateManager;

@@ -1,13 +1,13 @@
-export default class Vector2 {
+class Vector2 {
     /** A two element vector which supports various non-standard operations.
      * 
      *  Classes which keep track of Vector2 objects (like for position data)
      *  should use the copy functions when making vector data accessible via 
      *  getters to prevent unwanted/outside changes. */
 
-    /** @type {number} The x value. */
+    /** @type {number} */
     #x
-    /** @type {number} The y value. */
+    /** @type {number} */
     #y
 
     /** Create a two element vector.
@@ -127,4 +127,14 @@ export default class Vector2 {
         this.#x = selectX(this.#x, other.#x);
         this.#y = selectY(this.#y, other.#y);
     }
+
+    /** Sets this vector's elements to the other vector's elements if the
+     *  current element is 0.
+     *  @param {Vector2} other - The other vector. */
+    selectIfZero(other) {
+        this.#x = (this.#x === 0) ? other.#x : this.#x;
+        this.#y = (this.#y === 0) ? other.#y : this.#y;
+    }
 }
+
+export default Vector2;

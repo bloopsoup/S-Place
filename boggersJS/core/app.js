@@ -1,19 +1,20 @@
 import Vector2 from '../common/vector2.js';
+import State from '../common/state.js';
 import StateManager from './stateManager.js';
 import InputHandler from './inputHandler.js';
 
-export default class App {
+class App {
     /** Manages the game loop. */
 
-    /** @type {Vector2} The dimensions of the display canvas. */
+    /** @type {Vector2} */
     #dimensions
-    /** @type {CanvasRenderingContext2D} The context of the display canvas. */
+    /** @type {CanvasRenderingContext2D} */
     #context
-    /** @type {StateManager} The state manager of the application. */
+    /** @type {StateManager} */
     #stateManager
-    /** @type {InputHandler} The input handler of the application. */
+    /** @type {InputHandler} */
     #inputHandler
-    /** @type {number} The last timestamp used to calculate dt. */
+    /** @type {number} */
     #lastTime
 
     /** Creates the application.
@@ -46,3 +47,5 @@ export default class App {
         requestAnimationFrame(this.runTick);
     }
 }
+
+export default App;
