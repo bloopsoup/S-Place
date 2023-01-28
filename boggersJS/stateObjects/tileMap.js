@@ -1,43 +1,63 @@
 import Vector2 from "../common/vector2.js";
+import Sprite from '../components/sprite.js';
 
-export default class TileMap {
-    /** A 2D-grid that handles drawing tiles. */
-
+/** A 2D-grid that handles drawing tiles. */
+class TileMap {
+    /** @type {Vector2} */
     #unitDimensions
+    /** @type {Array<Array<number>>} */
     #grid
+    /** @type {Sprite} */
     #sprite
 
+    /** Create the TileMap.
+     *  @param {Vector2} unitDimensions - The dimensions of each tile. 
+     *  @param {Array<Array<number>>} grid - A 2D array where each number denotes the art for each tile.
+     *  @param {Sprite} sprite - The tile sheet to represent different types of tiles. */
     constructor(unitDimensions, grid, sprite) {
         this.#unitDimensions = unitDimensions;
         this.#grid = grid;
         this.#sprite = sprite;
     }
 
+    /** Convert a real position to the grid position.
+     *  @param {Vector2} realPos - The real position. 
+     *  @return {Vector2} The grid position. */
     toGridPos(realPos) { return realPos.floorDivCopy(this.#unitDimensions); }
+
+    /** Convert a grid position to the real position.
+     * @param {Vector2} gridPos - The grid position.
+     * @returns {Vector2} The real position. */
     toRealPos(gridPos) { return gridPos.mulCopy(this.#unitDimensions); }
+
+    /** Converts a tile type into a spritesheet frame.
+     *  @param {number} symbol - The tile type.
+     *  @returns {Vector2} The spritesheet frame corresponding to the tile type. */
     toFrame(symbol) {
         switch (symbol) {
             case "^^^": return new Vector2(2, 0);
-            case "___": return null;
+            case "___": return new Vector2(0, 0);
             case "|  ": return new Vector2(1, 1);
             case "  |": return new Vector2(3, 1);
-            case "===": return null;
+            case "===": return new Vector2(0, 0);
             case "|^^": return new Vector2(1, 0);
             case "^^|": return new Vector2(3, 0);
-            case "|__": return null;
-            case "__|": return null;
-            case "| |": return null;
-            case "|==": return null;
-            case "==|": return null;
-            case "|^|": return null;
-            case "|_|": return null;
+            case "|__": return new Vector2(0, 0);
+            case "__|": return new Vector2(0, 0);
+            case "| |": return new Vector2(0, 0);
+            case "|==": return new Vector2(0, 0);
+            case "==|": return new Vector2(0, 0);
+            case "|^|": return new Vector2(0, 0);
+            case "|_|": return new Vector2(0, 0);
             case "XXX": return new Vector2(2, 1);
             case "_-^": return new Vector2(0, 1);
             case "^-_": return new Vector2(0, 0);
-            default: return null;
+            default: return new Vector2(0, 0);
         }
     }
 
+    /** Draw the TileMap.
+     *  @param {CanvasRenderingContext2D} context - The context to draw on. */
     draw(context) {
         for (let i in this.#grid) {
             for (let j in this.#grid[i]) {
@@ -48,3 +68,5 @@ export default class TileMap {
         }
     }
 }
+
+export default TileMap;

@@ -1,14 +1,21 @@
 import Vector2 from "../common/vector2.js";
+import MovablePhysics from '../components/movable/movablePhysics.js';
 
-export default class CollisionMap {
-    /** A 2D-grid that handles tile-based collision for MovablePhysics objects.
-     *  Collision code is based on PothOnProgramming's tile tutorial. See the tutorial code at
-     *  {@link https://github.com/pothonprogramming/pothonprogramming.github.io/blob/master/content/tile-types/tile-types.js TileTypes}. */
-
+/** A 2D-grid that handles tile-based collision for MovablePhysics objects.
+ * 
+ *  Collision code is based on PothOnProgramming's tile tutorial. See the tutorial code at
+ *  {@link https://github.com/pothonprogramming/pothonprogramming.github.io/blob/master/content/tile-types/tile-types.js TileTypes}. */
+class CollisionMap {
+    /** @type {Vector2} */
     #unitDimensions
+    /** @type {Array<Array<number>>} */
     #grid
+    /** @type {Vector2} */
     #mapDimensions
 
+    /** Create the CollisionMap.
+     *  @param {Vector2} unitDimensions - The dimensions of each tile.
+     *  @param {Array<Array<number>>} grid - A 2D array where each number denotes the collision type of a tile. */
     constructor(unitDimensions, grid) {
         this.#unitDimensions = unitDimensions;
         this.#grid = grid;
@@ -18,11 +25,24 @@ export default class CollisionMap {
         this.collideRight = this.collideRight.bind(this);
     }
 
+    /** Get the total dimensions of the map.
+      * @return {Vector2} The dimensions of the map. */
     get mapDimensions() { return this.#mapDimensions; }
 
+    /** Convert a real position to the grid position.
+     *  @param {Vector2} realPos - The real position. 
+     *  @return {Vector2} The grid position. */
     toGridPos(realPos) { return realPos.floorDivCopy(this.#unitDimensions); }
+
+    /** Convert a grid position to the real position.
+     * @param {Vector2} gridPos - The grid position.
+     * @returns {Vector2} The real position. */
     toRealPos(gridPos) { return gridPos.mulCopy(this.#unitDimensions); }
 
+    /** Handle collisions from the top and snap the Movable if needed.
+     *  @param {MovablePhysics} target - The target Movable.
+     *  @param {Vector2} tilePos - The real position for a tile that is being checked.
+     *  @returns {boolean} Whether there is a collision. */
     collideTop(target, tilePos) {
         if (target.pos.y + target.dimensions.y <= tilePos.y || target.oldPos.y + target.dimensions.y > tilePos.y)
             return false;
@@ -30,6 +50,11 @@ export default class CollisionMap {
         target.velocity.y = 0;
         return true;
     }
+
+    /** Handle collisions from the bottom and snap the Movable if needed.
+     *  @param {MovablePhysics} target - The target Movable.
+     *  @param {Vector2} tilePos - The real position for a tile that is being checked.
+     *  @returns {boolean} Whether there is a collision. */
     collideBottom(target, tilePos) {
         if (target.pos.y >= tilePos.y + this.#unitDimensions.y || target.oldPos.y < tilePos.y + this.#unitDimensions.y)
             return false;
@@ -37,6 +62,11 @@ export default class CollisionMap {
         target.velocity.y = 0;
         return true;
     }
+
+    /** Handle collisions from the left and snap the Movable if needed.
+     *  @param {MovablePhysics} target - The target Movable.
+     *  @param {Vector2} tilePos - The real position for a tile that is being checked.
+     *  @returns {boolean} Whether there is a collision. */
     collideLeft(target, tilePos) {
         if (target.pos.x + target.dimensions.x <= tilePos.x || target.oldPos.x + target.dimensions.x > tilePos.x)
             return false;
@@ -44,6 +74,11 @@ export default class CollisionMap {
         target.velocity.x = 0;
         return true;
     }
+
+    /** Handle collisions from the right and snap the Movable if needed.
+     *  @param {MovablePhysics} target - The target Movable.
+     *  @param {Vector2} tilePos - The real position for a tile that is being checked.
+     *  @returns {boolean} Whether there is a collision. */
     collideRight(target, tilePos) {
         if (target.pos.x >= tilePos.x + this.#unitDimensions.x || target.oldPos.x < tilePos.x + this.#unitDimensions.x)
             return false;
@@ -52,10 +87,12 @@ export default class CollisionMap {
         return true;
     }
 
+    /** Handle collisions for a slope rising from left to right and snap the Movable if needed.
+     *  @param {MovablePhysics} target - The target Movable.
+     *  @param {Vector2} tilePos - The real position for a tile that is being checked. */
     collideSlopeUp(target, tilePos) {
         const origin = tilePos.copy(); 
         origin.y += this.#unitDimensions.y;
-
         const difference = target.bottomRightPos.subCopy(origin);
         const crossProduct = -difference.x - difference.y;
         const oldDifference = target.oldBottomRightPos.subCopy(origin);
@@ -66,9 +103,12 @@ export default class CollisionMap {
             target.velocity.y = 0;
         }
     }
+
+    /** Handle collisions for a slope descending from left to right and snap the Movable if needed.
+     *  @param {MovablePhysics} target - The target Movable.
+     *  @param {Vector2} tilePos - The real position for a tile that is being checked. */
     collideSlopeDown(target, tilePos) {
         const origin = tilePos.copy();
-
         const difference = target.bottomLeftPos.subCopy(origin);
         const crossProduct = difference.x - difference.y;
         const oldDifference = target.oldBottomLeftPos.subCopy(origin);
@@ -80,11 +120,18 @@ export default class CollisionMap {
         }
     }
 
+    /** Check many collisions at once for a tile. Stops at the first collision it sees.
+     *  @param {MovablePhysics} target - The target Movable.
+     *  @param {Vector2} tilePos - The real position for a tile that is being checked.
+     *  @param {Array<CallableFunction>} collideFuncs - A list of collision functions to run through. */
     collideMany(target, tilePos, collideFuncs) {
         for (let i in collideFuncs)
             if (collideFuncs[i](target, tilePos)) return;
     }
 
+    /** Calls the appropiate collision handler based on the tile found at a target's corner.
+     *  @param {MovablePhysics} target - The target Movable. 
+     *  @param {Vector2} cornerPos - A corner of the target Movable to check. */
     callCollisionHandler(target, cornerPos) {
         const gridPos = this.toGridPos(cornerPos);
         const tilePos = this.toRealPos(gridPos);
@@ -110,6 +157,8 @@ export default class CollisionMap {
         }
     }
 
+    /** Handle tile collisions for a list of targets.
+     *  @param {Array<MovablePhysics>} targets - The list of target Movables. */
     handleCollisions(targets) {
         for (let i in targets) {
             const target = targets[i];
@@ -120,3 +169,5 @@ export default class CollisionMap {
         }
     }
 }
+
+export default CollisionMap;

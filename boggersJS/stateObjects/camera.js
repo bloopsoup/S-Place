@@ -1,18 +1,29 @@
 import Vector2 from '../common/vector2.js';
+import Movable from '../components/movable/movable.js';
 
-export default class Camera {
-    /** Based on the dimensions and the position given by the anchor (which is a Movable object), 
-     *  this object provides offsets for the Canvas context. This results in a camera effect which 
-     *  focuses on the anchor. */
-
+/** Based on the dimensions and the position given by the anchor, this object provides offsets 
+ *  for the Canvas context. This results in a camera effect which focuses on the anchor. 
+ * 
+ *  There are fixed offsets (keep the object in a certain position no matter where it is) and 
+ *  hybrid offsets (move the object to certain positions when it passes a certain threshold). */
+class Camera {
+    /** @type {Vector2} */
     #canvasDimensions
+    /** @type {Movable} */
     #anchor
 
+    /** Create the Camera.
+     *  @param {Vector2} canvasDimensions - The size of the viewport.
+     *  @param {Movable} anchor - The tracked Movable. */
     constructor(canvasDimensions, anchor) {
         this.#canvasDimensions = canvasDimensions;
         this.#anchor = anchor;
     }
 
+    /** Gets the horizontal offset used to translate the canvas so that the anchor
+     *  is aligned to the left, right or center.
+     *  @param {string} mode - The alignment to use which is in {'left', 'right', ''}.
+     *  @returns {number} The horizontal offset. */
     horizontalOffset(mode) {
         switch (mode) {
             case 'left': return -this.#anchor.pos.x;
@@ -20,6 +31,16 @@ export default class Camera {
             default: return ((this.#canvasDimensions.x - this.#anchor.dimensions.x) / 2) - this.#anchor.pos.x;
         }
     }
+
+    /** Gets the horizontal offset used to translate the canvas so that the anchor is aligned
+     *  to the left, right, AND center DEPENDING on where the anchor is. Here's how the offset
+     *  operates in relation to the horizontalBoundary and the map boundaries.
+     * 
+     *  | ALIGN LEFT ----------> | ----- ALIGN CENTER ----- | -----------------> ALIGN RIGHT |
+     *  | (0, y)       horizontalBoundary[0]       horizontalBoundary[1]           (maxX, y) |
+     * 
+     *  @param {Array<number>} horizontalBoundary - The horizontal thresholds.
+     *  @returns {number} The horizontal offset. */
     boundedHorizontalOffset(horizontalBoundary) {
         const centerOffset = (this.#canvasDimensions.x - this.#anchor.dimensions.x) / 2;
         if (this.#anchor.pos.x < horizontalBoundary[0]) {
@@ -32,6 +53,10 @@ export default class Camera {
         return this.horizontalOffset('');
     }
 
+    /** Gets the vertical offset used to translate the canvas so that the anchor
+     *  is aligned to the up, down, or center.
+     *  @param {string} mode - The alignment to use which is in {'up', 'down', ''}.
+     *  @returns {number} The horizontal offset. */
     verticalOffset(mode) {
         switch (mode) {
             case 'up': return -this.#anchor.pos.y;
@@ -40,11 +65,21 @@ export default class Camera {
         }
     }
 
+    /** Gets the cardinal offset.
+     *  @param {string} horizontalMode - The horizontal alignment to use which is in {'left', 'right', ''}. 
+     *  @param {string} verticalMode - The vertical alignment to use which is in {'up', 'down', ''}.
+     *  @returns {Vector2} The cardinal offset. */
     getCardinalOffset(horizontalMode, verticalMode) {
         return new Vector2(this.horizontalOffset(horizontalMode), this.verticalOffset(verticalMode));
     }
 
+    /** Gets the hybrid offset.
+     *  @param {Array<number>} horizontalBoundary - The horizontal boundaries which are [LEFT, RIGHT].
+     *  @param {Array<number>} verticalBoundary - The vertical boundaries which are [TOP, BOTTOM].
+     *  @returns {Vector2} The hybrid offset. */
     getHybridOffset(horizontalBoundary, verticalBoundary) {
         return new Vector2(this.boundedHorizontalOffset(horizontalBoundary), this.verticalOffset(''));
     }
 }
+
+export default Camera;
