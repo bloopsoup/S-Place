@@ -91,13 +91,12 @@ class GameObject {
 
     /** Handles collisions between this GameObject and other types of GameObjects. 
      *  To be optionally implemented by subclasses.
-     *  @param {GameObject} other - The other GameObject.
-     *  @param {boolean} buffered - Whether the potential collision is buffered. */
-    handleCollisions(other, buffered) {}
+     *  @param {GameObject} other - The other GameObject. */
+    handleCollisions(other) {}
 
     /** Processes the inputs given by the InputHandler.
      *  To be optionally implemented by subclasses.
-     *  @param {Object.<string, Input>} inputs - The currently tracked inputs. */
+     *  @param {Object<string, Input>} inputs - The currently tracked inputs. */
     handleInputs(inputs) {}
 
     /** Update the components of the GameObject using delta time.

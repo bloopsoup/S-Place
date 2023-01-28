@@ -7,14 +7,14 @@ class StateManager {
     #isQuitting
     /** @type {string} */
     #currentStateName
-    /** @type {Object.<string, State>} */
+    /** @type {Object<string, State>} */
     #states
     /** @type {State} */
     #currentState
 
     /** Create the StateManager.
      *  @param {string} start - The name of the starting state.
-     *  @param {Object.<string, State>} states - The states that the manager can transition to. */
+     *  @param {Object<string, State>} states - The states that the manager can transition to. */
     constructor(start, states) {
         this.#isQuitting = false;
         this.#currentStateName = start, this.#states = states;
@@ -38,7 +38,7 @@ class StateManager {
     }
 
     /** Pass inputs from the InputHandler into the current state.
-     *  @param {Object.<string, Input>} inputs - The currently tracked inputs. */
+     *  @param {Object<string, Input>} inputs - The currently tracked inputs. */
     passInputs(inputs) { this.#currentState.handleInputs(inputs); }
 
     /** Update the current state's components and check if the 

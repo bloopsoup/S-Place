@@ -2,7 +2,8 @@
  * 
  *  Classes which keep track of Vector2 objects (like for position data)
  *  should use the copy functions when making vector data accessible. This 
- *  is to prevent unwanted/outside changes. */
+ *  is to prevent unwanted/outside changes. 
+ *  @memberof Common */
 class Vector2 {
     /** @type {number} */
     #x

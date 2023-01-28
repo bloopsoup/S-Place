@@ -29,15 +29,14 @@ class Player extends GameObject {
 
     /** Handle collisions.
      *  @see GameObject.handleCollisions
-     *  @param {GameObject} other 
-     *  @param {boolean} buffered */
-    handleCollisions(other, buffered) {
-        if (this.collider.collides(this.movable, other.movable, buffered)) console.log('PLAYER GOES OUCH');
+     *  @param {GameObject} other */
+    handleCollisions(other) {
+        if (this.collider.collides(this.movable, other.movable, true)) console.log('PLAYER GOES OUCH');
     }
 
     /** Handle inputs.
      *  @see GameObject.handleInputs
-     *  @param {Object.<string, Input>} inputs */
+     *  @param {Object<string, Input>} inputs */
     handleInputs(inputs) {
         if ('ArrowRight' in inputs) this.movable.incrementVelocity(new Vector2(1, 0));
         else if ('ArrowLeft' in inputs) this.movable.incrementVelocity(new Vector2(-1, 0));

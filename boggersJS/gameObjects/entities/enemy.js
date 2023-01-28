@@ -28,10 +28,9 @@ class Enemy extends GameObject {
 
     /** Handle collisions.
      *  @see GameObject.handleCollisions
-     *  @param {GameObject} other 
-     *  @param {boolean} buffered */
-    handleCollisions(other, buffered) {
-        if (this.collider.collides(this.movable, other.movable, buffered)) console.log('ENEMY GOES OUCH');
+     *  @param {GameObject} other */
+    handleCollisions(other) {
+        if (this.collider.collides(this.movable, other.movable, true)) console.log('ENEMY GOES OUCH');
     }
 
     /** Update components.

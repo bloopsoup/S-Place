@@ -5,7 +5,7 @@ import Input from '../common/input.js';
 class InputHandler {
     /** @type {Array<string>} */
     #acceptedNames = ['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight', 'Enter', 'MouseHold'];
-    /** @type {Object.<string, Input>} */
+    /** @type {Object<string, Input>} */
     #inputs
 
     /** Create the InputHandler and register event listeners for keyboard and mouse inputs. */
@@ -18,7 +18,7 @@ class InputHandler {
     }
 
     /** Get a copy of the InputHandler's currently tracked inputs.
-     *  @return {Object.<string, Input>} A copy of the InputHandler's currently tracked inputs. */
+     *  @return {Object<string, Input>} A copy of the InputHandler's currently tracked inputs. */
     get inputs() {
         const inputs = {};
         for (let name in this.#inputs)

@@ -1,7 +1,8 @@
 import Input from './input.js';
 
 /** A state abstract class that is managed by a StateManager. Actual game states 
- *  should be implemented outside of the engine. */
+ *  should be implemented outside of the engine. 
+ *  @memberof Common */
 class State {
     /** @type {boolean} */
     #isDone
@@ -48,7 +49,7 @@ class State {
     cleanup() { throw new Error('Implement!'); }
 
     /** Processes the inputs given by the InputHandler.
-     *  @param {Object.<string, Input>} inputs - The currently tracked inputs. */
+     *  @param {Object<string, Input>} inputs - The currently tracked inputs. */
     handleInputs(inputs) { throw new Error('Implement!'); }
 
     /** Updates frame-reliant components based on delta time.
