@@ -1,6 +1,6 @@
-import GameObject from "../gameObject.js";
 import Layer from "./layer.js";
-import Input from "../../common/input.js";
+import GameObject from "../gameObject.js";
+import { Input } from '../../common/index.js';
 
 /** Responsible for handling layers of GameObjects. This means it has to pass inputs, 
  *  update the state, and draw the sprites of all the GameObjects that lie in all of
@@ -8,7 +8,8 @@ import Input from "../../common/input.js";
  *  so that the objects themselves can add/remove elements to the pool when needed. 
  * 
  *  Having a Pool of objects allows support for an object-to-object collision system
- *  as collisions between objects can be handled through layers. */
+ *  as collisions between objects can be handled through layers. 
+ *  @memberof GameObjects.Controller */
 class Pool {
     /** @type {Object<string, Layer>} */
     #layers

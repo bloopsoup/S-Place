@@ -1,15 +1,12 @@
 import GameObject from '../gameObject.js';
-import Vector2 from '../../common/vector2.js';
-import MovablePhysics from '../../components/movable/movablePhysics.js';
-import Collider from '../../components/collider.js';
-import Health from '../../components/health.js';
-import Sprite from '../../components/sprite.js';
-import Input from '../../common/input.js';
+import { Input, Vector2 } from '../../common/index.js';
+import { Sprite, MovablePhysics, Collider, Health } from '../../components/index.js';
 
 /** The player character directly controlled via user input. Has physics-based
  *  movement behavior which supports tile-based collision. Also has a health
  *  component similar to Enemy.
- *  @augments GameObject */
+ *  @augments GameObject
+ *  @memberof GameObjects.Entities */
 class Player extends GameObject {
     /** Create the Player.
      *  @param {Vector2} maxDimensions - The bounding dimensions for the player.

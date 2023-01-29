@@ -1,11 +1,12 @@
-import Vector2 from '../common/vector2.js';
-import Movable from '../components/movable/movable.js';
+import { Vector2 } from '../common/index.js';
+import { Movable } from '../components/index.js';
 
 /** Based on the dimensions and the position given by the anchor, this object provides offsets 
  *  for the Canvas context. This results in a camera effect which focuses on the anchor. 
  * 
  *  There are fixed offsets (keep the object in a certain position no matter where it is) and 
- *  hybrid offsets (move the object to certain positions when it passes a certain threshold). */
+ *  hybrid offsets (move the object to certain positions when it passes a certain threshold). 
+ *  @memberof StateObjects */
 class Camera {
     /** @type {Vector2} */
     #canvasDimensions

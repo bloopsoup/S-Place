@@ -1,10 +1,10 @@
 import GameObject from '../gameObject.js';
-import Vector2 from '../../common/vector2.js';
-import Movable from '../../components/movable/movable.js';
-import Sprite from '../../components/sprite.js';
+import { Vector2 } from '../../common/index.js';
+import { Movable, Sprite } from '../../components/index.js';
 
 /** A static image. 
- *  @augments GameObject */
+ *  @augments GameObject 
+ *  @memberof GameObjects.Display */
 class Static extends GameObject {
     /** Create the static image.
      *  @param {Vector2} maxDimensions - The bounding dimensions for the static image.

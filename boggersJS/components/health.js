@@ -1,5 +1,6 @@
 /** The Health class provides methods for manipulating health. Also features optional
- *  defense and armor attributes which can modify how much health is decreased. */
+ *  defense and armor attributes which can modify how much health is decreased. 
+ *  @memberof Components */
 class Health {
     /** @type {number} */
     #maxHealth

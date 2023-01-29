@@ -1,10 +1,11 @@
-import Input from "../../common/input.js";
 import GameObject from "../gameObject.js";
+import { Input } from '../../common/index.js';
 
 /** Handles a list of gameObjects. Meant to be used with Pool which manages multiple
  *  layers of game objects. This extra level of indirection in managing objects allows
  *  an object-to-object collision system to be clearly defined, as well as a definite
- *  ordering in how elements are layered on screen. */
+ *  ordering in how elements are layered on screen. 
+ *  @memberof GameObjects.Controller */
 class Layer {
     /** @type {Array<GameObject>} */
     #gameObjects

@@ -1,14 +1,10 @@
-import Vector2 from '../common/vector2.js';
-import Input from '../common/input.js';
-import Sprite from '../components/sprite.js';
-import DeltaTimeRunner from '../components/deltaTimeRunner.js';
-import Movable from '../components/movable/movable.js';
-import Collider from '../components/collider.js';
-import Health from '../components/health.js';
+import { Input, Vector2 } from '../common/index.js';
+import { Sprite, DeltaTimeRunner, Movable, Collider, Health } from '../components/index.js';
 
 /** The primary object that all game states will deal with. This class is responsible for 
  *  handling inputs, updating its own state, and drawing itself on the screen. It also features 
- *  methods to handle object-to-object collisions and Pool operations. */
+ *  methods to handle object-to-object collisions and Pool operations. 
+ *  @memberof GameObjects */
 class GameObject {
     /** @type {Vector2} */
     #maxDimensions

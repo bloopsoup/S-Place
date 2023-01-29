@@ -1,7 +1,7 @@
-import Vector2 from '../common/vector2.js';
-import Input from '../common/input.js';
+import { Input, Vector2 } from '../common/index.js';
 
-/** Handles all keyboard and mouse inputs through event listeners. */
+/** Handles all keyboard and mouse inputs through event listeners. 
+ *  @memberof Core */
 class InputHandler {
     /** @type {Array<string>} */
     #acceptedNames = ['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight', 'Enter', 'MouseHold'];

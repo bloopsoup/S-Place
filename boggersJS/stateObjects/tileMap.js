@@ -1,7 +1,8 @@
-import Vector2 from "../common/vector2.js";
-import Sprite from '../components/sprite.js';
+import { Vector2 } from '../common/index.js';
+import { Sprite } from '../components/index.js';
 
-/** A 2D-grid that handles drawing tiles. */
+/** A 2D-grid that handles drawing tiles. 
+ *  @memberof StateObjects */
 class TileMap {
     /** @type {Vector2} */
     #unitDimensions

@@ -1,12 +1,11 @@
 import GameObject from '../gameObject.js';
-import Vector2 from '../../common/vector2.js';
-import Movable from '../../components/movable/movable.js';
-import Collider from '../../components/collider.js';
-import Sprite from '../../components/sprite.js';
+import { Vector2 } from '../../common/index.js';
+import { Sprite, Movable, Collider } from '../../components/index.js';
 
 /** A moving effect which starts at a position and moves according to velocity. 
  *  Marks itself for deletion when out of bounds or colliding with another GameObject.
- *  @augments GameObject */
+ *  @augments GameObject 
+ *  @memberof GameObjects.Entities */
 class Projectile extends GameObject {
     /** @type {number} */
     #damage

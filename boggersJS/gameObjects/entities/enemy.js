@@ -1,16 +1,14 @@
 import GameObject from '../gameObject.js';
-import Health from '../../components/health.js';
-import Vector2 from '../../common/vector2.js';
-import Movable from '../../components/movable/movable.js';
-import Collider from '../../components/collider.js';
-import Sprite from '../../components/sprite.js';
+import { Vector2 } from '../../common/index.js';
+import { Sprite, Movable, Collider, Health } from '../../components/index.js';
 
 /** A standard enemy class with translation-based movement behavior. Features
  *  a health component which is used to determine whether this object should
  *  delete itself (aka die). 
  * 
  *  Because its movement is translation-based, it cannot support tile collisions.
- *  @augments GameObject */
+ *  @augments GameObject
+ *  @memberof GameObjects.Entities */
 class Enemy extends GameObject {
     /** Create the Enemy.
      *  @param {Vector2} maxDimensions - The bounding dimensions of the enemy.

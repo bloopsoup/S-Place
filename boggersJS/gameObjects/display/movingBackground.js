@@ -1,11 +1,11 @@
 import GameObject from '../gameObject.js';
-import MovableBG from '../../components/movable/movableBG.js';
-import Vector2 from '../../common/vector2.js';
-import Sprite from '../../components/sprite.js';
+import { Vector2 } from '../../common/index.js';
+import { MovableBG, Sprite } from '../../components/index.js';
 
 /** An infinitely scrolling background. Velocity is used to indicate a cardinal
  *  direction of the moving background.
- *  @augments GameObject */
+ *  @augments GameObject 
+ *  @memberof GameObjects.Display */
 class MovingBackground extends GameObject {
     /** Create the MovingBackground.
      *  @param {Vector2} maxDimensions - Limits how far the background can move.

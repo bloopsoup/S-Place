@@ -1,4 +1,5 @@
-/** Responsible for running functions periodically based on delta time. */
+/** Responsible for running functions periodically based on delta time. 
+ *  @memberof Components */
 class DeltaTimeRunner {
     /** @type {number} */
     #time

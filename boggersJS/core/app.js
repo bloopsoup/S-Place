@@ -1,10 +1,10 @@
-import Vector2 from '../common/vector2.js';
-import State from '../common/state.js';
+import { State, Vector2 } from '../common/index.js';
 import StateManager from './stateManager.js';
 import InputHandler from './inputHandler.js';
 
 /** The main application which encompasses states, inputs, and the entire game loop. 
- *  All game applications running on boggersJS must start by calling the runTick method. */
+ *  All game applications running on boggersJS must start by calling the runTick method. 
+ *  @memberof Core */
 class App {
     /** @type {Vector2} */
     #dimensions

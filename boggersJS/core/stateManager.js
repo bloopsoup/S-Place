@@ -1,7 +1,7 @@
-import State from '../common/state.js';
-import Input from '../common/input.js';
+import { Input, State } from '../common/index.js';
 
-/** Runs one state at a time, switching out states when prompted. */
+/** Runs one state at a time, switching out states when prompted. 
+ *  @memberof Core */
 class StateManager {
     /** @type {boolean} */
     #isQuitting

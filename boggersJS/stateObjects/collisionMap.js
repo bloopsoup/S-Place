@@ -1,10 +1,11 @@
-import Vector2 from "../common/vector2.js";
-import MovablePhysics from '../components/movable/movablePhysics.js';
+import { Vector2 } from '../common/index.js';
+import { MovablePhysics } from '../components/index.js';
 
 /** A 2D-grid that handles tile-based collision for MovablePhysics objects.
  * 
  *  Collision code is based on PothOnProgramming's tile tutorial. See the tutorial code at
- *  {@link https://github.com/pothonprogramming/pothonprogramming.github.io/blob/master/content/tile-types/tile-types.js TileTypes}. */
+ *  {@link https://github.com/pothonprogramming/pothonprogramming.github.io/blob/master/content/tile-types/tile-types.js TileTypes}. 
+ *  @memberof StateObjects */
 class CollisionMap {
     /** @type {Vector2} */
     #unitDimensions
