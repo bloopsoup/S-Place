@@ -28,7 +28,7 @@ class CollisionMap {
 
     /** Get the total dimensions of the map.
       * @return {Vector2} The dimensions of the map. */
-    get mapDimensions() { return this.#mapDimensions; }
+    get mapDimensions() { return this.#mapDimensions.copy(); }
 
     /** Convert a real position to the grid position.
      *  @param {Vector2} realPos - The real position. 

@@ -35,6 +35,8 @@ class Gun extends GameObject {
         this.#bulletDamage = bulletDamage;
         this.#bulletSpeed = bulletSpeed;
         this.#canFire = true;
+
+        this.enableFire = this.enableFire.bind(this);
     }
 
     /** Allow the gun to fire. */
@@ -66,6 +68,11 @@ class Gun extends GameObject {
      *  @see GameObject.update
      *  @param {number} dt */
     update(dt) { if (!this.#canFire) this.dtRunner.deltaTimeUpdate(dt, this.enableFire);  }
+
+    /** Draw the object.
+     *  @see GameObject.draw
+     *  @param {CanvasRenderingContext2D} context */
+    draw(context) { this.sprite.draw(context, this.movable.pos); }
 }
 
 export default Gun;

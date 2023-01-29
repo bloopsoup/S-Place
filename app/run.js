@@ -1,6 +1,6 @@
-import Vector2 from '../boggersJS/common/vector2.js';
-import App from '../boggersJS/core/app.js';
 import Test from './states/test.js';
+import { Vector2 } from '../boggersJS/common/index.js';
+import { App } from '../boggersJS/core/index.js';
 
 function run() {
     const canvas = document.getElementById('canvas');

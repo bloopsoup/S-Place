@@ -37,21 +37,21 @@ class TileMap {
     toFrame(symbol) {
         switch (symbol) {
             case "^^^": return new Vector2(2, 0);
-            case "___": return new Vector2(0, 0);
+            case "___": return new Vector2(2, 2);
             case "|  ": return new Vector2(1, 1);
             case "  |": return new Vector2(3, 1);
-            case "===": return new Vector2(0, 0);
+            case "===": return new Vector2(2, 3);
             case "|^^": return new Vector2(1, 0);
             case "^^|": return new Vector2(3, 0);
-            case "|__": return new Vector2(0, 0);
-            case "__|": return new Vector2(0, 0);
-            case "| |": return new Vector2(0, 0);
-            case "|==": return new Vector2(0, 0);
-            case "==|": return new Vector2(0, 0);
-            case "|^|": return new Vector2(0, 0);
-            case "|_|": return new Vector2(0, 0);
+            case "|__": return new Vector2(1, 2);
+            case "__|": return new Vector2(3, 2);
+            case "| |": return new Vector2(2, 4);
+            case "|==": return new Vector2(1, 3);
+            case "==|": return new Vector2(3, 3);
+            case "|^|": return new Vector2(3, 4);
+            case "|_|": return new Vector2(1, 4);
             case "XXX": return new Vector2(2, 1);
-            case "_-^": return new Vector2(0, 1);
+            case "_-^": return new Vector2(0, 2);
             case "^-_": return new Vector2(0, 0);
             default: return new Vector2(0, 0);
         }

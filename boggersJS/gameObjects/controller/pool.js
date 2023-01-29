@@ -32,6 +32,8 @@ class Pool {
         names.forEach(i => this.#layers[i] = new Layer());
         this.#collisionOrder = collisionOrder;
 
+        this.addObjectToLayer = this.addObjectToLayer.bind(this);
+        this.addObjectsToLayer = this.addObjectsToLayer.bind(this);
         this.handleLayerCollisions = this.handleLayerCollisions.bind(this);
     }
 

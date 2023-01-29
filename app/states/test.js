@@ -1,40 +1,25 @@
-import { sprites } from '../config/config.js';
-import State from '../../boggersJS/common/state.js';
-import Vector2 from '../../boggersJS/common/vector2.js';
-import Camera from '../../boggersJS/stateObjects/camera.js';
-import Player from '../../boggersJS/gameObjects/entities/player.js';
-import Static from '../../boggersJS/gameObjects/display/static.js';
-import Pool from '../../boggersJS/gameObjects/controller/pool.js';
-
-import CollisionMap from '../../boggersJS/stateObjects/collisionMap.js';
-import TileMap from '../../boggersJS/stateObjects/tileMap.js';
+import { maps, sprites } from '../config/config.js';
+import { State, Vector2 } from '../../boggersJS/common/index.js';
+import { Player, Gun, Pool } from '../../boggersJS/gameObjects/index.js';
+import { Camera, CollisionMap, TileMap } from '../../boggersJS/stateObjects/index.js';
 
 export default class Test extends State {
     /** A test state for testing displays and features. */
 
     constructor() {
         super();
-        const mapDimensions = new Vector2(1600, 480);
 
-        this.grid = [
-            ["   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   "],
-            ["   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   "],
-            ["   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   "],
-            ["   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "_-^", "^^^", "^^^", "^-_", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   "],
-            ["   ", "   ", "   ", "   ", "   ", "|^^", "^^^", "^^^", "XXX", "XXX", "XXX", "XXX", "^-_", "   ", "   ", "   ", "   ", "   ", "   ", "   "],
-            ["   ", "   ", "   ", "   ", "   ", "|  ", "XXX", "XXX", "XXX", "XXX", "XXX", "XXX", "XXX", "^^^", "^^^", "^^|", "   ", "   ", "   ", "   "]
-        ]
+        this.collisionMap = new CollisionMap(new Vector2(80, 80), maps['test']);
+        this.tileMap = new TileMap(new Vector2(80, 80), maps['test'], sprites['tiles']());
 
-        this.collisionMap = new CollisionMap(new Vector2(80, 80), this.grid);
-        this.tileMap = new TileMap(new Vector2(80, 80), this.grid, sprites['test']());
+        this.gun = new Gun(this.collisionMap.mapDimensions, sprites['tiles'](), new Vector2(100, 200), 10, sprites['bullet'], 10, 10);
 
-        this.player = new Player(mapDimensions.copy(), sprites['test']());
+        this.player = new Player(this.collisionMap.mapDimensions, sprites['tiles'](), new Vector2(100, 20), new Vector2(5, 5), new Vector2(1.5, 1.5), new Vector2(1, 1), -20, 10);
         this.camera = new Camera(new Vector2(1000, 500), this.player.movable);
  
-        this.pool = new Pool(["background", "players", "enemies"], 
-                             [['players', 'enemies', true], ['enemies', 'players', false]]);
-        this.pool.addObjectToLayer('players', new Static(mapDimensions.copy(), sprites['enemy'](), new Vector2(1000, 0)));
+        this.pool = new Pool(["players", "bullets"], []);
         this.pool.addObjectToLayer('players', this.player);
+        this.pool.addObjectToLayer('players', this.gun);
     }
 
     startup() {}
