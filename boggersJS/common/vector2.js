@@ -76,6 +76,13 @@ class Vector2 {
      * @returns {Vector2} The result. */
     subCopy(other) { return new Vector2(this.#x - other.#x, this.#y - other.#y); }
 
+    /** Multiply a vector's elements by a scalar. 
+     *  @param {number} scalar - The scalar. */
+    mulScalar(scalar) {
+        this.#x *= scalar;
+        this.#y *= scalar;
+    }
+
     /** Multiply a vector to this vector element-wise. 
      *  @param {Vector2} other - The vector to multiply to this vector. */
     mul(other) {
@@ -101,10 +108,6 @@ class Vector2 {
      *  @param {Vector2} other - The vector that the copy is floor divided by.
      *  @returns {Vector2} The result. */
     floorDivCopy(other) { return new Vector2(Math.floor(this.#x / other.#x), Math.floor(this.#y / other.#y)); }
-    
-    /** Return a copy of this vector.
-     *  @returns {Vector2} The copy. */
-    copy() { return new Vector2(this.#x, this.#y); }
 
     /** Checks element-wise if this vector is less than the other vector.
      *  @param {Vector2} other - The other vector that is being compared to.
@@ -135,6 +138,17 @@ class Vector2 {
         this.#x = (this.#x === 0) ? other.#x : this.#x;
         this.#y = (this.#y === 0) ? other.#y : this.#y;
     }
+
+    /** Normalize this vector. */
+    normalize() {
+        const norm = Math.sqrt(Math.pow(this.#x, 2) + Math.pow(this.#y, 2));
+        this.#x /= norm;
+        this.#y /= norm;
+    }
+
+    /** Return a copy of this vector.
+     *  @returns {Vector2} The copy. */
+    copy() { return new Vector2(this.#x, this.#y); }
 }
 
 export default Vector2;

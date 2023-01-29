@@ -1,57 +1,71 @@
-import GameObject from '../gameObject.js';
-import Vector2 from '../../common/vector2.js';
-import Movable from '../../components/movable/movable.js';
-import Sprite from '../../components/sprite.js';
 import Projectile from './projectile.js'
-import Input from '../../common/input.js';
+import GameObject from '../gameObject.js';
+import { Input, Vector2 } from '../../common/index.js';
+import { Movable, Sprite } from '../../components/index.js';
 
-/** @author Mr. Nut */
+/** An entity responsible for creating projectiles that go towards the
+ *  position of a user's mouse click. Essentially a projectile factory.
+ *  @author Mr.Nut and bloopsoup
+ *  @augments GameObject 
+ *  @memberof GameObjects.Entities */
 class Gun extends GameObject {
-    /** Create gun
-     *  @param {Sprite} sprite - The sprite for the gun
-     *  @param {Sprite} bulletSprite - Sprite for gun's bullets
-     *  @param {Vector2} gunPos - Position of gun 
-     *  @param {number} damage - Damage per projectile of the gun
-     *  @param {number} bulletSpd - Speed of generated projectiles
-     *  @param {number} delay - Time between consecutive projectiles
-     */
-    
-    constructor(sprite, bulletSprite, damage, bulletSpd, delay) {
-        super(new Vector2(0, 0), sprite);
-        this.bulletSprite = bulletSprite
-        this.gunPos = new Vector2(0, 0);
-        this.damage = damage;
-        this.bulletSpd = bulletSpd;
-        this.dtRunner.requiredFrameCount = delay;
-        this.isFiring = false;
+    /** @type {CallableFunction} */
+    #bulletSpriteMaker
+    /** @type {number} */
+    #bulletDamage
+    /** @type {number} */
+    #bulletSpeed
+    /** @type {boolean} */
+    #canFire
+
+    /** Create the Gun.
+     *  @param {Vector2} maxDimensions - The bounding dimensions for the gun's bullets.
+     *  @param {Sprite} sprite - The gun's sprite.
+     *  @param {Vector2} pos - The gun's position.
+     *  @param {number} fireDelay - The delay between spawning consecutive projectiles.
+     *  @param {CallableFunction} bulletSpriteMaker - The gun's bullets' sprite constructor.
+     *  @param {number} bulletDamage - The gun's bullets' damage.
+     *  @param {number} bulletSpeed - The gun's bullets' speed. */
+    constructor(maxDimensions, sprite, pos, fireDelay, bulletSpriteMaker, bulletDamage, bulletSpeed) {
+        super(maxDimensions, sprite);
+        this.movable = new Movable(maxDimensions, this.sprite.dimensions, pos, new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0));
+        this.dtRunner.requiredFrameCount = fireDelay;
+
+        this.#bulletSpriteMaker = bulletSpriteMaker;
+        this.#bulletDamage = bulletDamage;
+        this.#bulletSpeed = bulletSpeed;
+        this.#canFire = true;
     }
 
-    createBullet() {
-        if (this.isFiring){
-            let bulletVel = inputs['MouseHold'].pos.subCopy(this.gunPos);
-            let norm = Math.sqrt(bulletVel.x*bulletVel.x + bulletVel.y*bulletVel.y)
-            bulletVel = bulletVel.floorDivCopy(new Vector2(norm, norm))
-            bulletVel = bulletVel.mulCopy(new Vector2(this.bulletSpd, this.bulletSpd))
-            new Projectile(10000, this.bulletSprite, this.gunPos, bulletVel, this.damage)
-        }
+    /** Allow the gun to fire. */
+    enableFire() { this.#canFire = true; }
+
+    /** Add a projectile that will originate from the gun and go towards
+     *  the terminal position via the pool hook.
+     *  @param {Vector2} terminalPos */
+    addBullet(terminalPos) {
+        const bulletVelocity = terminalPos.subCopy(this.movable.pos);
+        bulletVelocity.normalize();
+        bulletVelocity.mulScalar(this.#bulletSpeed);
+
+        const projectile = new Projectile(this.maxDimensions, this.#bulletSpriteMaker(), this.movable.pos.copy(), bulletVelocity, this.#bulletDamage);
+        this.poolHook('bullets', projectile);
     }
 
     /** Handle inputs.
      *  @see GameObject.handleInputs
      *  @param {Object<string, Input>} inputs */
     handleInputs(inputs) {
-        // inputs['MouseHold'].pos
-        // Math.sqrt(NUMBER)
-        if ('MouseHold' in inputs){
-            this.isFiring = true;
+        if ('MouseHold' in inputs && this.#canFire) {
+            this.addBullet(inputs['MouseHold'].pos);
+            this.#canFire = false;
         }
-        this.isFiring = false;
     }
 
     /** Update components.
      *  @see GameObject.update
      *  @param {number} dt */
-    update(dt) {
-        this.dtRunner.deltaTimeUpdate(dt, this.createBullet);
-    }
+    update(dt) { if (!this.#canFire) this.dtRunner.deltaTimeUpdate(dt, this.enableFire);  }
 }
+
+export default Gun;
