@@ -49,6 +49,7 @@ class CollisionMap {
             return false;
         target.pos.y = tilePos.y - target.dimensions.y;
         target.velocity.y = 0;
+        target.enableJump();
         return true;
     }
 
@@ -102,6 +103,7 @@ class CollisionMap {
         if (crossProduct < 1 && oldCrossProduct > -1) {
             target.pos.y = tilePos.y - target.dimensions.y - difference.x + this.#unitDimensions.y;
             target.velocity.y = 0;
+            target.enableJump();
         }
     }
 
@@ -118,6 +120,7 @@ class CollisionMap {
         if (crossProduct < 1 && oldCrossProduct > -1) {
             target.pos.y = tilePos.y - target.dimensions.y + difference.x;
             target.velocity.y = 0;
+            target.enableJump();
         }
     }
 

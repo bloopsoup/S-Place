@@ -34,7 +34,7 @@ export default class Test extends State {
 
     draw(context) {
         context.save();
-        const offset = this.camera.getHybridOffset([500, 1100], [0, 0]);
+        const offset = this.camera.getHybridOffset([500, 1100], [100, 400]);
         context.translate(offset.x, offset.y);
         this.pool.draw(context); 
         this.tileMap.draw(context);

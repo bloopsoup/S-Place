@@ -114,6 +114,11 @@ class Vector2 {
      *  @returns {boolean} The result. */
     lessThan(other) { return this.#x < other.#x && this.#y < other.#y; }
 
+    /** Checks element-wise if this vector is more than the other vector.
+     *  @param {Vector2} other - The other vector that is being compared to.
+     *  @returns {boolean} The result. */
+    greaterThan(other) { return this.#x > other.#x && this.#y > other.#y; }
+
     /** Checks element-wise if this vector is equal to the other vector.
      *  @param {Vector2} other - The other vector that is being compared to.
      *  @returns {boolean} The result. */
@@ -138,6 +143,10 @@ class Vector2 {
         this.#x = (this.#x === 0) ? other.#x : this.#x;
         this.#y = (this.#y === 0) ? other.#y : this.#y;
     }
+
+    /** Checks if either element in the vector is negative.
+     *  @return {boolean} The result. */
+    isNegative() { return this.#x < 0 || this.#y < 0; }
 
     /** Normalize this vector. */
     normalize() {

@@ -40,15 +40,15 @@ class Camera {
      *  | ALIGN LEFT ----------> | ----- ALIGN CENTER ----- | -----------------> ALIGN RIGHT |
      *  | (0, y)       horizontalBoundary[0]       horizontalBoundary[1]           (maxX, y) |
      * 
-     *  @param {Array<number>} horizontalBoundary - The horizontal thresholds.
+     *  @param {Array<number>} boundary - The horizontal thresholds.
      *  @returns {number} The horizontal offset. */
-    boundedHorizontalOffset(horizontalBoundary) {
+    boundedHorizontalOffset(boundary) {
         const centerOffset = (this.#canvasDimensions.x - this.#anchor.dimensions.x) / 2;
-        if (this.#anchor.pos.x < horizontalBoundary[0]) {
-            const difference = centerOffset / (horizontalBoundary[0]) * this.#anchor.pos.x;
+        if (this.#anchor.pos.x < boundary[0]) {
+            const difference = centerOffset / boundary[0] * this.#anchor.pos.x;
             return Math.min(this.horizontalOffset('left') + difference, this.horizontalOffset(''));
-        } else if (this.#anchor.pos.x > horizontalBoundary[1]) {
-            const difference = centerOffset / (this.#anchor.maxDimensions.x - this.#anchor.dimensions.x - horizontalBoundary[1]) * (this.#anchor.pos.x - horizontalBoundary[1]);
+        } else if (this.#anchor.pos.x > boundary[1]) {
+            const difference = centerOffset / (this.#anchor.maxDimensions.x - this.#anchor.dimensions.x - boundary[1]) * (this.#anchor.pos.x - boundary[1]);
             return Math.min(this.horizontalOffset('') + difference, this.horizontalOffset('right'));
         } 
         return this.horizontalOffset('');
@@ -66,12 +66,29 @@ class Camera {
         }
     }
 
+    /** Gets the vertical offset used to translate the canvas so that the anchor is aligned
+     *  to the top, bottom, AND center DEPENDING on where the anchor is. Here's how the offset
+     *  operates in relation to the verticalBoundary and the map boundaries.
+     *  @param {Array<number>} boundary - The vertical thresholds.
+     *  @returns {number} The vertical offset. */
+    boundedVerticalOffset(boundary) {
+        const centerOffset = (this.#canvasDimensions.y - this.#anchor.dimensions.y) / 2;
+        if (this.#anchor.pos.y < boundary[0]) {
+            const difference = centerOffset / boundary[0] * this.#anchor.pos.y;
+            return Math.min(this.verticalOffset('up') + difference, this.verticalOffset(''));
+        } else if (this.#anchor.pos.y > boundary[1]) {
+            const difference = centerOffset / (this.#anchor.maxDimensions.y - this.#anchor.dimensions.y - boundary[1]) * (this.#anchor.pos.y - boundary[1]);
+            return Math.min(this.verticalOffset('') + difference, this.verticalOffset('down'));
+        }
+        return this.verticalOffset('');
+    }
+
     /** Gets the cardinal offset.
      *  @param {string} horizontalMode - The horizontal alignment to use which is in {'left', 'right', ''}. 
      *  @param {string} verticalMode - The vertical alignment to use which is in {'up', 'down', ''}.
      *  @returns {Vector2} The cardinal offset. */
     getCardinalOffset(horizontalMode, verticalMode) {
-        return new Vector2(this.horizontalOffset(horizontalMode), this.verticalOffset(verticalMode));
+        return new Vector2(Math.floor(this.horizontalOffset(horizontalMode)), Math.floor(this.verticalOffset(verticalMode)));
     }
 
     /** Gets the hybrid offset.
@@ -79,7 +96,7 @@ class Camera {
      *  @param {Array<number>} verticalBoundary - The vertical boundaries which are [TOP, BOTTOM].
      *  @returns {Vector2} The hybrid offset. */
     getHybridOffset(horizontalBoundary, verticalBoundary) {
-        return new Vector2(this.boundedHorizontalOffset(horizontalBoundary), this.verticalOffset(''));
+        return new Vector2(Math.floor(this.boundedHorizontalOffset(horizontalBoundary)), Math.floor(this.boundedVerticalOffset(verticalBoundary)));
     }
 }
 

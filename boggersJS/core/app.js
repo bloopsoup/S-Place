@@ -18,15 +18,16 @@ class App {
     #lastTime
 
     /** Creates the application.
+     *  @param {Vector2} canvasPos - The position of the display canvas.
      *  @param {Vector2} dimensions - The dimensions of the display canvas.
      *  @param {CanvasRenderingContext2D} context - The context of the display canvas.
      *  @param {string} start - The name of the starting state.
      *  @param {Object<string, State>} states - The states of the application. */
-    constructor(dimensions, context, start, states) { 
+    constructor(canvasPos, dimensions, context, start, states) { 
         this.#dimensions = dimensions;
         this.#context = context;
         this.#stateManager = new StateManager(start, states);
-        this.#inputHandler = new InputHandler();
+        this.#inputHandler = new InputHandler(canvasPos, dimensions);
         this.#lastTime = 0;
 
         this.runTick = this.runTick.bind(this);
