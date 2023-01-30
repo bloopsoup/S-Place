@@ -5,19 +5,17 @@ import { Input, Vector2 } from '../common/index.js';
 class InputHandler {
     /** @type {Array<string>} */
     #acceptedNames = ['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight', 'Enter', 'MouseHold'];
-    /** @type {Vector2} */
-    #canvasPos
-    /** @type {Vector2} */
-    #canvasDimensions
+    /** @type {HTMLCanvasElement} */
+    #canvas
     /** @type {Object<string, Input>} */
     #inputs
 
     /** Create the InputHandler and register event listeners for keyboard and mouse inputs. 
-     *  @param {Vector2} canvasPos - The position of the canvas. 
-     *  @param {Vector2} canvasDimensions - The dimensions of the canvas. */
-    constructor(canvasPos, canvasDimensions) {
-        this.#canvasPos = canvasPos;
-        this.#canvasDimensions = canvasDimensions;
+     *  @param {HTMLCanvasElement} canvas - The display canvas. The handler needs access
+     *      to the canvas itself to properly handle resizing and converting client positions
+     *      into canvas positions. */
+    constructor(canvas) {
+        this.#canvas = canvas;
         this.#inputs = {};
         window.addEventListener('keydown', e => this.addInput(e.key));
         window.addEventListener('keyup', e => this.removeInput(e.key));
@@ -40,7 +38,29 @@ class InputHandler {
      *  @param {Vector2} pos - The position to check.
      *  @return {boolean} The result. */
     withinCanvas(pos) {
-        return pos.lessThan(this.#canvasPos.addCopy(this.#canvasDimensions)) && pos.greaterThan(this.#canvasPos); 
+        const rect = this.#canvas.getBoundingClientRect();
+        return pos.lessThan(new Vector2(rect.left + rect.width, rect.top + rect.height)) && pos.greaterThan(new Vector2(rect.left, rect.top)); 
+    }
+
+    /** Converts a client position into a real position (which uses the coordinate system
+     *  that all gameObjects will operate in). The reason for this indirection comes from 
+     *  how Javascript defines the origin when determining the position of your mouse click. 
+     * 
+     *  The origin is defined as the TOP LEFT, so if you want a canvas-relative position, you 
+     *  need to first do clientPos - canvasPos (given directly by the client rectangle to 
+     *  handle resizes).
+     * 
+     *  This is not enough because when you resize the canvas window, the real coordinate
+     *  system resizes along with it but uses the same numbers. A 1 unit distance in the
+     *  real coordinate system may have a different size than a 1 unit distance in the client
+     *  coordinate system, which means you also have to scale the canvas-relative position.
+     *  @param {Vector2} clientPos - The client position.
+     *  @return {Vector2} The real position. */
+    toRealPos(clientPos) {
+        const rect = this.#canvas.getBoundingClientRect();
+        const realPos = clientPos.subCopy(new Vector2(rect.left, rect.top));
+        realPos.mul(new Vector2(this.#canvas.width / rect.width,  this.#canvas.height / rect.height));
+        return realPos;
     }
 
     /** Add an input to the handler's currently tracked inputs.
@@ -49,7 +69,7 @@ class InputHandler {
     addInput(name, pos = new Vector2(0, 0)) {
         if (!this.#acceptedNames.includes(name)) return;
         if (name !== 'MouseHold' || (name === 'MouseHold' && this.withinCanvas(pos))) 
-            this.#inputs[name] = new Input(name, pos.subCopy(this.#canvasPos));
+            this.#inputs[name] = new Input(name, this.toRealPos(pos));
     }
 
     /** Remove an input from the handler's currently tracked inputs.

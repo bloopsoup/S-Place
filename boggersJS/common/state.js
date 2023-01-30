@@ -1,9 +1,12 @@
 import Input from './input.js';
+import Vector2 from './vector2.js';
 
 /** A state abstract class that is managed by a StateManager. Actual game states 
  *  should be implemented outside of the engine. 
  *  @memberof Common */
 class State {
+    /** @type {Vector2} */
+    #canvasDimensions
     /** @type {boolean} */
     #isDone
     /** @type {boolean} */
@@ -13,11 +16,17 @@ class State {
     /** @type {string} */
     #previous
 
-    /** Create a new state object. */
-    constructor() {
+    /** Create a new state object. 
+     *  @param {Vector2} canvasDimensions - The canvas dimensions. */
+    constructor(canvasDimensions) {
+        this.#canvasDimensions = canvasDimensions; 
         this.#isDone = false, this.#isQuitting = false;
         this.#next = "", this.#previous = "";
     }
+
+    /** Gets the canvas dimensions that the state operates in.
+     *  @return {Vector2} The canvas dimensions. */
+    get canvasDimensions() { return this.#canvasDimensions; }
 
     /** Check if the state is done running.
      *  @return {boolean} The result. */

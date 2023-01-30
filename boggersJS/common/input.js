@@ -24,6 +24,11 @@ class Input {
      *  @return {Vector2} The input's mouse position. */
     get pos() { return this.#pos.copy(); }
 
+    /** Apply an offset to the input's mouse position. 
+     *  Used when working with Cameras. 
+     *  @param {Vector2} offset - The offset to add. */
+    applyOffset(offset) { this.#pos.sub(offset); }
+
     /** Creates a copy of the input.
      *  @returns {Input} The copy of the original input. */
     copy() { return new Input(this.#name, this.#pos.copy()); }

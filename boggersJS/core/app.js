@@ -1,4 +1,4 @@
-import { State, Vector2 } from '../common/index.js';
+import { State } from '../common/index.js';
 import StateManager from './stateManager.js';
 import InputHandler from './inputHandler.js';
 
@@ -6,8 +6,8 @@ import InputHandler from './inputHandler.js';
  *  All game applications running on boggersJS must start by calling the runTick method. 
  *  @memberof Core */
 class App {
-    /** @type {Vector2} */
-    #dimensions
+    /** @type {HTMLCanvasElement} */
+    #canvas
     /** @type {CanvasRenderingContext2D} */
     #context
     /** @type {StateManager} */
@@ -18,16 +18,14 @@ class App {
     #lastTime
 
     /** Creates the application.
-     *  @param {Vector2} canvasPos - The position of the display canvas.
-     *  @param {Vector2} dimensions - The dimensions of the display canvas.
-     *  @param {CanvasRenderingContext2D} context - The context of the display canvas.
+     *  @param {HTMLCanvasElement} canvas - The display canvas.
      *  @param {string} start - The name of the starting state.
      *  @param {Object<string, State>} states - The states of the application. */
-    constructor(canvasPos, dimensions, context, start, states) { 
-        this.#dimensions = dimensions;
-        this.#context = context;
+    constructor(canvas, start, states) {
+        this.#canvas = canvas;
+        this.#context = canvas.getContext('2d');
         this.#stateManager = new StateManager(start, states);
-        this.#inputHandler = new InputHandler(canvasPos, dimensions);
+        this.#inputHandler = new InputHandler(canvas);
         this.#lastTime = 0;
 
         this.runTick = this.runTick.bind(this);
@@ -40,7 +38,7 @@ class App {
         const dt = timestamp - this.#lastTime;
         this.#lastTime = timestamp;
 
-        this.#context.clearRect(0, 0, this.#dimensions.x, this.#dimensions.y);
+        this.#context.clearRect(0, 0, this.#canvas.width, this.#canvas.height);
         this.#stateManager.passInputs(this.#inputHandler.inputs);
         this.#stateManager.update(dt);
         this.#stateManager.draw(this.#context);

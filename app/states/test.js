@@ -6,16 +6,15 @@ import { Camera, CollisionMap, TileMap } from '../../boggersJS/stateObjects/inde
 export default class Test extends State {
     /** A test state for testing displays and features. */
 
-    constructor() {
-        super();
+    constructor(canvasDimensions) {
+        super(canvasDimensions);
 
         this.collisionMap = new CollisionMap(new Vector2(80, 80), maps['test']);
         this.tileMap = new TileMap(new Vector2(80, 80), maps['test'], sprites['tiles']());
-
         this.gun = new Gun(this.collisionMap.mapDimensions, sprites['tiles'](), new Vector2(100, 200), 10, sprites['bullet'], 10, 10);
 
         this.player = new Player(this.collisionMap.mapDimensions, sprites['tiles'](), new Vector2(100, 20), new Vector2(5, 5), new Vector2(1.5, 1.5), new Vector2(1, 1), -20, 10);
-        this.camera = new Camera(new Vector2(1000, 500), this.player.movable);
+        this.camera = new Camera(this.canvasDimensions, this.player.movable);
  
         this.pool = new Pool(["players", "bullets"], []);
         this.pool.addObjectToLayer('players', this.player);
@@ -25,7 +24,11 @@ export default class Test extends State {
     startup() {}
     cleanup() {}
 
-    handleInputs(inputs) { this.pool.handleInputs(inputs); }
+    handleInputs(inputs) {
+        const offset = this.camera.getHybridOffset([500, 1100], [100, 200]);
+        Object.keys(inputs).forEach(key => inputs[key].applyOffset(offset));
+        this.pool.handleInputs(inputs); 
+    }
 
     update(dt) { 
         this.pool.update(dt);
@@ -34,7 +37,7 @@ export default class Test extends State {
 
     draw(context) {
         context.save();
-        const offset = this.camera.getHybridOffset([500, 1100], [100, 400]);
+        const offset = this.camera.getHybridOffset([500, 1100], [100, 200]);
         context.translate(offset.x, offset.y);
         this.pool.draw(context); 
         this.tileMap.draw(context);
