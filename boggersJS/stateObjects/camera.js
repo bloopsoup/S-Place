@@ -69,6 +69,10 @@ class Camera {
     /** Gets the vertical offset used to translate the canvas so that the anchor is aligned
      *  to the top, bottom, AND center DEPENDING on where the anchor is. Here's how the offset
      *  operates in relation to the verticalBoundary and the map boundaries.
+     * 
+     *  | ALIGN UP   ----------> | ----- ALIGN CENTER ----- | ----------------> ALIGN DOWN |
+     *  | (x, 0)        verticalBoundary[0]       verticalBoundary[1]           (0, maxY)  |
+     * 
      *  @param {Array<number>} boundary - The vertical thresholds.
      *  @returns {number} The vertical offset. */
     boundedVerticalOffset(boundary) {

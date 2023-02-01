@@ -19,6 +19,7 @@ class InputHandler {
         this.#inputs = {};
         window.addEventListener('keydown', e => this.addInput(e.key));
         window.addEventListener('keyup', e => this.removeInput(e.key));
+        window.addEventListener('mousemove', e => this.modifyMouseInput(new Vector2(e.clientX, e.clientY)));
         window.addEventListener('mousedown', e => this.addInput('MouseHold', new Vector2(e.clientX, e.clientY)));
         window.addEventListener('mouseup', _ => this.removeInput('MouseHold'));
     }
@@ -61,6 +62,13 @@ class InputHandler {
         const realPos = clientPos.subCopy(new Vector2(rect.left, rect.top));
         realPos.mul(new Vector2(this.#canvas.width / rect.width,  this.#canvas.height / rect.height));
         return realPos;
+    }
+
+    /** Change the position of a currently tracked mouse input when the mouse has been moved.
+     *  @param {Vector2} pos - The new mouse position. */
+    modifyMouseInput(pos) {
+        if ('MouseHold' in this.#inputs)
+            this.#inputs['MouseHold'] = new Input('MouseHold', this.toRealPos(pos));
     }
 
     /** Add an input to the handler's currently tracked inputs.

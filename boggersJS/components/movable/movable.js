@@ -126,10 +126,10 @@ class Movable {
     }
 
     /** Decrement the velocity so that the chosen axis velocity goes to 0.
-     *  @param {string} axis - The velocity axis to zero out. Is in {'x', 'y', 'both'}. */
+     *  @param {number} axis - The velocity axis to zero out. Is in {0, 1, 2}. */
     decrementVelocity(axis) {
-        const modifier = new Vector2(-Math.sign(this.#velocity.x) * ((axis === 'x' || axis === 'both') ? 1 : 0),
-                                     -Math.sign(this.#velocity.y) * ((axis === 'y' || axis === 'both') ? 1 : 0));
+        const modifier = new Vector2(-Math.sign(this.#velocity.x) * ((axis === 0 || axis === 2) ? 1 : 0),
+                                     -Math.sign(this.#velocity.y) * ((axis === 1 || axis === 2) ? 1 : 0));
         const newVelocity = this.#velocity.addCopy(this.#deceleration.mulCopy(modifier));
         newVelocity.select(new Vector2(0, 0), this.#velocity.x < 0, this.#velocity.y < 0);
         this.#velocity = newVelocity;
@@ -180,6 +180,15 @@ class Movable {
         if (this.pastLeftWall()) { this.#pos.x = 0; this.#velocity.x = 0; }
         if (this.pastRightWall()) { this.#pos.x = this.#maxDimensions.x - this.#dimensions.x; this.#velocity.x = 0; }
         if (this.pastFloor()) { this.#pos.y = this.#maxDimensions.y - this.#dimensions.y; this.#velocity.y = 0; }
+    }
+
+    /** Snaps the Movable by settings its position and velocity to the provided arguments.
+     *  @param {number} axis - The axis to snap the position and velocity to. Is in {0, 1}.
+     *  @param {number} axisPos - The new axis position (either for x or y).
+     *  @param {number} axisVelocity - The new axis velocity (either for x or y). */
+    snapCustom(axis, axisPos, axisVelocity) {
+        if (axis === 0) { this.#pos.x = axisPos; this.#velocity.x = axisVelocity; } 
+        else { this.#pos.y = axisPos; this.#velocity.y = axisVelocity; }
     }
 }
 

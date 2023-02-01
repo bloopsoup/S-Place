@@ -48,7 +48,7 @@ class MovablePhysics extends Movable {
     update() {
         this.incrementPos();
         this.snap();
-        this.decrementVelocity('x');
+        this.decrementVelocity(0);
         this.fall();
     }
 }

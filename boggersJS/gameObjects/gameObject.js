@@ -6,8 +6,6 @@ import { Sprite, DeltaTimeRunner, Movable, Collider, Health } from '../component
  *  methods to handle object-to-object collisions and Pool operations. 
  *  @memberof GameObjects */
 class GameObject {
-    /** @type {Vector2} */
-    #maxDimensions
     /** @type {Sprite} */
     #sprite
     /** @type {DeltaTimeRunner} */
@@ -24,18 +22,12 @@ class GameObject {
     #canDelete
 
     /** Create the GameObject.
-     *  @param {Vector2} maxDimensions - The boundaries that confines the GameObject.
      *  @param {Sprite} sprite - The sprite representing the GameObject. */
-    constructor(maxDimensions, sprite) {
-        this.#maxDimensions = maxDimensions;
+    constructor(sprite) {
         this.#sprite = sprite;
         this.#dtRunner = new DeltaTimeRunner(20, 1000);
         this.#canDelete = false;
     }
-
-    /** Gets the bounding dimensions.
-     *  @return {Vector2} The GameObject's bounding dimensions. */
-    get maxDimensions() { return this.#maxDimensions.copy(); }
 
     /** Gets the sprite.
      *  @return {Sprite} The sprite. */

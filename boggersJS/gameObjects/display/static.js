@@ -6,19 +6,21 @@ import { Movable, Sprite } from '../../components/index.js';
  *  @augments GameObject 
  *  @memberof GameObjects.Display */
 class Static extends GameObject {
+    /** @type {Vector2} */
+    #pos
+
     /** Create the static image.
-     *  @param {Vector2} maxDimensions - The bounding dimensions for the static image.
      *  @param {Sprite} sprite - The image itself.
      *  @param {Vector2} pos - The position of the image. */
-    constructor(maxDimensions, sprite, pos) {
-        super(new Vector2(0, 0), sprite);
-        this.movable = new Movable(maxDimensions, this.sprite.dimensions, pos, new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0));
+    constructor(sprite, pos) {
+        super(sprite);
+        this.#pos = pos;
     }
 
     /** Draw the object.
      *  @see GameObject.draw
      *  @param {CanvasRenderingContext2D} context */
-    draw(context) { this.sprite.draw(context, this.movable.pos); }
+    draw(context) { this.sprite.draw(context, this.#pos); }
 }
 
 export default Static;
