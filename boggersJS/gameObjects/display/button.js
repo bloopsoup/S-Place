@@ -1,5 +1,6 @@
 import GameObject from '../gameObject.js';
 import { Input, Vector2 } from '../../common/index.js';
+
 class Button extends GameObject {
     constructor(sprite, pos, callback) {
         super(sprite);

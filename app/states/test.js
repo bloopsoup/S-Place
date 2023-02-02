@@ -1,7 +1,7 @@
 import { maps, sprites } from '../config/config.js';
 import { State, Vector2 } from '../../boggersJS/common/index.js';
 import { Player, Gun, Pool } from '../../boggersJS/gameObjects/index.js';
-import { Camera, CollisionMap, TileMap } from '../../boggersJS/stateObjects/index.js';
+import { Camera, TileMap } from '../../boggersJS/stateObjects/index.js';
 
 export default class Test extends State {
     /** A test state for testing displays and features. */
@@ -9,11 +9,10 @@ export default class Test extends State {
     constructor(canvasDimensions) {
         super(canvasDimensions);
 
-        this.collisionMap = new CollisionMap(new Vector2(80, 80), maps['test']);
-        this.tileMap = new TileMap(new Vector2(80, 80), maps['test'], sprites['tiles']());
-        this.gun = new Gun(this.collisionMap.mapDimensions, sprites['tiles'](), new Vector2(100, 200), 10, sprites['bullet'], 10, 10);
+        this.tileMap = new TileMap(maps['test'], sprites['tiles']());
 
-        this.player = new Player(this.collisionMap.mapDimensions, sprites['tiles'](), new Vector2(100, 20), new Vector2(5, 5), new Vector2(1.5, 1.5), new Vector2(1, 1), -20, 10);
+        this.gun = new Gun(sprites['tiles'](), new Vector2(100, 200), 10, sprites['bullet'], maps['test'], 10, 10);
+        this.player = new Player(sprites['tiles'](), maps['test'], new Vector2(100, 20), new Vector2(5, 5), new Vector2(1.5, 1.5), new Vector2(1, 1), -20, 10);
         this.camera = new Camera(this.canvasDimensions, this.player.movable);
  
         this.pool = new Pool(["players", "bullets"], []);
@@ -32,7 +31,6 @@ export default class Test extends State {
 
     update(dt) { 
         this.pool.update(dt);
-        this.collisionMap.handleCollisions([this.player.movable]);
     }
 
     draw(context) {

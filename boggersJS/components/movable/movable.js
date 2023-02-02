@@ -101,6 +101,10 @@ class Movable {
      *  @return {Vector2} The old position of the bottom right corner. */
     get oldBottomRightPos() { return this.#oldPos.addCopy(this.#dimensions); }
 
+    /** Get the positions of all corners. 
+     *  @return {Array<Vector2>} The positions of all corners. */
+    get corners() { return [this.topRightPos, this.topLeftPos, this.bottomLeftPos, this.bottomRightPos]; }
+
     /** Set the position.
      *  @param {Vector2} pos - The position. */
     set pos(pos) { this.#pos = pos; }
@@ -179,6 +183,7 @@ class Movable {
     snap() {
         if (this.pastLeftWall()) { this.#pos.x = 0; this.#velocity.x = 0; }
         if (this.pastRightWall()) { this.#pos.x = this.#maxDimensions.x - this.#dimensions.x; this.#velocity.x = 0; }
+        if (this.pastCeiling()) { this.#pos.y = 0; this.#velocity.y = 0; }
         if (this.pastFloor()) { this.#pos.y = this.#maxDimensions.y - this.#dimensions.y; this.#velocity.y = 0; }
     }
 

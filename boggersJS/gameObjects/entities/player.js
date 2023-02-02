@@ -32,6 +32,17 @@ class Player extends GameObject {
         if (this.collider.collides(this.movable, other.movable, true)) console.log('PLAYER GOES OUCH');
     }
 
+    handleTileCollisions() {
+        const corners = this.movable.corners;
+        for (let i in corners) {
+            const correction = this.collisionMap.callCollisionHandler(this.movable, corners[i]);
+            if (!correction) continue;
+            const [ axis, axisPos, axisVelocity ] = correction;
+            if (axis === 1) this.movable.enableJump();
+            this.movable.snapCustom(axis, axisPos, axisVelocity);
+        }
+    }
+
     /** Handle inputs.
      *  @see GameObject.handleInputs
      *  @param {Object<string, Input>} inputs */
@@ -47,6 +58,7 @@ class Player extends GameObject {
     update(dt) {
         this.dtRunner.deltaTimeUpdate(dt, this.sprite.nextFrameInRow);
         this.movable.update();
+        this.handleTileCollisions();
     }
 
     /** Draw the object.
