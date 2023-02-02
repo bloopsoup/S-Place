@@ -1,6 +1,6 @@
 import GameObject from '../gameObject.js';
-import { Input, Vector2 } from '../../common/index.js';
-import { Sprite, MovablePhysics, Collider, Health } from '../../components/index.js';
+import { Grid, Input, Vector2 } from '../../common/index.js';
+import { Sprite, MovablePhysics, Collider, CollisionMap, Health } from '../../components/index.js';
 
 /** The player character directly controlled via user input. Has physics-based
  *  movement behavior which supports tile-based collision. Also has a health
@@ -9,18 +9,19 @@ import { Sprite, MovablePhysics, Collider, Health } from '../../components/index
  *  @memberof GameObjects.Entities */
 class Player extends GameObject {
     /** Create the Player.
-     *  @param {Vector2} maxDimensions - The bounding dimensions for the player.
      *  @param {Sprite} sprite - The player's sprite.
+     *  @param {Grid} grid - The grid the player operates in.
      *  @param {Vector2} pos - The player's starting position.
      *  @param {Vector2} maxSpeed - The player's max speed.
      *  @param {Vector2} acceleration - The acceleration of the player.
      *  @param {Vector2} deceleration - The deceleration of the player. 
      *  @param {number} jumpPower - How high the player can jump.
      *  @param {number} health - The starting health. */
-    constructor(maxDimensions, sprite, pos, maxSpeed, acceleration, deceleration, jumpPower, health) {
-        super(maxDimensions, sprite);
-        this.movable = new MovablePhysics(maxDimensions, this.sprite.dimensions, pos, new Vector2(0, 0), maxSpeed, acceleration, deceleration, jumpPower);
+    constructor(sprite, grid, pos, maxSpeed, acceleration, deceleration, jumpPower, health) {
+        super(sprite);
+        this.movable = new MovablePhysics(grid.dimensions, this.sprite.dimensions, pos, new Vector2(0, 0), maxSpeed, acceleration, deceleration, jumpPower);
         this.collider = new Collider(100);
+        this.collisionMap = new CollisionMap(grid);
         this.health = new Health(health);
     }
 

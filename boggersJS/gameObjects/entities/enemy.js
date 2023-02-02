@@ -1,6 +1,6 @@
 import GameObject from '../gameObject.js';
-import { Vector2 } from '../../common/index.js';
-import { Sprite, Movable, Collider, Health } from '../../components/index.js';
+import { Grid, Vector2 } from '../../common/index.js';
+import { Sprite, Movable, Collider, CollisionMap, Health } from '../../components/index.js';
 
 /** A standard enemy class with translation-based movement behavior. Features
  *  a health component which is used to determine whether this object should
@@ -11,16 +11,17 @@ import { Sprite, Movable, Collider, Health } from '../../components/index.js';
  *  @memberof GameObjects.Entities */
 class Enemy extends GameObject {
     /** Create the Enemy.
-     *  @param {Vector2} maxDimensions - The bounding dimensions of the enemy.
      *  @param {Sprite} sprite - The sprite for the enemy.
+     *  @param {Grid} grid - The grid the enemy operates in.
      *  @param {Vector2} pos - The starting position.
      *  @param {Vector2} velocity - The starting velocity. 
      *  @param {number} health - The health of the enemy. 
      *  @param {number} defense - The defense of the enemy. */
-    constructor(maxDimensions, sprite, pos, velocity, health, defense) {
-        super(maxDimensions, sprite);
-        this.movable = new Movable(maxDimensions, this.sprite.dimensions, pos, velocity, new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0));
+    constructor(sprite, grid, pos, velocity, health, defense) {
+        super(sprite);
+        this.movable = new Movable(grid.dimensions, this.sprite.dimensions, pos, velocity, new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0));
         this.collider = new Collider(100);
+        this.collisionMap = new CollisionMap(grid);
         this.health = new Health(health, 1, defense, 0);
     }
 

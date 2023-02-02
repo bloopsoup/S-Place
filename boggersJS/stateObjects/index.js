@@ -3,5 +3,4 @@
  *  given state.
  *  @namespace StateObjects */
 export { default as Camera } from './camera.js';
-export { default as CollisionMap } from './collisionMap.js';
 export { default as TileMap } from './tileMap.js';

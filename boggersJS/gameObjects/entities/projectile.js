@@ -1,6 +1,6 @@
 import GameObject from '../gameObject.js';
-import { Vector2 } from '../../common/index.js';
-import { Sprite, Movable, Collider } from '../../components/index.js';
+import { Grid, Vector2 } from '../../common/index.js';
+import { Sprite, Movable, Collider, CollisionMap } from '../../components/index.js';
 
 /** A moving effect which starts at a position and moves according to velocity. 
  *  Marks itself for deletion when out of bounds or colliding with another GameObject.
@@ -11,15 +11,16 @@ class Projectile extends GameObject {
     #damage
 
     /** Create the projectile.
-     *  @param {Vector2} maxDimensions - How far the projectile can go without being marked for deletion.
      *  @param {Sprite} sprite - The sprite of the projectile.
+     *  @param {Grid} grid - The grid the projectile resides in.
      *  @param {Vector2} pos - The starting position of the projectile.
      *  @param {Vector2} velocity - The velocity of the projectile.
      *  @param {number} damage - The amount of damage that the projectile will deal. */
-    constructor(maxDimensions, sprite, pos, velocity, damage) {
-        super(maxDimensions, sprite);
-        this.movable = new Movable(maxDimensions, this.sprite.dimensions, pos, velocity, new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0));
+    constructor(sprite, grid, pos, velocity, damage) {
+        super(sprite);
+        this.movable = new Movable(grid.dimensions, this.sprite.dimensions, pos, velocity, new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0));
         this.collider = new Collider(50);
+        this.collisionMap = new CollisionMap(grid);
         this.#damage = damage;
     }
 

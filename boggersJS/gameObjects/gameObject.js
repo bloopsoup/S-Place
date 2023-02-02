@@ -1,5 +1,5 @@
-import { Input, Vector2 } from '../common/index.js';
-import { Sprite, DeltaTimeRunner, Movable, Collider, Health } from '../components/index.js';
+import { Input } from '../common/index.js';
+import { Sprite, DeltaTimeRunner, Movable, Collider, CollisionMap, Health } from '../components/index.js';
 
 /** The primary object that all game states will deal with. This class is responsible for 
  *  handling inputs, updating its own state, and drawing itself on the screen. It also features 
@@ -14,6 +14,8 @@ class GameObject {
     #movable
     /** @type {Collider} */
     #collider
+    /** @type {CollisionMap} */
+    #collisionMap
     /** @type {Health} */
     #health
     /** @type {CallableFunction} */
@@ -45,6 +47,10 @@ class GameObject {
      *  @return {Collider} The Collider. */
     get collider() { return this.#collider; }
 
+    /** Gets the CollisionMap.
+     *  @return {CollisionMap} The map. */
+    get collisionMap() { return this.#collisionMap; }
+
     /** Gets the Health. 
      *  @return {Health} The Health. */
     get health() { return this.#health; }
@@ -65,6 +71,10 @@ class GameObject {
     /** Sets the Collider. Used by subclasses.
      *  @param {Collider} collider - The new Collider. */
     set collider(collider) { this.#collider = collider; }
+
+    /** Sets the CollisionMap. Used by subclasses. 
+     *  @param {CollisionMap} collisionMap - The new map. */
+    set collisionMap(collisionMap) { this.#collisionMap = collisionMap; }
 
     /** Sets the Health. Used by subclasses. 
      *  @param {Health} health - The new Health. */
