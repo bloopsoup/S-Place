@@ -14,7 +14,8 @@ class Button extends GameObject {
     #isClicked
 
     /** Create the Button.
-     *  @param {Sprite} sprite - The sprites for the button.
+     *  @param {Sprite} sprite - The sprites for the button. Spritesheet should have one row of
+     *      three images: [DEFAULT, HOVERED, CLICK]
      *  @param {Vector2} pos - The position of the button.
      *  @param {CallableFunction} func - The function that is called when the button is pressed. */
     constructor(sprite, pos, func) {

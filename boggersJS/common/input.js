@@ -24,6 +24,10 @@ class Input {
      *  @return {Vector2} The input's mouse position. */
     get pos() { return this.#pos.copy(); }
 
+    /** Whether the input itself is a printable character.
+     *  @return {boolean} The result. */
+    isPrintable() { return this.#name.length === 1; }
+
     /** Apply an offset to the input's mouse position. 
      *  Used when working with Cameras. 
      *  @param {Vector2} offset - The offset to add. */
