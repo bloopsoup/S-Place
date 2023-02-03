@@ -22,9 +22,13 @@ class Grid {
 
     /** Access an element of the grid at a position. If an index is too
      *  big, defaults to accessing the last element of the column or row.
+     *  If the index is too small, defaults to accessing the first element
+     *  of the column or row.
      *  @param {Vector2} pos - The position of the accessed element.
      *  @returns {number} The number at that position. */
-    get(pos) { return this.#grid[Math.min(pos.y, this.#grid.length - 1)][Math.min(pos.x, this.#grid[0].length - 1)]; }
+    get(pos) { 
+        return this.#grid[Math.max(Math.min(pos.y, this.#grid.length - 1), 0)][Math.max(Math.min(pos.x, this.#grid[0].length - 1), 0)]; 
+    }
 
     /** Apply a function to each element in the grid. The function signature 
      *  should be as follows: FUNC(pos: Vector2, element: number)

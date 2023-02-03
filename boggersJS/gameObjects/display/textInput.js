@@ -1,9 +1,3 @@
-/*
-Research this
-https://developer.mozilla.org/en-US/docs/Web/API/Element/keydown_event
-https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Drawing_text
-*/
-
 import GameObject from '../gameObject.js';
 import { Movable, Collider, Sprite } from '../../components/index.js';
 import { InputTracker, Vector2 } from '../../common/index.js';
@@ -12,6 +6,10 @@ import { InputTracker, Vector2 } from '../../common/index.js';
  *  @augments GameObject 
  *  @memberof GameObjects.Display */
 class TextInput extends GameObject {
+    /** @type {number} */
+    #maxLength
+    /** @type {string} */
+    #font
     /** @type {CallableFunction} */
     #func
     /** @type {string} */
@@ -23,11 +21,16 @@ class TextInput extends GameObject {
      *  @param {Sprite} sprite - The sprites of the text input. Spritesheet should have one row of
      *      two images: [INACTIVE, ACTIVE].
      *  @param {Vector2} pos - The position of the text input.
+     *  @param {number} maxLength - The max length of the text input.
+     *  @param {string} font - The font of the text input.
      *  @param {CallableFunction} func - The function that is called when the text input is submitted. */
-    constructor(sprite, pos, func) {
+    constructor(sprite, pos, maxLength, font, func) {
         super(sprite);
         this.movable = new Movable(new Vector2(0, 0), this.sprite.dimensions, pos, new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0));
         this.collider = new Collider(0);
+
+        this.#maxLength = maxLength;
+        this.#font = font;
         this.#func = func;
         this.#text = '';
         this.#isActive = false;
@@ -48,8 +51,12 @@ class TextInput extends GameObject {
             else this.#isActive = false;
         }
         if (this.#isActive) {
-            if (inputs.has('Enter')) this.submitText();
-            if (inputs.has('Backspace')) this.#text = this.#text.slice(0, -1);
+            if (inputs.consumeInput('Enter')) this.submitText();
+            if (inputs.consumeInput('Backspace')) this.#text = this.#text.slice(0, -1);
+            if (this.#text.length < this.#maxLength) {
+                const char = inputs.consumePrintableInput();
+                if (char) this.#text += char;
+            }
         }   
     }
 
@@ -57,7 +64,11 @@ class TextInput extends GameObject {
      *  @see GameObject.draw
      *  @param {CanvasRenderingContext2D} context */
     draw(context){
-        // draw sprite and text!
+        context.save();
+        this.sprite.drawFrame(context, this.movable.pos, !this.#isActive ? new Vector2(0, 0) : new Vector2(1, 0));
+        context.font = this.#font;
+        context.fillText(this.#text, this.movable.pos.x, this.movable.pos.y + this.movable.dimensions.y);
+        context.restore();
     }
 }
 

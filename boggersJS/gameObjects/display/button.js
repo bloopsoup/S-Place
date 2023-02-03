@@ -55,7 +55,6 @@ class Button extends GameObject {
      *  @see GameObject.draw
      *  @param {CanvasRenderingContext2D} context */
     draw(context) {
-        console.log(this.#isHovered, this.#isClicked);
         this.sprite.drawFrame(context, this.movable.pos, this.currentFrame());
     }
 }

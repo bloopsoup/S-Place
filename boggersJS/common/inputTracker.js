@@ -35,12 +35,22 @@ class InputTracker {
      *  @param {string} name - The name of the input to remove. */
     remove(name) { delete this.#inputs[name]; }
 
-    /** Removes a printable input from tracking and returns it. This will return 
-     *  null if no printable input is found.
-     *  @returns {Input | null} The result. */
+    /** Removes the specified input and returns a boolean indicating
+     *  if the input was originally being tracked. 
+     *  @returns {boolean} The result. */
+    consumeInput(name) {
+        if (!(name in this.#inputs)) return false;
+        this.remove(name);
+        return true;
+    }
+
+    /** Removes a printable input from tracking and returns its name. This 
+     *  will return null if no printable input is found.
+     *  @returns {string | null} The result. */
     consumePrintableInput() {
         const printable = Object.keys(this.#inputs).find(i => i.length === 1);
-        return printable ? this.#inputs[printable] : null;
+        if (printable) this.remove(printable);
+        return printable ? printable : null;
     }
 
     /** Apply an offset to the positions of all currently tracked inputs. 
