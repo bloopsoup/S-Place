@@ -30,7 +30,7 @@ export default class Test extends State {
     cleanup() {}
 
     handleInputs(inputs) {
-        const offset = this.camera.getHybridOffset([500, 1100], [100, 200]);
+        const offset = this.camera.getHybridOffset();
         inputs.applyOffset(offset);
         this.pool.handleInputs(inputs); 
     }
@@ -41,7 +41,7 @@ export default class Test extends State {
 
     draw(context) {
         context.save();
-        const offset = this.camera.getHybridOffset([500, 1100], [100, 200]);
+        const offset = this.camera.getHybridOffset();
         context.translate(offset.x, offset.y);
         this.pool.draw(context); 
         this.tileMap.draw(context);

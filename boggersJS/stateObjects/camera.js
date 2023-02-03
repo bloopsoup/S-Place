@@ -33,24 +33,16 @@ class Camera {
         }
     }
 
-    /** Gets the horizontal offset used to translate the canvas so that the anchor is aligned
-     *  to the left, right, AND center DEPENDING on where the anchor is. Here's how the offset
-     *  operates in relation to the horizontalBoundary and the map boundaries.
-     * 
-     *  | ALIGN LEFT ----------> | ----- ALIGN CENTER ----- | -----------------> ALIGN RIGHT |
-     *  | (0, y)       horizontalBoundary[0]       horizontalBoundary[1]           (maxX, y) |
-     * 
-     *  @param {Array<number>} boundary - The horizontal thresholds.
+    /** Gets the horizontal offset used to translate the canvas so that the camera is focused on
+     *  the left of the screen, the right of the screen, or centered on the anchor. Transitions
+     *  from the sides to centering occur when the anchor moves to the center of the screen.
      *  @returns {number} The horizontal offset. */
-    boundedHorizontalOffset(boundary) {
+    boundedHorizontalOffset() {
         const centerOffset = (this.#canvasDimensions.x - this.#anchor.dimensions.x) / 2;
-        if (this.#anchor.pos.x < boundary[0]) {
-            const difference = centerOffset / boundary[0] * this.#anchor.pos.x;
-            return Math.min(this.horizontalOffset('left') + difference, this.horizontalOffset(''));
-        } else if (this.#anchor.pos.x > boundary[1]) {
-            const difference = centerOffset / (this.#anchor.maxDimensions.x - this.#anchor.dimensions.x - boundary[1]) * (this.#anchor.pos.x - boundary[1]);
-            return Math.min(this.horizontalOffset('') + difference, this.horizontalOffset('right'));
-        } 
+        if (this.#anchor.pos.x < centerOffset) 
+            return 0; 
+        else if (this.#anchor.pos.x > this.#anchor.maxDimensions.x - this.#canvasDimensions.x + centerOffset)
+            return this.#canvasDimensions.x - this.#anchor.maxDimensions.x;
         return this.horizontalOffset('');
     }
 
@@ -66,24 +58,16 @@ class Camera {
         }
     }
 
-    /** Gets the vertical offset used to translate the canvas so that the anchor is aligned
-     *  to the top, bottom, AND center DEPENDING on where the anchor is. Here's how the offset
-     *  operates in relation to the verticalBoundary and the map boundaries.
-     * 
-     *  | ALIGN UP   ----------> | ----- ALIGN CENTER ----- | ----------------> ALIGN DOWN |
-     *  | (x, 0)        verticalBoundary[0]       verticalBoundary[1]           (0, maxY)  |
-     * 
-     *  @param {Array<number>} boundary - The vertical thresholds.
+    /** Gets the vertical offset used to translate the canvas so that the camera is focused on
+     *  the top of the screen, the bottom of the screen, or centered on the anchor. Transitions
+     *  from the sides to centering occur when the anchor moves to the center of the screen.
      *  @returns {number} The vertical offset. */
-    boundedVerticalOffset(boundary) {
+    boundedVerticalOffset() {
         const centerOffset = (this.#canvasDimensions.y - this.#anchor.dimensions.y) / 2;
-        if (this.#anchor.pos.y < boundary[0]) {
-            const difference = centerOffset / boundary[0] * this.#anchor.pos.y;
-            return Math.min(this.verticalOffset('up') + difference, this.verticalOffset(''));
-        } else if (this.#anchor.pos.y > boundary[1]) {
-            const difference = centerOffset / (this.#anchor.maxDimensions.y - this.#anchor.dimensions.y - boundary[1]) * (this.#anchor.pos.y - boundary[1]);
-            return Math.min(this.verticalOffset('') + difference, this.verticalOffset('down'));
-        }
+        if (this.#anchor.pos.y < centerOffset)
+            return 0;
+        else if (this.#anchor.pos.y > this.#anchor.maxDimensions.y - this.#canvasDimensions.y + centerOffset)
+            return this.#canvasDimensions.y - this.#anchor.maxDimensions.y;
         return this.verticalOffset('');
     }
 
@@ -96,11 +80,9 @@ class Camera {
     }
 
     /** Gets the hybrid offset.
-     *  @param {Array<number>} horizontalBoundary - The horizontal boundaries which are [LEFT, RIGHT].
-     *  @param {Array<number>} verticalBoundary - The vertical boundaries which are [TOP, BOTTOM].
      *  @returns {Vector2} The hybrid offset. */
-    getHybridOffset(horizontalBoundary, verticalBoundary) {
-        return new Vector2(Math.floor(this.boundedHorizontalOffset(horizontalBoundary)), Math.floor(this.boundedVerticalOffset(verticalBoundary)));
+    getHybridOffset() {
+        return new Vector2(Math.floor(this.boundedHorizontalOffset()), Math.floor(this.boundedVerticalOffset()));
     }
 }
 

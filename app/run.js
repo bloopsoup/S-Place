@@ -4,7 +4,7 @@ import { App } from '../boggersJS/core/index.js';
 
 function run() {
     const canvas = document.getElementById('canvas');
-    canvas.width = 1000, canvas.height = 500;
+    canvas.width = 1280, canvas.height = 720;
 
     const start = 'test';
     const states = {
