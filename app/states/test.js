@@ -29,7 +29,7 @@ export default class Test extends State {
 
     handleInputs(inputs) {
         const offset = this.camera.getHybridOffset([500, 1100], [100, 200]);
-        Object.keys(inputs).forEach(key => inputs[key].applyOffset(offset));
+        inputs.applyOffset(offset);
         this.pool.handleInputs(inputs); 
     }
 

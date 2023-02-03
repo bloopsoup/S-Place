@@ -17,6 +17,11 @@ class InputTracker {
      *  @returns {boolean} The result. */
     has(name) { return name in this.#inputs; }
 
+    /** Gets an input from the tracker.
+     *  @param {string} name - The name of the input.
+     *  @returns {Input} The input. */
+    get(name) { return this.#inputs[name]; }
+
     /** Add an input.
      *  @param {string} name - The name of the input.
      *  @param {Vector2} pos - The mouse position of the input. */
@@ -36,6 +41,13 @@ class InputTracker {
     consumePrintableInput() {
         const printable = Object.keys(this.#inputs).find(i => i.length === 1);
         return printable ? this.#inputs[printable] : null;
+    }
+
+    /** Apply an offset to the positions of all currently tracked inputs. 
+     *  Used when working with Cameras. 
+     *  @param {Vector2} offset - The offset to apply. */
+    applyOffset(offset) {
+        Object.keys(this.#inputs).forEach(key => this.#inputs[key].offset = offset.copy());
     }
 }
 

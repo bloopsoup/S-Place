@@ -1,6 +1,6 @@
 import Layer from "./layer.js";
 import GameObject from "../gameObject.js";
-import { Input } from '../../common/index.js';
+import { InputTracker } from '../../common/index.js';
 
 /** Responsible for handling layers of GameObjects. This means it has to pass inputs, 
  *  update the state, and draw the sprites of all the GameObjects that lie in all of
@@ -76,7 +76,7 @@ class Pool {
     }
 
     /** Pass the currently tracked inputs into all layers.
-     *  @param {Object<string, Input>} inputs - The currently tracked inputs. */
+     *  @param {InputTracker} inputs - The currently tracked inputs. */
     handleInputs(inputs) { Object.keys(this.#layers).forEach(key => this.#layers[key].handleInputs(inputs)); }
 
     /** Updates the state of the game objects contained in all layers.

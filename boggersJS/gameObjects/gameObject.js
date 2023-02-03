@@ -1,4 +1,4 @@
-import { Input } from '../common/index.js';
+import { InputTracker } from '../common/index.js';
 import { Sprite, DeltaTimeRunner, Movable, Collider, CollisionMap, Health } from '../components/index.js';
 
 /** The primary object that all game states will deal with. This class is responsible for 
@@ -97,7 +97,7 @@ class GameObject {
 
     /** Processes the inputs given by the InputHandler.
      *  To be optionally implemented by subclasses.
-     *  @param {Object<string, Input>} inputs - The currently tracked inputs. */
+     *  @param {InputTracker} inputs - The currently tracked inputs. */
     handleInputs(inputs) {}
 
     /** Update the components of the GameObject using delta time.

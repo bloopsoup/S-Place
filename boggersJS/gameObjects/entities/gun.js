@@ -1,6 +1,6 @@
 import Projectile from './projectile.js'
 import GameObject from '../gameObject.js';
-import { Grid, Input, Vector2 } from '../../common/index.js';
+import { Grid, InputTracker, Vector2 } from '../../common/index.js';
 import { Sprite } from '../../components/index.js';
 
 /** An entity responsible for creating projectiles that go towards the
@@ -61,10 +61,10 @@ class Gun extends GameObject {
 
     /** Handle inputs.
      *  @see GameObject.handleInputs
-     *  @param {Object<string, Input>} inputs */
+     *  @param {InputTracker} inputs */
     handleInputs(inputs) {
-        if ('MouseHold' in inputs && this.#canFire) {
-            this.addBullet(inputs['MouseHold'].pos);
+        if (inputs.has('MouseHold') && this.#canFire) {
+            this.addBullet(inputs.get('MouseHold').pos);
             this.#canFire = false;
         }
     }

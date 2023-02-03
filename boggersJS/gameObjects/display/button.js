@@ -1,6 +1,6 @@
 import GameObject from '../gameObject.js';
 import { Movable, Collider, Sprite } from '../../components/index.js';
-import { Input, Vector2 } from '../../common/index.js';
+import { InputTracker, Vector2 } from '../../common/index.js';
 
 /** A button that activates a given function when clicked.
  *  @augments GameObject 
@@ -38,15 +38,16 @@ class Button extends GameObject {
 
     /** Handle inputs.
      *  @see GameObject.handleInputs
-     *  @param {Object<string, Input>} inputs */
+     *  @param {InputTracker} inputs */
     handleInputs(inputs) {
-        if (!('MouseMove' in inputs)) return;
-        if (this.collider.pointOverlaps(this.movable, inputs['MouseMove'].pos)) {
+        if (!inputs.has('MouseMove')) return;
+        if (this.collider.pointOverlaps(this.movable, inputs.get('MouseMove').pos)) {
             this.#isHovered = true;
-            if ('MouseHold' in inputs) { this.#isClicked = true; this.#func(); } 
+            if (inputs.has('MouseHold')) { this.#isClicked = true; this.#func(); } 
             else { this.#isClicked = false; }
         } else {
             this.#isHovered = false;
+            this.#isClicked = false;
         }
     }
 
@@ -54,6 +55,7 @@ class Button extends GameObject {
      *  @see GameObject.draw
      *  @param {CanvasRenderingContext2D} context */
     draw(context) {
+        console.log(this.#isHovered, this.#isClicked);
         this.sprite.drawFrame(context, this.movable.pos, this.currentFrame());
     }
 }

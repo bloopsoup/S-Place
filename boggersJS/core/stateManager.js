@@ -1,4 +1,4 @@
-import { Input, State } from '../common/index.js';
+import { InputTracker, State } from '../common/index.js';
 
 /** Runs one state at a time, switching out states when prompted. 
  *  @memberof Core */
@@ -38,7 +38,7 @@ class StateManager {
     }
 
     /** Pass inputs from the InputHandler into the current state.
-     *  @param {Object<string, Input>} inputs - The currently tracked inputs. */
+     *  @param {InputTracker} inputs - The currently tracked inputs. */
     passInputs(inputs) { this.#currentState.handleInputs(inputs); }
 
     /** Update the current state's components and check if the 

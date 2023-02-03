@@ -6,7 +6,7 @@ https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Drawing_tex
 
 import GameObject from '../gameObject.js';
 import { Movable, Collider, Sprite } from '../../components/index.js';
-import { Input, Vector2 } from '../../common/index.js';
+import { InputTracker, Vector2 } from '../../common/index.js';
 
 /** A textbox which displays user input text.
  *  @augments GameObject 
@@ -41,15 +41,15 @@ class TextInput extends GameObject {
 
     /** Handle inputs.
      *  @see GameObject.handleInputs
-     *  @param {Object<string, Input>} inputs */
+     *  @param {InputTracker} inputs */
     handleInputs(inputs) {
-        if ('MouseClick' in inputs) {
-            if (this.collider.pointOverlaps(this.movable, inputs['MouseClick'].pos)) this.#isActive = true;
+        if (inputs.has('MouseHold')) {
+            if (this.collider.pointOverlaps(this.movable, inputs.get('MouseHold').pos)) this.#isActive = true;
             else this.#isActive = false;
         }
         if (this.#isActive) {
-            if ('Enter' in inputs) this.submitText();
-            if ('Backspace' in inputs) this.#text = this.#text.slice(0, -1);
+            if (inputs.has('Enter')) this.submitText();
+            if (inputs.has('Backspace')) this.#text = this.#text.slice(0, -1);
         }   
     }
 

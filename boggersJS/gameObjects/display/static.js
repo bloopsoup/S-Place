@@ -1,6 +1,6 @@
 import GameObject from '../gameObject.js';
 import { Vector2 } from '../../common/index.js';
-import { Movable, Sprite } from '../../components/index.js';
+import { Sprite } from '../../components/index.js';
 
 /** A static image. 
  *  @augments GameObject 

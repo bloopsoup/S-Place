@@ -1,5 +1,5 @@
 import GameObject from "../gameObject.js";
-import { Input } from '../../common/index.js';
+import { InputTracker } from '../../common/index.js';
 
 /** Handles a list of gameObjects. Meant to be used with Pool which manages multiple
  *  layers of game objects. This extra level of indirection in managing objects allows
@@ -38,7 +38,7 @@ class Layer {
     }
 
     /** Pass down the currently tracked inputs to the layer's game objects.
-     *  @param {Object<string, Input>} inputs - The currently tracked inputs. */
+     *  @param {InputTracker} inputs - The currently tracked inputs. */
     handleInputs(inputs) { this.#gameObjects.forEach(i => i.handleInputs(inputs)); }
 
     /** Update the components of the layer's game objects.

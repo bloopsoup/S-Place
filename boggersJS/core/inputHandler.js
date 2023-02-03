@@ -1,11 +1,11 @@
-import { Input, Vector2 } from '../common/index.js';
+import { InputTracker, Vector2 } from '../common/index.js';
 
 /** Handles all keyboard and mouse inputs through event listeners. 
  *  @memberof Core */
 class InputHandler {
     /** @type {HTMLCanvasElement} */
     #canvas
-    /** @type {Object<string, Input>} */
+    /** @type {InputTracker} */
     #inputs
 
     /** Create the InputHandler and register event listeners for keyboard and mouse inputs. 
@@ -14,26 +14,21 @@ class InputHandler {
      *      into canvas positions. */
     constructor(canvas) {
         this.#canvas = canvas;
-        this.#inputs = {};
+        this.#inputs = new InputTracker();
         window.addEventListener('keydown', e => this.addInput(e.key));
-        window.addEventListener('keyup', e => this.removeInput(e.key));
         window.addEventListener('mousedown', e => this.addInput('MouseHold', new Vector2(e.clientX, e.clientY)));
-        window.addEventListener('mouseup', _ => this.removeInput('MouseHold'));
         window.addEventListener('mousemove', e => this.addInput('MouseMove', new Vector2(e.clientX, e.clientY)));
+        window.addEventListener('keyup', e => this.#inputs.remove(e.key));
+        window.addEventListener('mouseup', _ => this.#inputs.remove('MouseHold'));
     }
 
-    /** Get a copy of the InputHandler's currently tracked inputs.
-     *  @return {Object<string, Input>} A copy of the InputHandler's currently tracked inputs. */
-    get inputs() {
-        const inputs = {};
-        for (let name in this.#inputs)
-            inputs[name] = this.#inputs[name].copy();
-        return inputs;
-    }
+    /** Get the InputHandler's currently tracked inputs.
+     *  @return {InputTracker} A copy of the InputHandler's currently tracked inputs. */
+    get inputs() { return this.#inputs; }
 
-    /** Checks whether a point is within a canvas space. Used to determine
-     *  whether to track a recent mouse input depending on whether the event
-     *  happened within canvas or outside of canvas.
+    /** Checks whether a point is within a canvas space. Used to determine whether to track 
+     *  a recent mouse input depending on whether the event happened within canvas or outside 
+     *  of canvas.
      *  @param {Vector2} pos - The position to check.
      *  @return {boolean} The result. */
     withinCanvas(pos) {
@@ -62,20 +57,20 @@ class InputHandler {
         return realPos;
     }
 
-    /** Add an input to the handler's currently tracked inputs.
+    /** Add an input to the handler's currently tracked inputs. This function is used
+     *  rather than the tracker's add method because positions and other metadata behind
+     *  inputs needs to be checked. For example, you would not admit a mouse input whose
+     *  position is out of bounds in relation to the canvas.
      *  @param {string} name - The name of the input.
      *  @param {Vector2} pos - The mouse position of the input. */
     addInput(name, pos = new Vector2(0, 0)) {
-        if (name !== 'MouseHold' || (name === 'MouseHold' && this.withinCanvas(pos))) 
-            this.#inputs[name] = new Input(name, this.toRealPos(pos));
-        if (name === 'MouseMove' && 'MouseHold' in this.#inputs)
-            this.#inputs['MouseHold'] = new Input('MouseHold', this.toRealPos(pos));
-    }
-
-    /** Remove an input from the handler's currently tracked inputs.
-     *  @param {string} name - The name of the input to remove. */
-    removeInput(name) {
-        delete this.#inputs[name];
+        switch (name) {
+            case 'MouseHold':
+            case 'MouseMove':
+                if (!this.withinCanvas(pos)) break;
+            default:
+                this.#inputs.add(name, this.toRealPos(pos));
+        }
     }
 }
 

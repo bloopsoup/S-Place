@@ -1,4 +1,4 @@
-import Input from './input.js';
+import InputTracker from './inputTracker.js';
 import Vector2 from './vector2.js';
 
 /** A state abstract class that is managed by a StateManager. Actual game states 
@@ -58,7 +58,7 @@ class State {
     cleanup() { throw new Error('Implement!'); }
 
     /** Processes the inputs given by the InputHandler.
-     *  @param {Object<string, Input>} inputs - The currently tracked inputs. */
+     *  @param {InputTracker} inputs - The currently tracked inputs. */
     handleInputs(inputs) { throw new Error('Implement!'); }
 
     /** Updates frame-reliant components based on delta time.

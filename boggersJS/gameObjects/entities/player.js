@@ -1,5 +1,5 @@
 import GameObject from '../gameObject.js';
-import { Grid, Input, Vector2 } from '../../common/index.js';
+import { Grid, InputTracker, Vector2 } from '../../common/index.js';
 import { Sprite, MovablePhysics, Collider, CollisionMap, Health } from '../../components/index.js';
 
 /** The player character directly controlled via user input. Has physics-based
@@ -47,11 +47,11 @@ class Player extends GameObject {
 
     /** Handle inputs.
      *  @see GameObject.handleInputs
-     *  @param {Object<string, Input>} inputs */
+     *  @param {InputTracker} inputs */
     handleInputs(inputs) {
-        if ('ArrowRight' in inputs) this.movable.incrementVelocity(new Vector2(1, 0));
-        else if ('ArrowLeft' in inputs) this.movable.incrementVelocity(new Vector2(-1, 0));
-        if ('ArrowUp' in inputs) this.movable.jump();
+        if (inputs.has('d')) this.movable.incrementVelocity(new Vector2(1, 0));
+        else if (inputs.has('a')) this.movable.incrementVelocity(new Vector2(-1, 0));
+        if (inputs.has('w')) this.movable.jump();
     }
 
     /** Update components.
