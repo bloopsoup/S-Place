@@ -24,6 +24,16 @@ class Projectile extends GameObject {
         this.#damage = damage;
     }
 
+    /** Handle tile collisions.
+     *  @see GameObject.handleTileCollisions */
+    handleTileCollisions() {
+        const corners = this.movable.corners;
+        for (let i in corners) {
+            const correction = this.collisionMap.callCollisionHandler(this.movable, corners[i]);
+            if (correction) this.markForDeletion();
+        }
+    }
+
     /** Update components.
      *  @see GameObject.update
      *  @param {number} dt */
@@ -31,6 +41,7 @@ class Projectile extends GameObject {
         this.dtRunner.deltaTimeUpdate(dt, this.sprite.nextFrameInRow);
         this.movable.incrementPos();
         if (this.movable.outOfBoundsComplete()) this.markForDeletion();
+        this.handleTileCollisions();
     }
 
     /** Draw the object.

@@ -3,8 +3,6 @@ import { Input, Vector2 } from '../common/index.js';
 /** Handles all keyboard and mouse inputs through event listeners. 
  *  @memberof Core */
 class InputHandler {
-    /** @type {Array<string>} */
-    #acceptedNames = ['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight', 'Enter', 'MouseHold'];
     /** @type {HTMLCanvasElement} */
     #canvas
     /** @type {Object<string, Input>} */
@@ -19,9 +17,9 @@ class InputHandler {
         this.#inputs = {};
         window.addEventListener('keydown', e => this.addInput(e.key));
         window.addEventListener('keyup', e => this.removeInput(e.key));
-        window.addEventListener('mousemove', e => this.modifyMouseInput(new Vector2(e.clientX, e.clientY)));
         window.addEventListener('mousedown', e => this.addInput('MouseHold', new Vector2(e.clientX, e.clientY)));
         window.addEventListener('mouseup', _ => this.removeInput('MouseHold'));
+        window.addEventListener('mousemove', e => this.addInput('MouseMove', new Vector2(e.clientX, e.clientY)));
     }
 
     /** Get a copy of the InputHandler's currently tracked inputs.
@@ -64,27 +62,20 @@ class InputHandler {
         return realPos;
     }
 
-    /** Change the position of a currently tracked mouse input when the mouse has been moved.
-     *  @param {Vector2} pos - The new mouse position. */
-    modifyMouseInput(pos) {
-        if ('MouseHold' in this.#inputs)
-            this.#inputs['MouseHold'] = new Input('MouseHold', this.toRealPos(pos));
-    }
-
     /** Add an input to the handler's currently tracked inputs.
      *  @param {string} name - The name of the input.
      *  @param {Vector2} pos - The mouse position of the input. */
     addInput(name, pos = new Vector2(0, 0)) {
-        if (!this.#acceptedNames.includes(name)) return;
         if (name !== 'MouseHold' || (name === 'MouseHold' && this.withinCanvas(pos))) 
             this.#inputs[name] = new Input(name, this.toRealPos(pos));
+        if (name === 'MouseMove' && 'MouseHold' in this.#inputs)
+            this.#inputs['MouseHold'] = new Input('MouseHold', this.toRealPos(pos));
     }
 
     /** Remove an input from the handler's currently tracked inputs.
      *  @param {string} name - The name of the input to remove. */
     removeInput(name) {
-        if (this.#acceptedNames.includes(name))
-            delete this.#inputs[name];
+        delete this.#inputs[name];
     }
 }
 

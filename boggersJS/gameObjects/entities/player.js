@@ -32,6 +32,8 @@ class Player extends GameObject {
         if (this.collider.collides(this.movable, other.movable, true)) console.log('PLAYER GOES OUCH');
     }
 
+    /** Handle tile collisions.
+     *  @see GameObject.handleTileCollisions */
     handleTileCollisions() {
         const corners = this.movable.corners;
         for (let i in corners) {

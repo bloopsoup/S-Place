@@ -1,35 +1,60 @@
 import GameObject from '../gameObject.js';
+import { Movable, Collider, Sprite } from '../../components/index.js';
 import { Input, Vector2 } from '../../common/index.js';
 
+/** A button that activates a given function when clicked.
+ *  @augments GameObject 
+ *  @memberof GameObjects.Display */
 class Button extends GameObject {
-    constructor(sprite, pos, callback) {
+    /** @type {CallableFunction} */
+    #func
+    /** @type {boolean} */
+    #isHovered
+    /** @type {boolean} */
+    #isClicked
+
+    /** Create the Button.
+     *  @param {Sprite} sprite - The sprites for the button.
+     *  @param {Vector2} pos - The position of the button.
+     *  @param {CallableFunction} func - The function that is called when the button is pressed. */
+    constructor(sprite, pos, func) {
         super(sprite);
-        this.pos = pos;
-        this.callback = callback
-        this.dim = sprite.dimensions
-        this.isHovered = false;
-        this.isClicked = false;
+        this.movable = new Movable(new Vector2(0, 0), this.sprite.dimensions, pos, new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0));
+        this.collider = new Collider(0);
+        this.#func = func;
+        this.#isHovered = false;
+        this.#isClicked = false;
     }
 
+    /** Returns the correct frame for the button display based on
+     *  its current state.
+     *  @returns {Vector2} The current frame of the button. */
+    currentFrame() {
+        if (this.#isClicked) return new Vector2(2, 0);
+        else if (this.#isHovered) return new Vector2(1, 0);
+        else return new Vector2(0, 0);
+    }
 
+    /** Handle inputs.
+     *  @see GameObject.handleInputs
+     *  @param {Object<string, Input>} inputs */
     handleInputs(inputs) {
-        if ('MouseMove' in inputs) {
-            const mouse_pos = inputs['MouseMove'].pos;
-            if (mouse_pos.greaterThan(this.pos) && mouse_pos.lessThan(this.pos.addCopy(this.dim))) {
-                this.isHovered = true;
-                if ('MouseHold' in inputs) {
-                    this.isClicked = true;
-                    this.callback()
-                }
-                else {this.isClicked = false;}
-            }
-            else {this.isHovered = false;}
+        if (!('MouseMove' in inputs)) return;
+        if (this.collider.pointOverlaps(this.movable, inputs['MouseMove'].pos)) {
+            this.#isHovered = true;
+            if ('MouseHold' in inputs) { this.#isClicked = true; this.#func(); } 
+            else { this.#isClicked = false; }
+        } else {
+            this.#isHovered = false;
         }
     }
 
-    draw(context) { 
-        if (this.isClicked) { this.sprite.drawFrame(context, this.pos, new Vector2(2, 0)); }
-        else if (this.isHovered) { this.sprite.drawFrame(context, this.pos, new Vector2(1, 0)); }
-        else { this.sprite.drawFrame(context, this.pos, new Vector2(0, 0)); }
+    /** Draw the object.
+     *  @see GameObject.draw
+     *  @param {CanvasRenderingContext2D} context */
+    draw(context) {
+        this.sprite.drawFrame(context, this.movable.pos, this.currentFrame());
     }
 }
+
+export default Button;

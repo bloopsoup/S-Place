@@ -1,4 +1,5 @@
 import { Movable } from './movable/index.js';
+import { Vector2 } from '../common/index.js';
 
 /** Handles buffered and instant collisions between two Movable objects.
  *  Buffered collisions have a cooldown which can be used to call collision 
@@ -15,6 +16,14 @@ class Collider {
     constructor(intangibilityTicks) {
         this.#currentTicks = 0; 
         this.#intangibilityTicks = intangibilityTicks;
+    }
+
+    /** Checks if a position is within a Movable.
+     *  @param {Movable} a - The Movable.
+     *  @param {Vector2} b - The position to check.
+     *  @returns {boolean} The result. */
+    pointOverlaps(a, b) {
+        return b.greaterThan(a.pos) && b.lessThan(a.pos.addCopy(a.dimensions));
     }
 
     /** Check whether two Movables overlap each other.

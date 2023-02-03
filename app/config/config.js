@@ -20,5 +20,7 @@ export const sprites = {
     'player': () => new Sprite('player', new Vector2(200, 200), [9, 7]),
     'background': () => new Sprite('background', new Vector2(2400, 720), [1]),
     'tiles': () => new Sprite('tiles', new Vector2(80, 80), [4, 4]),
-    'bullet': () => new Sprite('bullet', new Vector2(10, 10), [1])
+    'button': () => new Sprite('button', new Vector2(200, 50), [3]),
+    'bullet': () => new Sprite('bullet', new Vector2(10, 10), [1]),
+    'zito': () => new Sprite('zito', new Vector2(60, 80), [13])
 };
