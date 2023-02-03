@@ -60,3 +60,5 @@ class TextInput extends GameObject {
         // draw sprite and text!
     }
 }
+
+export default TextInput;

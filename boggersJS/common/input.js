@@ -1,6 +1,6 @@
 import Vector2 from './vector2.js';
 
-/** Stores input related information that is managed by an InputHandler
+/** Stores input related information that is managed by an InputHandler.
  *  @memberof Common */
 class Input {
     /** @type {string} */
@@ -23,10 +23,6 @@ class Input {
     /** Get the input's mouse position.
      *  @return {Vector2} The input's mouse position. */
     get pos() { return this.#pos.copy(); }
-
-    /** Whether the input itself is a printable character.
-     *  @return {boolean} The result. */
-    isPrintable() { return this.#name.length === 1; }
 
     /** Apply an offset to the input's mouse position. 
      *  Used when working with Cameras. 
