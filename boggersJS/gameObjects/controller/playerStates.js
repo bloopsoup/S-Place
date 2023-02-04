@@ -2,7 +2,7 @@ import ControlState from './controlState.js';
 import { Vector2 } from '../../common/index.js';
 
 class StandingLeft extends ControlState {
-    startup(target) { target.sprite.row = 1; }
+    startup(target) { target.sprite.row = 0; }
 
     handleInputs(target, inputs) {
         if (inputs.has('w')) this.goToDest('JumpingLeft');
@@ -12,7 +12,7 @@ class StandingLeft extends ControlState {
 }
 
 class StandingRight extends ControlState {
-    startup(target) { target.sprite.row = 0; }
+    startup(target) { target.sprite.row = 1; }
 
     handleInputs(target, inputs) {
         if (inputs.has('w')) this.goToDest('JumpingRight');
@@ -22,7 +22,7 @@ class StandingRight extends ControlState {
 }
 
 class RunningLeft extends ControlState {
-    startup(target) { target.sprite.row = 7; }
+    startup(target) { target.sprite.row = 2; }
 
     handleInputs(target, inputs) {
         if (inputs.has('w')) this.goToDest('JumpingLeft');
@@ -33,7 +33,7 @@ class RunningLeft extends ControlState {
 }
 
 class RunningRight extends ControlState {
-    startup(target) { target.sprite.row = 6; }
+    startup(target) { target.sprite.row = 3; }
 
     handleInputs(target, inputs) {
         if (inputs.has('w')) this.goToDest('JumpingRight');
@@ -46,7 +46,7 @@ class RunningRight extends ControlState {
 class JumpingLeft extends ControlState {
     startup(target) {
         if (target.movable.canJump) target.movable.jump();
-        target.sprite.row = 3;
+        target.sprite.row = 4;
     }
 
     handleInputs(target, inputs) {
@@ -59,7 +59,7 @@ class JumpingLeft extends ControlState {
 class JumpingRight extends ControlState {
     startup(target) {
         if (target.movable.canJump) { target.movable.jump(); }
-        target.sprite.row = 2;
+        target.sprite.row = 5;
     }
 
     handleInputs(target, inputs) {
