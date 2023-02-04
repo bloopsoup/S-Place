@@ -43,7 +43,7 @@ class Sprite {
 
     /** Sets the current row.
      *  @param {number} row - The new row. */    
-    set row(row) { this.#frame.y = row; }
+    set row(row) { this.#frame.x = 0; this.#frame.y = row; }
 
     /** Check if the current frame is on the last row.
      *  @returns {boolean} The result. */

@@ -1,5 +1,6 @@
 import Layer from "./layer.js";
 import GameObject from "../gameObject.js";
+import { Controller } from '../controller/index.js';
 import { InputTracker } from '../../common/index.js';
 
 /** Responsible for handling layers of GameObjects. This means it has to pass inputs, 
@@ -13,6 +14,8 @@ import { InputTracker } from '../../common/index.js';
 class Pool {
     /** @type {Object<string, Layer>} */
     #layers
+    /** @type {Array<Controller>} */
+    #controllers
     /** @type {Array<Array<string>>} */
     #collisionOrder
 
@@ -28,6 +31,7 @@ class Pool {
      *  const pool = Pool(['layer1', 'layer2', 'layer3'], [['layer1', 'layer3'], ['layer2', 'layer3']]); */
     constructor(names, collisionOrder) { 
         this.#layers = {};
+        this.#controllers = [];
         
         names.forEach(i => this.#layers[i] = new Layer());
         this.#collisionOrder = collisionOrder;
@@ -66,6 +70,10 @@ class Pool {
         this.#layers[name].addObjects(gameObjects);
     }
 
+    /** Adds a controller to the Pool.
+     *  @param {Controller} controller - The controller to add. */
+    addController(controller) { this.#controllers.push(controller); }
+
     /** Handles collisions between layers, processing it according to
      *  the collision order. */
     handleLayerCollisions() {
@@ -77,7 +85,10 @@ class Pool {
 
     /** Pass the currently tracked inputs into all layers.
      *  @param {InputTracker} inputs - The currently tracked inputs. */
-    handleInputs(inputs) { Object.keys(this.#layers).forEach(key => this.#layers[key].handleInputs(inputs)); }
+    handleInputs(inputs) { 
+        Object.keys(this.#layers).forEach(key => this.#layers[key].handleInputs(inputs)); 
+        this.#controllers.forEach(controller => controller.passInputs(inputs));
+    }
 
     /** Updates the state of the game objects contained in all layers.
      *  @param {number} dt - The time between the last two frames. */
