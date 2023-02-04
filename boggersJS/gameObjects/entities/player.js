@@ -2,9 +2,9 @@ import GameObject from '../gameObject.js';
 import { Grid, Vector2 } from '../../common/index.js';
 import { Sprite, MovablePhysics, Collider, CollisionMap, Health } from '../../components/index.js';
 
-/** The player character directly controlled via user input. Has physics-based
+/** The player character meant to be controlled via Controller. Has physics-based
  *  movement behavior which supports tile-based collision. Also has a health
- *  component similar to Enemy.
+ *  component to determine when to die (delete itself).
  *  @augments GameObject
  *  @memberof GameObjects.Entities */
 class Player extends GameObject {

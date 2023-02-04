@@ -5,10 +5,6 @@ import { InputTracker } from "../../common/index.js";
 /** Controllers are a much more robust substitute to a game object's 
  *  handleInputs method. They employ a state machine where each state 
  *  determines what inputs are allowed and what animation will be played.
- * 
- *  You should use controllers rather than implementing a game object's
- *  handleInputs if you expect to that the object itself will have many
- *  states based on input such as running, walking, idle, etc. 
  *  @memberof GameObjects.Controller */
 class Controller {
     /** @type {GameObject} */

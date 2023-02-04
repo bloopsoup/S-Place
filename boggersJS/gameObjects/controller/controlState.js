@@ -29,7 +29,7 @@ class ControlState {
      *  occur here via specific user inputs like a keypress.
      *  @param {GameObject} target - The controlled element.
      *  @param {InputTracker} inputs - The currently tracked inputs. */
-    handleInputs(target, inputs) { }
+    handleInputs(target, inputs) {}
 
     /** Removes the state's done flag before the controller leaves. */
     reset() { this.#isDone = false; }
