@@ -5,7 +5,7 @@ import { InputTracker } from '../../common/index.js';
  *  layers of game objects. This extra level of indirection in managing objects allows
  *  an object-to-object collision system to be clearly defined, as well as a definite
  *  ordering in how elements are layered on screen. 
- *  @memberof GameObjects.Controller */
+ *  @memberof GameObjects.Management */
 class Layer {
     /** @type {Array<GameObject>} */
     #gameObjects

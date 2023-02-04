@@ -26,6 +26,10 @@ class MovablePhysics extends Movable {
         this.#canJump = true;
     }
 
+    /** Checks whether the Movable can jump again.
+     *  @returns {boolean} The result. */
+    get canJump() { return this.#canJump; }
+
     /** Enable jumping. */
     enableJump() { this.#canJump = true; }
 

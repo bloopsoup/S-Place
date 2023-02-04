@@ -9,7 +9,7 @@ import { InputTracker } from '../../common/index.js';
  * 
  *  Having a Pool of objects allows support for an object-to-object collision system
  *  as collisions between objects can be handled through layers. 
- *  @memberof GameObjects.Controller */
+ *  @memberof GameObjects.Management */
 class Pool {
     /** @type {Object<string, Layer>} */
     #layers
