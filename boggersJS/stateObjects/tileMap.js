@@ -39,6 +39,11 @@ class TileMap {
             case 15: return new Vector2(2, 1);
             case 16: return new Vector2(0, 2);
             case 17: return new Vector2(0, 0);
+            case 18: return new Vector2(6, 0);
+            case 19: return new Vector2(6, 1);
+            case 20: return new Vector2(6, 2);
+            case 21: return new Vector2(6, 3);
+            case 22: return new Vector2(2, 1);
             default: return new Vector2(0, 0);
         }
     }
