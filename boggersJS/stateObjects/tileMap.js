@@ -27,10 +27,10 @@ class TileMap {
             case 3 : return new Vector2(1, 1);
             case 4 : return new Vector2(3, 1);
             case 5 : return new Vector2(2, 3);
-            case 6 : return new Vector2(1, 0);
-            case 7 : return new Vector2(3, 0);
-            case 8 : return new Vector2(1, 2);
-            case 9 : return new Vector2(3, 2);
+            case 6 : return new Vector2(4, 0);
+            case 7 : return new Vector2(5, 0);
+            case 8 : return new Vector2(4, 2);
+            case 9 : return new Vector2(5, 2);
             case 10: return new Vector2(2, 4);
             case 11: return new Vector2(1, 3);
             case 12: return new Vector2(3, 3);
