@@ -125,8 +125,6 @@ class CollisionMap {
     }
 
     /** Calls the appropiate collision handler based on the tile found at a target's corner.
-     *  Tiles are encoded as binary numbers where each bit position represents the side of
-     *  a tile that is collidable. 0b00000 -> SLOPED-RIGHT-LEFT-BOTTOM-TOP]
      *  @param {Movable} target - The target Movable. 
      *  @param {Vector2} cornerPos - A corner of the target Movable to check. 
      *  @returns {Array<number> | null} Either returns NULL if there is no collision 

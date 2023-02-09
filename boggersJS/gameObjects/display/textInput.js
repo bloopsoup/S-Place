@@ -40,6 +40,7 @@ class TextInput extends GameObject {
     submitText() {
         this.#func(this.#text);
         this.#text = '';
+        this.#isActive = false;
     }
 
     /** Handle inputs.
