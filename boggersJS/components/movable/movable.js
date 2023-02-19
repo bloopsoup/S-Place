@@ -21,6 +21,8 @@ class Movable {
     #acceleration
     /** @type {Vector2} */
     #deceleration
+    /** @type {number} */
+    #offset = 0.01
     /** @type {CommandQueue} */
     #commandQueue
 
@@ -204,8 +206,8 @@ class Movable {
 
     /** Snaps the Movable by setting its position and velocity when it attempts to go out of bounds. */
     snap() {
-        if (this.pastLeftWall()) { this.#pos.x = 0; this.#velocity.x = 0; }
-        if (this.pastRightWall()) { this.#pos.x = this.#maxDimensions.x - this.#dimensions.x; this.#velocity.x = 0; }
+        if (this.pastLeftWall()) { this.#pos.x = this.#offset; this.#velocity.x = 0; }
+        if (this.pastRightWall()) { this.#pos.x = this.#maxDimensions.x - this.#dimensions.x - this.#offset; this.#velocity.x = 0; }
         if (this.pastCeiling()) { this.#pos.y = 0; this.#velocity.y = 0; }
         if (this.pastFloor()) { this.#pos.y = this.#maxDimensions.y - this.#dimensions.y; this.#velocity.y = 0; }
     }

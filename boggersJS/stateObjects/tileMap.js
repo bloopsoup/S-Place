@@ -8,6 +8,10 @@ class TileMap {
     #grid
     /** @type {Sprite} */
     #sprite
+    /** @type {HTMLCanvasElement} */
+    #cachedCanvas
+    /** @type {boolean} */
+    #hasRendered
 
     /** Create the TileMap.
      *  @param {Grid} grid - A grid where each number denotes the art for each tile.
@@ -15,6 +19,9 @@ class TileMap {
     constructor(grid, sprite) {
         this.#grid = grid;
         this.#sprite = sprite;
+        this.#cachedCanvas = document.createElement('canvas');
+        this.#cachedCanvas.width = grid.dimensions.x, this.#cachedCanvas.height = grid.dimensions.y;
+        this.#hasRendered = false;
     }
 
     /** Converts a tile type into a spritesheet frame.
@@ -48,12 +55,20 @@ class TileMap {
         }
     }
 
-    /** Draw the TileMap.
-     *  @param {CanvasRenderingContext2D} context - The context to draw on. */
-    draw(context) {
+    /** Prerenders the TileMap to improve performance. Should be called ONCE. */
+    preDraw() {
+        const context = this.#cachedCanvas.getContext('2d');
         this.#grid.forEach((pos, element) => {
             if (element) this.#sprite.drawFrame(context, pos, this.toFrame(element)); 
         }, true);
+        this.#hasRendered = true;
+    }
+
+    /** Draw the TileMap.
+     *  @param {CanvasRenderingContext2D} context - The context to draw on. */
+    draw(context) {
+        if (!this.#hasRendered) this.preDraw();
+        context.drawImage(this.#cachedCanvas, 0, 0);
     }
 }
 
