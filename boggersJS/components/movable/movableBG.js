@@ -35,10 +35,11 @@ class MovableBG extends Movable {
      *  Used when the background is completely out of bounds. */
     resetPos() { this.pos = this.#startPos.copy(); }
 
-    /** Increments the background position and resets the position
-     *  if needed. */
-    update() {
-        this.incrementPos();
+    /** Increments the background position and resets the position if needed.
+     *  @param {number} dt - The milliseconds between the last two frames. */
+    update(dt) {
+        this.commandQueue.update(dt);
+        this.queueIncrementPos();
         if (this.outOfBoundsComplete()) this.resetPos();   
     }
 }

@@ -49,7 +49,7 @@ class RunningLeft extends ControlState {
     handleInputs(target, inputs) {
         if (inputs.has('w')) this.goToDest('JumpingLeft');
         else if (inputs.has('d')) this.goToDest('RunningRight');
-        else if (inputs.has('a')) target.movable.incrementVelocity(new Vector2(-1, 0));
+        else if (inputs.has('a')) target.movable.queueIncrementVelocity(new Vector2(-1, 0));
         else this.goToDest('StandingLeft');
     }
 }
@@ -66,7 +66,7 @@ class RunningRight extends ControlState {
      *  @param {InputTracker} inputs - The currently tracked inputs. */
     handleInputs(target, inputs) {
         if (inputs.has('w')) this.goToDest('JumpingRight');
-        else if (inputs.has('d')) target.movable.incrementVelocity(new Vector2(1, 0));
+        else if (inputs.has('d')) target.movable.queueIncrementVelocity(new Vector2(1, 0));
         else if (inputs.has('a')) this.goToDest('RunningLeft');
         else this.goToDest('StandingRight');
     }
@@ -88,7 +88,7 @@ class JumpingLeft extends ControlState {
     handleInputs(target, inputs) {
         if (target.movable.canJump) this.goToDest('StandingLeft');
         else if (inputs.has('d')) this.goToDest('JumpingRight');
-        else if (inputs.has('a')) target.movable.incrementVelocity(new Vector2(-1, 0));
+        else if (inputs.has('a')) target.movable.queueIncrementVelocity(new Vector2(-1, 0));
     }
 }
 
@@ -107,7 +107,7 @@ class JumpingRight extends ControlState {
      *  @param {InputTracker} inputs - The currently tracked inputs. */
     handleInputs(target, inputs) {
         if (target.movable.canJump) this.goToDest('StandingRight');
-        else if (inputs.has('d')) target.movable.incrementVelocity(new Vector2(1, 0));
+        else if (inputs.has('d')) target.movable.queueIncrementVelocity(new Vector2(1, 0));
         else if (inputs.has('a')) this.goToDest('JumpingLeft');
     }
 }

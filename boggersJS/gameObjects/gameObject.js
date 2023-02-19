@@ -102,7 +102,7 @@ class GameObject {
 
     /** Update the components of the GameObject using delta time.
      *  To be optionally implemented by subclasses.
-     *  @param {number} dt - The time between the last two frames. */
+     *  @param {number} dt - The milliseconds between the last two frames. */
     update(dt) {}
 
     /** Draw the GameObject. Must be implemented by subclasses.

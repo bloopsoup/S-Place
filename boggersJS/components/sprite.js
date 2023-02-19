@@ -1,4 +1,5 @@
 import { Vector2 } from '../common/index.js';
+import DeltaTimeRunner from './deltaTimeRunner.js';
 
 /** The Sprite class provides methods for displaying the proper frames from an
  *  underlying spritesheet. It has two modes you can use to iterate through frames.
@@ -14,6 +15,8 @@ class Sprite {
     #gridFormat
     /** @type {Vector2} */
     #frame
+    /** @type {DeltaTimeRunner} */
+    #dtRunner
 
     /** Create the Sprite.
      *  @param {string} name - The ID pointing to the HTMLElement containing the spritesheet. 
@@ -24,6 +27,7 @@ class Sprite {
         this.#dimensions = dimensions;
         this.#gridFormat = gridFormat;
         this.#frame = new Vector2(0, 0);
+        this.#dtRunner = new DeltaTimeRunner(4);
 
         this.nextFrameInRow = this.nextFrameInRow.bind(this);
         this.nextFrame = this.nextFrame.bind(this);
@@ -70,6 +74,12 @@ class Sprite {
             if (this.onLastRow()) this.#frame.y = 0;
             else this.#frame.y++;
         } else { this.#frame.x++; }
+    }
+
+    /** Advances the frame if enough time has passed.
+     *  @param {number} dt - The milliseconds between the last two frames. */
+    updateFrame(dt) {
+        this.#dtRunner.deltaTimeUpdate(dt, this.nextFrameInRow);
     }
 
     /** Draw a sprite from the desired frame at a position.

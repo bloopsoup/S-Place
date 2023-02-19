@@ -91,7 +91,7 @@ class Pool {
     }
 
     /** Updates the state of the game objects contained in all layers.
-     *  @param {number} dt - The time between the last two frames. */
+     *  @param {number} dt - The milliseconds between the last two frames. */
     update(dt) { 
         this.handleLayerCollisions(); 
         Object.keys(this.#layers).forEach(key => this.#layers[key].update(dt)); 

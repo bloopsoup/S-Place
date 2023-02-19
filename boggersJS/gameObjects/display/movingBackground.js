@@ -20,7 +20,7 @@ class MovingBackground extends GameObject {
      *  @see GameObject.update
      *  @param {number} dt */
     update(dt) {
-        this.movable.update();
+        this.movable.update(dt);
     }
 
     /** Draw the object.

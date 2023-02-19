@@ -8,14 +8,6 @@ lower frame rate. If you were to look at a character going `x` units per minute,
 find that the character runs incredibly fast on `A` compared to `B`, even when they are using
 the same velocity value.
 
-## Changing the Runner
-
-As of the moment, the `DeltaTimeRunner` is quite confusing with its inclusion of an `fps` member
-even though you can't dictate the `fps` when requesting the next animation frame.
-
-**Implementation**
-1) Get rid of `fps` and `requiredFrameCount` and just use `requiredSeconds`.
-
 ## `Sprite` and `Collider`
 A crucial component that handles sprite animations. Every object in the game needs a `Sprite`
 component if it want to be displayed.

@@ -62,7 +62,7 @@ class State {
     handleInputs(inputs) { throw new Error('Implement!'); }
 
     /** Updates frame-reliant components based on delta time.
-     *  @param {number} dt - The time between the last two frames. */
+     *  @param {number} dt - The milliseconds between the last two frames. */
     update(dt) { throw new Error('Implement!'); }
 
     /** Draws state elements and game objects onto the canvas.

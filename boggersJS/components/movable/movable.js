@@ -1,4 +1,5 @@
 import { Vector2 } from '../../common/index.js';
+import CommandQueue from '../commandQueue.js';
 
 /** A base 2D movement class that supports acceleration-based movement. 
  *  Uses maxDimensions for basic bounds checking and position snapping. 
@@ -20,6 +21,8 @@ class Movable {
     #acceleration
     /** @type {Vector2} */
     #deceleration
+    /** @type {CommandQueue} */
+    #commandQueue
 
     /** Create the Movable.
      *  @param {Vector2} maxDimensions - Assuming origin is (0, 0), limits how far the Movable can go down and right.
@@ -38,6 +41,11 @@ class Movable {
         this.#maxSpeed = maxSpeed;
         this.#acceleration = acceleration;
         this.#deceleration = deceleration;
+        this.#commandQueue = new CommandQueue();
+
+        this.incrementPos = this.incrementPos.bind(this);
+        this.incrementVelocity = this.incrementVelocity.bind(this);
+        this.decrementVelocity = this.decrementVelocity.bind(this);
     }
 
     /** Get the maximum dimensions.
@@ -68,6 +76,10 @@ class Movable {
     /** Get the deceleration.
      *  @return {Vector2} The deceleration. */
     get deceleration() { return this.#deceleration.copy(); }
+
+    /** Get the command queue.
+     *  @return {CommandQueue} The command queue. */
+    get commandQueue() { return this.#commandQueue; }
 
     /** Get the position of the Movable's top left corner.
      *  @return {Vector2} The position of the top left corner. */
@@ -115,6 +127,9 @@ class Movable {
         this.#pos.add(this.#velocity); 
     }
 
+    /** Queues a commmand to increment movement. */
+    queueIncrementPos() { this.#commandQueue.add('incrementPos', this.incrementPos); }
+
     /** Set the velocity. 
      *  @param {Vector2} velocity - The velocity. */
     set velocity(velocity) { this.#velocity = velocity; }
@@ -129,6 +144,10 @@ class Movable {
         this.#velocity.select(maxVelocity, dir.x > 0, dir.y > 0);
     }
 
+    /** Queues a command to increment velocity. 
+     *  @param {Vector2} dir - A Vector2 whose elements are in {-1, 0, 1}. */
+    queueIncrementVelocity(dir) { this.#commandQueue.add('incrementVelocity', () => this.incrementVelocity(dir)); }
+
     /** Decrement the velocity so that the chosen axis velocity goes to 0.
      *  @param {number} axis - The velocity axis to zero out. Is in {0, 1, 2}. */
     decrementVelocity(axis) {
@@ -138,6 +157,10 @@ class Movable {
         newVelocity.select(new Vector2(0, 0), this.#velocity.x < 0, this.#velocity.y < 0);
         this.#velocity = newVelocity;
     }
+
+    /** Queues a command to decrement velocity.
+     *  @param {number} axis - The velocity axis to zero out. Is in {0, 1, 2}. */
+    queueDecrementVelocity(axis) { this.#commandQueue.add('decrementVelocity', () => this.decrementVelocity(axis)); }
 
     /** Checks if the Movable is clipping past the left wall.
      *  @returns {boolean} The result. */
@@ -195,6 +218,10 @@ class Movable {
         if (axis === 0) { this.#pos.x = axisPos; this.#velocity.x = axisVelocity; } 
         else { this.#pos.y = axisPos; this.#velocity.y = axisVelocity; }
     }
+
+    /** Processes the movement commands when enough time has passed.
+     *  @param {number} dt - The milliseconds between the last two frames. */
+    update(dt) { this.#commandQueue.update(dt); }
 }
 
 export default Movable;

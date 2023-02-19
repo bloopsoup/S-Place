@@ -49,8 +49,9 @@ class Player extends GameObject {
      *  @see GameObject.update
      *  @param {number} dt */
     update(dt) {
-        this.dtRunner.deltaTimeUpdate(dt, this.sprite.nextFrameInRow);
-        this.movable.update();
+        this.sprite.updateFrame(dt);
+        this.movable.update(dt);
+        this.collider.update(dt);
         this.handleTileCollisions();
     }
 

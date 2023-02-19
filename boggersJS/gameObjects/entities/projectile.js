@@ -38,8 +38,9 @@ class Projectile extends GameObject {
      *  @see GameObject.update
      *  @param {number} dt */
     update(dt) {
-        this.dtRunner.deltaTimeUpdate(dt, this.sprite.nextFrameInRow);
-        this.movable.incrementPos();
+        this.sprite.updateFrame(dt);
+        this.movable.update(dt);
+        this.movable.queueIncrementPos();
         if (this.movable.outOfBoundsComplete()) this.markForDeletion();
         this.handleTileCollisions();
     }

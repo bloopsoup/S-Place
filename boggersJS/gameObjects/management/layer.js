@@ -42,7 +42,7 @@ class Layer {
     handleInputs(inputs) { this.#gameObjects.forEach(i => i.handleInputs(inputs)); }
 
     /** Update the components of the layer's game objects.
-     *  @param {number} dt - The time between the last two frames. */
+     *  @param {number} dt - The milliseconds between the last two frames. */
     update(dt) { this.clean(); this.#gameObjects.forEach(i => i.update(dt)); }
 
     /** Draw the layer's GameObjects.
