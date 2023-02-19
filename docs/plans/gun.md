@@ -1,8 +1,6 @@
 # `Gun`
 Points and shoots in the direction of your mouse.
 
----
-
 ## Another Method For `Vector2`
 
 ```js
@@ -10,8 +8,6 @@ Points and shoots in the direction of your mouse.
  *  @return {number} The angle in radians. */
 toAngle() { return Math.atan2(this.#y, this.#x); }
 ```
-
----
 
 ## A Rotated `Sprite`
 
@@ -33,8 +29,6 @@ drawRotated(context, pos, rotatePos, angle) {
     context.restore();
 }
 ```
-
----
 
 ## Mouse-Dependent Rotation and the Barrel
 Once sprites can be rotated, it is time to have it rotate to always face the mouse. And with a
