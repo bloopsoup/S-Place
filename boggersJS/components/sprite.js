@@ -88,7 +88,7 @@ class Sprite {
      *  @param {Vector2} frame - The desired frame to draw. */
     drawFrame(context, pos, frame) {
         context.drawImage(this.#image, frame.x * this.#dimensions.x, frame.y * this.#dimensions.y, 
-            this.#dimensions.x, this.#dimensions.y, pos.x, pos.y, this.#dimensions.x, this.#dimensions.y);
+            this.#dimensions.x, this.#dimensions.y, Math.floor(pos.x), Math.floor(pos.y), this.#dimensions.x, this.#dimensions.y);
     }
 
     /** Draw a sprite from the current frame at a position.
@@ -96,7 +96,7 @@ class Sprite {
      *  @param {Vector2} pos - The position to draw the sprite. */
     draw(context, pos) {
         context.drawImage(this.#image, this.#frame.x * this.#dimensions.x, this.#frame.y * this.#dimensions.y, 
-            this.#dimensions.x, this.#dimensions.y, pos.x, pos.y, this.#dimensions.x, this.#dimensions.y);
+            this.#dimensions.x, this.#dimensions.y, Math.floor(pos.x), Math.floor(pos.y), this.#dimensions.x, this.#dimensions.y);
     }
 }
 
