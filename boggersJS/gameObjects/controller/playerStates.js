@@ -98,7 +98,7 @@ class JumpingRight extends ControlState {
     /** Modify the target upon entering the state.
      *  @param {Player} target - The player to modify. */
     startup(target) {
-        if (target.movable.canJump) { target.movable.jump(); }
+        if (target.movable.canJump) target.movable.jump();
         target.sprite.row = 5;
     }
 

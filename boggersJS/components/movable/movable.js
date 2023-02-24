@@ -44,24 +44,20 @@ class Movable {
         this.#acceleration = acceleration;
         this.#deceleration = deceleration;
         this.#commandQueue = new CommandQueue();
-
-        this.incrementPos = this.incrementPos.bind(this);
-        this.incrementVelocity = this.incrementVelocity.bind(this);
-        this.decrementVelocity = this.decrementVelocity.bind(this);
     }
 
     /** Get the maximum dimensions.
      *  @return {Vector2} The maximum dimensions. */
-    get maxDimensions() { return this.#maxDimensions.copy(); }
+    get maxDimensions() { return this.#maxDimensions; }
 
     /** Get the dimensions.
      *  @return {Vector2} The dimensions. */
-    get dimensions() { return this.#dimensions.copy(); }
+    get dimensions() { return this.#dimensions; }
 
     /** Get the old position. This is used with the current position
      *  to calculate direction, making it useful for tile-based collisions.
      *  @return {Vector2} The old position. */
-    get oldPos() { return this.#oldPos.copy(); }
+    get oldPos() { return this.#oldPos; }
 
     /** Get the current position.
      *  @return {Vector2} The current position. */
@@ -73,11 +69,11 @@ class Movable {
 
     /** Get the acceleration.
      *  @return {Vector2} The acceleration. */
-    get acceleration() { return this.#acceleration.copy(); }
+    get acceleration() { return this.#acceleration; }
 
     /** Get the deceleration.
      *  @return {Vector2} The deceleration. */
-    get deceleration() { return this.#deceleration.copy(); }
+    get deceleration() { return this.#deceleration; }
 
     /** Get the command queue.
      *  @return {CommandQueue} The command queue. */
@@ -85,11 +81,11 @@ class Movable {
 
     /** Get the position of the Movable's top left corner.
      *  @return {Vector2} The position of the top left corner. */
-    get topLeftPos() { return this.#pos.copy(); }
+    get topLeftPos() { return this.#pos; }
 
     /** Get the old position of the Movable's top left corner.
      *  @return {Vector2} The old position of the top left corner. */
-    get oldTopLeftPos() { return this.#oldPos.copy(); }
+    get oldTopLeftPos() { return this.#oldPos; }
 
     /** Get the position of the Movable's top right corner.
      *  @return {Vector2} The position of the top right corner. */
@@ -123,46 +119,9 @@ class Movable {
      *  @param {Vector2} pos - The position. */
     set pos(pos) { this.#pos = pos; }
 
-    /** Update the old position and increment the current position via velocity. */
-    incrementPos() { 
-        this.#oldPos = this.#pos.copy();
-        this.#pos.add(this.#velocity); 
-    }
-
-    /** Queues a commmand to increment movement. */
-    queueIncrementPos() { this.#commandQueue.add('incrementPos', this.incrementPos); }
-
     /** Set the velocity. 
      *  @param {Vector2} velocity - The velocity. */
     set velocity(velocity) { this.#velocity = velocity; }
-
-    /** Increment the velocity based on the provided direction. For example,
-     *  if the direction is (1, 0), only the velocity's x will increase positively.
-     *  @param {Vector2} dir - A Vector2 whose elements are in {-1, 0, 1}. */
-    incrementVelocity(dir) { 
-        this.#velocity.add(this.#acceleration.mulCopy(dir));
-        const maxVelocity = this.#maxSpeed.mulCopy(dir);
-        maxVelocity.selectIfZero(this.#velocity);
-        this.#velocity.select(maxVelocity, dir.x > 0, dir.y > 0);
-    }
-
-    /** Queues a command to increment velocity. 
-     *  @param {Vector2} dir - A Vector2 whose elements are in {-1, 0, 1}. */
-    queueIncrementVelocity(dir) { this.#commandQueue.add('incrementVelocity', () => this.incrementVelocity(dir)); }
-
-    /** Decrement the velocity so that the chosen axis velocity goes to 0.
-     *  @param {number} axis - The velocity axis to zero out. Is in {0, 1, 2}. */
-    decrementVelocity(axis) {
-        const modifier = new Vector2(-Math.sign(this.#velocity.x) * ((axis === 0 || axis === 2) ? 1 : 0),
-                                     -Math.sign(this.#velocity.y) * ((axis === 1 || axis === 2) ? 1 : 0));
-        const newVelocity = this.#velocity.addCopy(this.#deceleration.mulCopy(modifier));
-        newVelocity.select(new Vector2(0, 0), this.#velocity.x < 0, this.#velocity.y < 0);
-        this.#velocity = newVelocity;
-    }
-
-    /** Queues a command to decrement velocity.
-     *  @param {number} axis - The velocity axis to zero out. Is in {0, 1, 2}. */
-    queueDecrementVelocity(axis) { this.#commandQueue.add('decrementVelocity', () => this.decrementVelocity(axis)); }
 
     /** Checks if the Movable is clipping past the left wall.
      *  @returns {boolean} The result. */
@@ -203,6 +162,47 @@ class Movable {
     /** Checks if the Movable is completely out of bounds.
      *  @returns {boolean} The result. */
     outOfBoundsComplete() { return this.pastLeftWallComplete() || this.pastRightWallComplete() || this.pastCeilingComplete() || this.pastFloorComplete(); }
+
+    /** Update the old position and increment the current position via velocity. */
+    incrementPos() {
+        this.#pos.copyTo(this.#oldPos);
+        this.#pos.add(this.#velocity); 
+    }
+
+    /** Increment the velocity based on the provided direction. For example,
+     *  if the direction is (1, 0), only the velocity's x will increase positively.
+     *  @param {Vector2} dir - A Vector2 whose elements are in {-1, 0, 1}. */
+    incrementVelocity(dir) { 
+        const buffer = this.#acceleration.copy();
+        buffer.mul(dir);
+        this.#velocity.add(buffer);
+        this.#maxSpeed.copyTo(buffer);
+        buffer.mul(dir);
+        buffer.selectIfZero(this.#velocity);
+        this.#velocity.select(buffer, dir.x > 0, dir.y > 0);
+    }
+
+    /** Decrement the velocity so that the chosen axis velocity goes to 0.
+     *  @param {number} axis - The velocity axis to zero out. Is in {0, 1, 2}. */
+    decrementVelocity(axis) {
+        const buffer = new Vector2(-Math.sign(this.#velocity.x) * ((axis === 0 || axis === 2) ? 1 : 0),
+                                   -Math.sign(this.#velocity.y) * ((axis === 1 || axis === 2) ? 1 : 0));
+        buffer.mul(this.#deceleration);
+        buffer.add(this.#velocity);
+        buffer.selectWithZero(this.#velocity.x < 0, this.#velocity.y < 0);
+        buffer.copyTo(this.#velocity);
+    }
+
+    /** Queues a commmand to increment movement. */
+    queueIncrementPos() { this.#commandQueue.add('incrementPos', () => this.incrementPos()); }
+
+    /** Queues a command to increment velocity. 
+     *  @param {Vector2} dir - A Vector2 whose elements are in {-1, 0, 1}. */
+    queueIncrementVelocity(dir) { this.#commandQueue.add('incrementVelocity', () => this.incrementVelocity(dir)); }
+
+    /** Queues a command to decrement velocity.
+     *  @param {number} axis - The velocity axis to zero out. Is in {0, 1, 2}. */
+    queueDecrementVelocity(axis) { this.#commandQueue.add('decrementVelocity', () => this.decrementVelocity(axis)); }
 
     /** Snaps the Movable by setting its position and velocity when it attempts to go out of bounds. */
     snap() {

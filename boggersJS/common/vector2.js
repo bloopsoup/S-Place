@@ -34,6 +34,14 @@ class Vector2 {
      *  @param {number} y - The y value. */
     set y(y) { this.#y = y; }
 
+    /** Sets both the x and y values.
+     *  @param {number} x - The x value.
+     *  @param {number} y - The y value. */
+    setBoth(x, y) { 
+        this.#x = x; 
+        this.#y = y; 
+    }
+
     /** Add to the x value.
      *  @param {number} x - The x value to add. */
     addToX(x) { this.#x += x; }
@@ -136,6 +144,16 @@ class Vector2 {
         this.#y = selectY(this.#y, other.#y);
     }
 
+    /** The same as select except the other vector is the zero vector.
+     *  @param {boolean} useMinA - Whether to take the minimum of the x values from both vectors.
+     *  @param {boolean} useMinB - Whether to take the minimum of the y values from both vectors. */
+    selectWithZero(useMinA, useMinB) {
+        const selectX = useMinA ? Math.min : Math.max;
+        const selectY = useMinB ? Math.min : Math.max;
+        this.#x = selectX(this.#x, 0);
+        this.#y = selectY(this.#y, 0);
+    }
+
     /** Sets this vector's elements to the other vector's elements if the
      *  current element is 0.
      *  @param {Vector2} other - The other vector. */
@@ -158,6 +176,13 @@ class Vector2 {
     /** Return a copy of this vector.
      *  @returns {Vector2} The copy. */
     copy() { return new Vector2(this.#x, this.#y); }
+
+    /** Copies this vector's numbers to the other vector.
+     *  @param {Vector2} other - The other vector. */
+    copyTo(other) {
+        other.#x = this.#x;
+        other.#y = this.#y;
+    }
 }
 
 export default Vector2;

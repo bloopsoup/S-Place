@@ -24,7 +24,9 @@ class Collider {
      *  @param {Vector2} b - The position to check.
      *  @returns {boolean} The result. */
     pointOverlaps(a, b) {
-        return b.greaterThan(a.pos) && b.lessThan(a.pos.addCopy(a.dimensions));
+        const buffer = a.pos.copy();
+        buffer.add(a.dimensions);
+        return b.greaterThan(a.pos) && b.lessThan(buffer);
     }
 
     /** Check whether two Movables overlap each other.
@@ -32,7 +34,12 @@ class Collider {
      *  @param {Movable} b - The second Movable.
      *  @returns {boolean} The result. */
     overlaps(a, b) {
-        return a.pos.lessThan(b.pos.addCopy(b.dimensions)) && b.pos.lessThan(a.pos.addCopy(a.dimensions));
+        const buffer = a.pos.copy();
+        buffer.add(a.dimensions);
+        if (!b.pos.lessThan(buffer)) return false;
+        b.pos.copyTo(buffer);
+        buffer.add(b.dimensions);
+        return a.pos.lessThan(buffer);
     }
 
     /** Check whether a collision occurs between two Movables. This takes into account

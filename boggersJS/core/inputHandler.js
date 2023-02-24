@@ -33,7 +33,10 @@ class InputHandler {
      *  @return {boolean} The result. */
     withinCanvas(pos) {
         const rect = this.#canvas.getBoundingClientRect();
-        return pos.lessThan(new Vector2(rect.left + rect.width, rect.top + rect.height)) && pos.greaterThan(new Vector2(rect.left, rect.top)); 
+        const buffer = new Vector2(rect.left + rect.width, rect.top + rect.height);
+        if (!pos.lessThan(buffer)) return false;
+        buffer.setBoth(rect.left, rect.top);
+        return pos.greaterThan(buffer); 
     }
 
     /** Converts a client position into a real position (which uses the coordinate system
@@ -48,13 +51,13 @@ class InputHandler {
      *  system resizes along with it but uses the same numbers. A 1 unit distance in the
      *  real coordinate system may have a different size than a 1 unit distance in the client
      *  coordinate system, which means you also have to scale the canvas-relative position.
-     *  @param {Vector2} clientPos - The client position.
-     *  @return {Vector2} The real position. */
+     *  @param {Vector2} clientPos - The client position. */
     toRealPos(clientPos) {
         const rect = this.#canvas.getBoundingClientRect();
-        const realPos = clientPos.subCopy(new Vector2(rect.left, rect.top));
-        realPos.mul(new Vector2(this.#canvas.width / rect.width,  this.#canvas.height / rect.height));
-        return realPos;
+        const buffer = new Vector2(rect.left, rect.top);
+        clientPos.sub(buffer);
+        buffer.setBoth(this.#canvas.width / rect.width,  this.#canvas.height / rect.height);
+        clientPos.mul(buffer);
     }
 
     /** Add an input to the handler's currently tracked inputs. This function is used
@@ -69,7 +72,8 @@ class InputHandler {
             case 'MouseMove':
                 if (!this.withinCanvas(pos)) break;
             default:
-                this.#inputs.add(name, this.toRealPos(pos));
+                this.toRealPos(pos);
+                this.#inputs.add(name, pos);
         }
     }
 }

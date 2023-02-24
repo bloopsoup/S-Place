@@ -24,8 +24,6 @@ class MovablePhysics extends Movable {
         super(maxDimensions, dimensions, pos, velocity, maxSpeed, acceleration, deceleration);
         this.#jumpPower = jumpPower;
         this.#canJump = true;
-
-        this.fall = this.fall.bind(this);
     }
 
     /** Checks whether the Movable can jump again.
@@ -50,7 +48,7 @@ class MovablePhysics extends Movable {
     }
 
     /** Queues a fall command. */
-    queueFall() { this.commandQueue.add('fall', this.fall); }
+    queueFall() { this.commandQueue.add('fall', () => this.fall()); }
 
     /** Increments/snaps the position when needed. 
      *  Also accounts for deceleration and gravity.

@@ -6,17 +6,17 @@ class Input {
     /** @type {string} */
     #name
     /** @type {Vector2} */
-    #pos
+    #oldPos
     /** @type {Vector2} */
-    #offset
+    #pos
 
     /** Create a new input object.
      *  @param {string} name - The name of the input.
      *  @param {Vector2} pos - The mouse position of the input. */
     constructor(name, pos) {
         this.#name = name;
-        this.#pos = pos;
-        this.#offset = new Vector2(0, 0);
+        this.#oldPos = pos;
+        this.#pos = pos.copy();
     }
 
     /** Get the input name.
@@ -25,11 +25,14 @@ class Input {
 
     /** Get the input's mouse position.
      *  @return {Vector2} The input's mouse position. */
-    get pos() { return this.#pos.subCopy(this.#offset); }
+    get pos() { return this.#pos; }
 
     /** Sets the offset to the input's mouse position. 
      *  @param {Vector2} offset - The offset. */
-    set offset(offset) { this.#offset = offset; }
+    set offset(offset) {
+        this.#oldPos.copyTo(this.#pos);
+        this.#pos.sub(offset);
+    }
 }
 
 export default Input;

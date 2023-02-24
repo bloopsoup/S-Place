@@ -131,26 +131,28 @@ class CollisionMap {
      *      (so no snapping) or a triplet of numbers: [{0, 1} - axis, new pos for axis, 
      *      new velocity for axis] */
     callCollisionHandler(target, cornerPos) {
-        const gridPos = this.#grid.toGridPos(cornerPos);
-        const tilePos = this.#grid.toRealPos(gridPos);
-        switch (this.#grid.get(gridPos)) {
-            case 1 : return this.collideTop(target, tilePos);
-            case 2 : return this.collideBottom(target, tilePos);
-            case 3 : return this.collideLeft(target, tilePos);
-            case 4 : return this.collideRight(target, tilePos);
-            case 5 : return this.collideMany(target, tilePos, [this.collideTop, this.collideBottom]);
-            case 6 : return this.collideMany(target, tilePos, [this.collideTop, this.collideLeft]);
-            case 7 : return this.collideMany(target, tilePos, [this.collideTop, this.collideRight]);
-            case 8 : return this.collideMany(target, tilePos, [this.collideBottom, this.collideLeft]);
-            case 9 : return this.collideMany(target, tilePos, [this.collideBottom, this.collideRight]);
-            case 10: return this.collideMany(target, tilePos, [this.collideLeft, this.collideRight]);
-            case 11: return this.collideMany(target, tilePos, [this.collideTop, this.collideBottom, this.collideLeft]);
-            case 12: return this.collideMany(target, tilePos, [this.collideTop, this.collideBottom, this.collideRight]);
-            case 13: return this.collideMany(target, tilePos, [this.collideTop, this.collideLeft, this.collideRight]);
-            case 14: return this.collideMany(target, tilePos, [this.collideBottom, this.collideLeft, this.collideRight]);
-            case 15: return this.collideMany(target, tilePos, [this.collideTop, this.collideBottom, this.collideLeft, this.collideRight]);
-            case 16: return this.collideSlopeUp(target, tilePos);
-            case 17: return this.collideSlopeDown(target, tilePos);
+        const buffer = cornerPos.copy();
+        this.#grid.toGridPos(buffer);
+        const collisionType = this.#grid.get(buffer);
+        this.#grid.toRealPos(buffer);
+        switch (collisionType) {
+            case 1 : return this.collideTop(target, buffer);
+            case 2 : return this.collideBottom(target, buffer);
+            case 3 : return this.collideLeft(target, buffer);
+            case 4 : return this.collideRight(target, buffer);
+            case 5 : return this.collideMany(target, buffer, [this.collideTop, this.collideBottom]);
+            case 6 : return this.collideMany(target, buffer, [this.collideTop, this.collideLeft]);
+            case 7 : return this.collideMany(target, buffer, [this.collideTop, this.collideRight]);
+            case 8 : return this.collideMany(target, buffer, [this.collideBottom, this.collideLeft]);
+            case 9 : return this.collideMany(target, buffer, [this.collideBottom, this.collideRight]);
+            case 10: return this.collideMany(target, buffer, [this.collideLeft, this.collideRight]);
+            case 11: return this.collideMany(target, buffer, [this.collideTop, this.collideBottom, this.collideLeft]);
+            case 12: return this.collideMany(target, buffer, [this.collideTop, this.collideBottom, this.collideRight]);
+            case 13: return this.collideMany(target, buffer, [this.collideTop, this.collideLeft, this.collideRight]);
+            case 14: return this.collideMany(target, buffer, [this.collideBottom, this.collideLeft, this.collideRight]);
+            case 15: return this.collideMany(target, buffer, [this.collideTop, this.collideBottom, this.collideLeft, this.collideRight]);
+            case 16: return this.collideSlopeUp(target, buffer);
+            case 17: return this.collideSlopeDown(target, buffer);
             default: return null;
         }
     }
