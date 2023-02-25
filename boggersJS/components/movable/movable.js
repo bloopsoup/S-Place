@@ -32,8 +32,8 @@ class Movable {
     constructor(maxDimensions, dimensions, pos, velocity, maxSpeed, acceleration, deceleration) {
         this.#maxDimensions = maxDimensions;
         this.#dimensions = dimensions;
-        this.#oldPos = new Vector2(0, 0);
-        this.#pos = pos;
+        this.#oldPos = pos;
+        this.#pos = pos.copy();
         this.#velocity = velocity;
         this.#maxSpeed = maxSpeed;
         this.#acceleration = acceleration;
@@ -152,6 +152,17 @@ class Movable {
     /** Checks if the Movable is completely out of bounds.
      *  @returns {boolean} The result. */
     outOfBoundsComplete() { return this.pastLeftWallComplete() || this.pastRightWallComplete() || this.pastCeilingComplete() || this.pastFloorComplete(); }
+
+    /** Gets the interpolated position.
+     *  @param {number} alpha - Used for interpolation when rendering between two states. */
+    interpolatePos(alpha) {
+        const before = this.#oldPos.copy();
+        before.mulScalar(1 - alpha);
+        const after = this.#pos.copy();
+        after.mulScalar(alpha);
+        after.add(before);
+        return after;
+    }
 
     /** Update the old position and increment the current position via velocity. */
     incrementPos() {

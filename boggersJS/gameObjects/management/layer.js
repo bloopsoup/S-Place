@@ -45,8 +45,9 @@ class Layer {
     update() { this.clean(); this.#gameObjects.forEach(i => i.update()); }
 
     /** Draw the layer's GameObjects.
-     *  @param {CanvasRenderingContext2D} context - The context to draw on. */
-    draw(context) { this.#gameObjects.forEach(i => i.draw(context)); }
+     *  @param {CanvasRenderingContext2D} context - The context to draw on.
+     *  @param {number} alpha - Used for interpolation when rendering between two states. */
+    draw(context, alpha) { this.#gameObjects.forEach(i => i.draw(context, alpha)); }
 }
 
 export default Layer;

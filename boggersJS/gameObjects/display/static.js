@@ -19,8 +19,9 @@ class Static extends GameObject {
 
     /** Draw the object.
      *  @see GameObject.draw
-     *  @param {CanvasRenderingContext2D} context */
-    draw(context) { this.sprite.draw(context, this.#pos); }
+     *  @param {CanvasRenderingContext2D} context
+     *  @param {number} alpha */
+    draw(context, alpha) { this.sprite.draw(context, this.#pos); }
 }
 
 export default Static;

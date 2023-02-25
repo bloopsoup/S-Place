@@ -98,8 +98,9 @@ class GameObject {
     update() {}
 
     /** Draw the GameObject. Must be implemented by subclasses.
-     *  @param {CanvasRenderingContext2D} context - The context to draw on. */
-    draw(context) { throw new Error('Implement!'); }
+     *  @param {CanvasRenderingContext2D} context - The context to draw on.
+     *  @param {number} alpha - Used for interpolation when rendering between two states. */
+    draw(context, alpha) { throw new Error('Implement!'); }
 }
 
 export default GameObject;

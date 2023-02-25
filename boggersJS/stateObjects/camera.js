@@ -39,11 +39,22 @@ class Camera {
      *  @returns {number} The horizontal offset. */
     boundedHorizontalOffset() {
         const centerOffset = (this.#canvasDimensions.x - this.#anchor.dimensions.x) / 2;
-        if (this.#anchor.pos.x < centerOffset) 
-            return 0; 
+        if (this.#anchor.pos.x < centerOffset) return 0; 
         else if (this.#anchor.pos.x > this.#anchor.maxDimensions.x - this.#canvasDimensions.x + centerOffset)
             return this.#canvasDimensions.x - this.#anchor.maxDimensions.x;
         return this.horizontalOffset('');
+    }
+
+    /** Like boundedHorizontalOffset, except it uses the Movable's interpolated position.
+     *  @param {number} alpha - Used for interpolation when rendering between two states.
+     *  @returns {number} The vertical offset. */
+    boundedHorizontalInterpolatedOffset(alpha) {
+        const pos = this.#anchor.interpolatePos(alpha);
+        const centerOffset = (this.#canvasDimensions.x - this.#anchor.dimensions.x) / 2;
+        if (pos.x < centerOffset) return 0; 
+        else if (pos.x > this.#anchor.maxDimensions.x - this.#canvasDimensions.x + centerOffset)
+            return this.#canvasDimensions.x - this.#anchor.maxDimensions.x;
+        return ((this.#canvasDimensions.x - this.#anchor.dimensions.x) / 2) - pos.x;
     }
 
     /** Gets the vertical offset used to translate the canvas so that the anchor
@@ -64,11 +75,22 @@ class Camera {
      *  @returns {number} The vertical offset. */
     boundedVerticalOffset() {
         const centerOffset = (this.#canvasDimensions.y - this.#anchor.dimensions.y) / 2;
-        if (this.#anchor.pos.y < centerOffset)
-            return 0;
+        if (this.#anchor.pos.y < centerOffset) return 0;
         else if (this.#anchor.pos.y > this.#anchor.maxDimensions.y - this.#canvasDimensions.y + centerOffset)
             return this.#canvasDimensions.y - this.#anchor.maxDimensions.y;
         return this.verticalOffset('');
+    }
+
+    /** Like boundedVerticalOffset, except it uses the Movable's interpolated position.
+     *  @param {number} alpha - Used for interpolation when rendering between two states.
+     *  @returns {number} The vertical offset. */
+    boundedVerticalInterpolatedOffset(alpha) {
+        const pos = this.#anchor.interpolatePos(alpha);
+        const centerOffset = (this.#canvasDimensions.y - this.#anchor.dimensions.y) / 2;
+        if (pos.y < centerOffset) return 0;
+        else if (pos.y > this.#anchor.maxDimensions.y - this.#canvasDimensions.y + centerOffset)
+            return this.#canvasDimensions.y - this.#anchor.maxDimensions.y;
+        return ((this.#canvasDimensions.y - this.#anchor.dimensions.y) / 2) - pos.y;
     }
 
     /** Gets the cardinal offset.
@@ -79,10 +101,17 @@ class Camera {
         return new Vector2(Math.floor(this.horizontalOffset(horizontalMode)), Math.floor(this.verticalOffset(verticalMode)));
     }
 
-    /** Gets the hybrid offset.
-     *  @returns {Vector2} The hybrid offset. */
-    getHybridOffset() {
+    /** Gets the bounded offset.
+     *  @returns {Vector2} The bounded offset. */
+    getBoundedOffset() {
         return new Vector2(Math.floor(this.boundedHorizontalOffset()), Math.floor(this.boundedVerticalOffset()));
+    }
+
+    /** Gets the interpolated bounded offset.
+     *  @param {number} alpha - Used for interpolation when rendering between two states.
+     *  @returns {Vector2} The bounded offset. */
+    getInterpolatedBoundedOffset(alpha) {
+        return new Vector2(Math.floor(this.boundedHorizontalInterpolatedOffset(alpha)), Math.floor(this.boundedVerticalInterpolatedOffset(alpha)))
     }
 }
 

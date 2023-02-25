@@ -55,7 +55,7 @@ class DialogueBox extends GameObject {
         }
     }
     
-    draw(context){
+    draw(context, alpha){
         context.font = "48px serif";
         context.fillText(this.display, this.movable.pos.x, this.movable.pos.y);
     }

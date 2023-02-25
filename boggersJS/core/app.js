@@ -57,10 +57,10 @@ class App {
             this.#accumulator -= this.#dt;
         }
 
-        // ADD INTERPOLATION
+        const alpha = this.#accumulator / this.#dt;
 
         this.#context.clearRect(0, 0, this.#canvas.width, this.#canvas.height);
-        this.#stateManager.draw(this.#context);
+        this.#stateManager.draw(this.#context, alpha);
         requestAnimationFrame(this.runTick);
     }
 }

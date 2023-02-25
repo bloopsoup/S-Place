@@ -12,7 +12,7 @@ export default class Test extends State {
         this.tileMap = new TileMap(maps['test'], sprites['blue']());
 
         this.gun = new Gun(sprites['tiles'](), new Vector2(100, 200), 5, sprites['bullet'], maps['test'], 10, 5);
-        this.player = new Player(sprites['player'](), maps['test'], new Vector2(100, 20), new Vector2(5, 5), new Vector2(1.2, 1.2), new Vector2(0.6, 0.6), -15, 10);
+        this.player = new Player(sprites['player'](), maps['test'], new Vector2(100, 20), new Vector2(5, 5), new Vector2(0.45, 0.45), new Vector2(0.25, 0.25), -8, 10);
         this.controller = new Controller('StandingRight', playerStates, this.player);
 
         this.camera = new Camera(this.canvasDimensions, this.player.movable);
@@ -27,7 +27,7 @@ export default class Test extends State {
     cleanup() {}
 
     handleInputs(inputs) {
-        const offset = this.camera.getHybridOffset();
+        const offset = this.camera.getBoundedOffset();
         inputs.applyOffset(offset);
         this.pool.handleInputs(inputs); 
     }
@@ -36,11 +36,11 @@ export default class Test extends State {
         this.pool.update();
     }
 
-    draw(context) {
+    draw(context, alpha) {
         context.save();
-        const offset = this.camera.getHybridOffset();
+        const offset = this.camera.getInterpolatedBoundedOffset(alpha);
         context.translate(offset.x, offset.y);
-        this.pool.draw(context); 
+        this.pool.draw(context, alpha); 
         this.tileMap.draw(context);
         context.restore();
     }

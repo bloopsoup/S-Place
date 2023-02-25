@@ -65,8 +65,9 @@ class State {
     update() { throw new Error('Implement!'); }
 
     /** Draws state elements and game objects onto the canvas.
-     *  @param {CanvasRenderingContext2D} context - The context to draw on. */
-    draw(context) { throw new Error('Implement!'); }
+     *  @param {CanvasRenderingContext2D} context - The context to draw on.
+     *  @param {number} alpha - Used for interpolation when rendering between two states. */
+    draw(context, alpha) { throw new Error('Implement!'); }
 
     /** Used by the StateManager when transitioning into a new state to reset the old state. */
     reset() { 

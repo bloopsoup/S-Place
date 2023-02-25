@@ -50,8 +50,9 @@ class StateManager {
     }
 
     /** Draws the current state's components.
-     *  @param {CanvasRenderingContext2D} context - The context to draw on. */
-    draw(context) { this.#currentState.draw(context); }
+     *  @param {CanvasRenderingContext2D} context - The context to draw on.
+     *  @param {number} alpha - Used for interpolation when rendering between two states. */
+    draw(context, alpha) { this.#currentState.draw(context, alpha); }
 }
 
 export default StateManager;

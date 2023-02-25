@@ -45,8 +45,9 @@ class Projectile extends GameObject {
 
     /** Draw the object.
      *  @see GameObject.draw
-     *  @param {CanvasRenderingContext2D} context */
-    draw(context) { this.sprite.draw(context, this.movable.pos); }
+     *  @param {CanvasRenderingContext2D} context
+     *  @param {number} alpha */
+    draw(context, alpha) { this.sprite.draw(context, this.movable.interpolatePos(alpha)); }
 }
 
 export default Projectile;

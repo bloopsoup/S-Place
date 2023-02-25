@@ -55,8 +55,9 @@ class Button extends GameObject {
 
     /** Draw the object.
      *  @see GameObject.draw
-     *  @param {CanvasRenderingContext2D} context */
-    draw(context) {
+     *  @param {CanvasRenderingContext2D} context
+     *  @param {number} alpha */
+    draw(context, alpha) {
         this.sprite.drawFrame(context, this.movable.pos, this.currentFrame());
     }
 }

@@ -65,8 +65,9 @@ class TextInput extends GameObject {
 
     /** Draw the object.
      *  @see GameObject.draw
-     *  @param {CanvasRenderingContext2D} context */
-    draw(context){
+     *  @param {CanvasRenderingContext2D} context
+     *  @param {number} alpha */
+    draw(context, alpha){
         context.save();
         this.sprite.drawFrame(context, this.movable.pos, !this.#isActive ? this.#frames[0] : this.#frames[1]);
         context.font = this.#font;

@@ -97,8 +97,9 @@ class Pool {
     }
 
     /** Draw the game objects contained in all layers.
-     *  @param {CanvasRenderingContext2D} context - The context to draw on. */
-    draw(context) { Object.keys(this.#layers).forEach(key => this.#layers[key].draw(context)); }
+     *  @param {CanvasRenderingContext2D} context - The context to draw on.
+     *  @param {number} alpha - Used for interpolation when rendering between two states. */
+    draw(context, alpha) { Object.keys(this.#layers).forEach(key => this.#layers[key].draw(context, alpha)); }
 }
 
 export default Pool;
