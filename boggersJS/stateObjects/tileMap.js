@@ -9,7 +9,30 @@ class TileMap {
     /** @type {Sprite} */
     #sprite
     /** @type {Object<number, Vector2>} */
-    #frames
+    #frames = {
+        1: new Vector2(2, 0),
+        2: new Vector2(2, 2),
+        3: new Vector2(1, 1),
+        4: new Vector2(3, 1),
+        5 : new Vector2(2, 3),
+        6 : new Vector2(4, 0),
+        7 : new Vector2(5, 0),
+        8 : new Vector2(4, 2),
+        9 : new Vector2(5, 2),
+        10: new Vector2(2, 4),
+        11: new Vector2(1, 3),
+        12: new Vector2(3, 3),
+        13: new Vector2(3, 4),
+        14: new Vector2(1, 4),
+        15: new Vector2(2, 1),
+        16: new Vector2(0, 2),
+        17: new Vector2(0, 0),
+        18: new Vector2(6, 0),
+        19: new Vector2(6, 1),
+        20: new Vector2(6, 2),
+        21: new Vector2(6, 3),
+        22: new Vector2(2, 1)
+    };
     /** @type {HTMLCanvasElement} */
     #cachedCanvas
     /** @type {boolean} */
@@ -21,30 +44,6 @@ class TileMap {
     constructor(grid, sprite) {
         this.#grid = grid;
         this.#sprite = sprite;
-        this.#frames = {
-            1: new Vector2(2, 0),
-            2: new Vector2(2, 2),
-            3: new Vector2(1, 1),
-            4: new Vector2(3, 1),
-            5 : new Vector2(2, 3),
-            6 : new Vector2(4, 0),
-            7 : new Vector2(5, 0),
-            8 : new Vector2(4, 2),
-            9 : new Vector2(5, 2),
-            10: new Vector2(2, 4),
-            11: new Vector2(1, 3),
-            12: new Vector2(3, 3),
-            13: new Vector2(3, 4),
-            14: new Vector2(1, 4),
-            15: new Vector2(2, 1),
-            16: new Vector2(0, 2),
-            17: new Vector2(0, 0),
-            18: new Vector2(6, 0),
-            19: new Vector2(6, 1),
-            20: new Vector2(6, 2),
-            21: new Vector2(6, 3),
-            22: new Vector2(2, 1)
-        }
         this.#cachedCanvas = document.createElement('canvas');
         this.#cachedCanvas.width = grid.dimensions.x, this.#cachedCanvas.height = grid.dimensions.y;
         this.#hasRendered = false;

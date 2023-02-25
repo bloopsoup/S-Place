@@ -42,12 +42,11 @@ class StateManager {
     passInputs(inputs) { this.#currentState.handleInputs(inputs); }
 
     /** Update the current state's components and check if the 
-     *  state wants to transition or quit.
-     *  @param {number} dt - The milliseconds between the last two frames. */
-    update(dt) {
+     *  state wants to transition or quit. */
+    update() {
         if (this.#currentState.isQuitting) this.#isQuitting = true;
         else if (this.#currentState.isDone) this.changeStates();
-        this.#currentState.update(dt);
+        this.#currentState.update();
     }
 
     /** Draws the current state's components.

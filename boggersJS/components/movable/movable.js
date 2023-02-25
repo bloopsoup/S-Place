@@ -1,5 +1,4 @@
 import { Vector2 } from '../../common/index.js';
-import CommandQueue from '../commandQueue.js';
 
 /** A base 2D movement class that supports acceleration-based movement. 
  *  Uses maxDimensions for basic bounds checking and position snapping. 
@@ -21,10 +20,6 @@ class Movable {
     #acceleration
     /** @type {Vector2} */
     #deceleration
-    /** @type {number} */
-    #offset = 0.01
-    /** @type {CommandQueue} */
-    #commandQueue
 
     /** Create the Movable.
      *  @param {Vector2} maxDimensions - Assuming origin is (0, 0), limits how far the Movable can go down and right.
@@ -43,7 +38,6 @@ class Movable {
         this.#maxSpeed = maxSpeed;
         this.#acceleration = acceleration;
         this.#deceleration = deceleration;
-        this.#commandQueue = new CommandQueue();
     }
 
     /** Get the maximum dimensions.
@@ -74,10 +68,6 @@ class Movable {
     /** Get the deceleration.
      *  @return {Vector2} The deceleration. */
     get deceleration() { return this.#deceleration; }
-
-    /** Get the command queue.
-     *  @return {CommandQueue} The command queue. */
-    get commandQueue() { return this.#commandQueue; }
 
     /** Get the position of the Movable's top left corner.
      *  @return {Vector2} The position of the top left corner. */
@@ -193,21 +183,10 @@ class Movable {
         buffer.copyTo(this.#velocity);
     }
 
-    /** Queues a commmand to increment movement. */
-    queueIncrementPos() { this.#commandQueue.add('incrementPos', () => this.incrementPos()); }
-
-    /** Queues a command to increment velocity. 
-     *  @param {Vector2} dir - A Vector2 whose elements are in {-1, 0, 1}. */
-    queueIncrementVelocity(dir) { this.#commandQueue.add('incrementVelocity', () => this.incrementVelocity(dir)); }
-
-    /** Queues a command to decrement velocity.
-     *  @param {number} axis - The velocity axis to zero out. Is in {0, 1, 2}. */
-    queueDecrementVelocity(axis) { this.#commandQueue.add('decrementVelocity', () => this.decrementVelocity(axis)); }
-
     /** Snaps the Movable by setting its position and velocity when it attempts to go out of bounds. */
     snap() {
-        if (this.pastLeftWall()) { this.#pos.x = this.#offset; this.#velocity.x = 0; }
-        if (this.pastRightWall()) { this.#pos.x = this.#maxDimensions.x - this.#dimensions.x - this.#offset; this.#velocity.x = 0; }
+        if (this.pastLeftWall()) { this.#pos.x = 0; this.#velocity.x = 0; }
+        if (this.pastRightWall()) { this.#pos.x = this.#maxDimensions.x - this.#dimensions.x; this.#velocity.x = 0; }
         if (this.pastCeiling()) { this.#pos.y = 0; this.#velocity.y = 0; }
         if (this.pastFloor()) { this.#pos.y = this.#maxDimensions.y - this.#dimensions.y; this.#velocity.y = 0; }
     }
@@ -220,10 +199,6 @@ class Movable {
         if (axis === 0) { this.#pos.x = axisPos; this.#velocity.x = axisVelocity; } 
         else { this.#pos.y = axisPos; this.#velocity.y = axisVelocity; }
     }
-
-    /** Processes the movement commands when enough time has passed.
-     *  @param {number} dt - The milliseconds between the last two frames. */
-    update(dt) { this.#commandQueue.update(dt); }
 }
 
 export default Movable;

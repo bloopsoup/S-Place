@@ -1,5 +1,5 @@
 import { Vector2 } from '../common/index.js';
-import DeltaTimeRunner from './deltaTimeRunner.js';
+import TickRunner from './tickRunner.js';
 
 /** The Sprite class provides methods for displaying the proper frames from an
  *  underlying spritesheet. It has two modes you can use to iterate through frames.
@@ -15,8 +15,8 @@ class Sprite {
     #gridFormat
     /** @type {Vector2} */
     #frame
-    /** @type {DeltaTimeRunner} */
-    #dtRunner
+    /** @type {TickRunner} */
+    #runner
 
     /** Create the Sprite.
      *  @param {string} name - The ID pointing to the HTMLElement containing the spritesheet. 
@@ -27,10 +27,7 @@ class Sprite {
         this.#dimensions = dimensions;
         this.#gridFormat = gridFormat;
         this.#frame = new Vector2(0, 0);
-        this.#dtRunner = new DeltaTimeRunner(4);
-
-        this.nextFrameInRow = this.nextFrameInRow.bind(this);
-        this.nextFrame = this.nextFrame.bind(this);
+        this.#runner = new TickRunner(8, () => this.nextFrameInRow());
     }
 
     /** Get a copy of the sprite's dimensions.
@@ -76,11 +73,8 @@ class Sprite {
         } else { this.#frame.x++; }
     }
 
-    /** Advances the frame if enough time has passed.
-     *  @param {number} dt - The milliseconds between the last two frames. */
-    updateFrame(dt) {
-        this.#dtRunner.deltaTimeUpdate(dt, this.nextFrameInRow);
-    }
+    /** Advances the frame if enough time has passed. */
+    updateFrame() { this.#runner.update(); }
 
     /** Draw a sprite from the desired frame at a position.
      *  @param {CanvasRenderingContext2D} context - The context to draw on.

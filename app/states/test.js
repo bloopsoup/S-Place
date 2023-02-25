@@ -11,8 +11,8 @@ export default class Test extends State {
 
         this.tileMap = new TileMap(maps['test'], sprites['blue']());
 
-        this.gun = new Gun(sprites['tiles'](), new Vector2(100, 200), 10, sprites['bullet'], maps['test'], 10, 10);
-        this.player = new Player(sprites['player'](), maps['test'], new Vector2(100, 20), new Vector2(5, 5), new Vector2(1.5, 1.5), new Vector2(1, 1), -20, 10);
+        this.gun = new Gun(sprites['tiles'](), new Vector2(100, 200), 5, sprites['bullet'], maps['test'], 10, 5);
+        this.player = new Player(sprites['player'](), maps['test'], new Vector2(100, 20), new Vector2(5, 5), new Vector2(1.2, 1.2), new Vector2(0.6, 0.6), -15, 10);
         this.controller = new Controller('StandingRight', playerStates, this.player);
 
         this.camera = new Camera(this.canvasDimensions, this.player.movable);
@@ -32,8 +32,8 @@ export default class Test extends State {
         this.pool.handleInputs(inputs); 
     }
 
-    update(dt) { 
-        this.pool.update(dt);
+    update() { 
+        this.pool.update();
     }
 
     draw(context) {

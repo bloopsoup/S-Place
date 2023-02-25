@@ -8,6 +8,8 @@ import { InputTracker, Vector2 } from '../../common/index.js';
 class Button extends GameObject {
     /** @type {CallableFunction} */
     #func
+    /** @type {Array<Vector2>} */
+    #frames = [new Vector2(0, 0), new Vector2(1, 0), new Vector2(2, 0)];
     /** @type {boolean} */
     #isHovered
     /** @type {boolean} */
@@ -31,9 +33,9 @@ class Button extends GameObject {
      *  its current state.
      *  @returns {Vector2} The current frame of the button. */
     currentFrame() {
-        if (this.#isClicked) return new Vector2(2, 0);
-        else if (this.#isHovered) return new Vector2(1, 0);
-        else return new Vector2(0, 0);
+        if (this.#isClicked) return this.#frames[2];
+        else if (this.#isHovered) return this.#frames[1];
+        else return this.#frames[0];
     }
 
     /** Handle inputs.

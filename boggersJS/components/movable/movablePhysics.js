@@ -47,18 +47,13 @@ class MovablePhysics extends Movable {
         else this.#canJump = true;
     }
 
-    /** Queues a fall command. */
-    queueFall() { this.commandQueue.add('fall', () => this.fall()); }
-
     /** Increments/snaps the position when needed. 
-     *  Also accounts for deceleration and gravity.
-     *  @param {number} dt - The milliseconds between the last two frames. */
-    update(dt) {
+     *  Also accounts for deceleration and gravity. */
+    update() {
+        this.incrementPos();
         this.snap();
-        this.commandQueue.update(dt);
-        this.queueIncrementPos();
-        this.queueDecrementVelocity(0);
-        this.queueFall();
+        this.decrementVelocity(0);
+        this.fall();
     }
 }
 

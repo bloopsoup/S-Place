@@ -1,7 +1,7 @@
 import Projectile from './projectile.js'
 import GameObject from '../gameObject.js';
 import { Grid, InputTracker, Vector2 } from '../../common/index.js';
-import { Sprite } from '../../components/index.js';
+import { Sprite, TickRunner } from '../../components/index.js';
 
 /** An entity responsible for creating projectiles that go towards the
  *  position of a user's mouse click. Essentially a projectile factory.
@@ -11,6 +11,8 @@ import { Sprite } from '../../components/index.js';
 class Gun extends GameObject {
     /** @type {Vector2} */
     #pos
+    /** @type {TickRunner} */
+    #tickRunner
     /** @type {CallableFunction} */
     #bulletSpriteMaker
     /** @type {Grid} */
@@ -33,15 +35,13 @@ class Gun extends GameObject {
     constructor(sprite, pos, fireDelay, bulletSpriteMaker, bulletGrid, bulletDamage, bulletSpeed) {
         super(sprite);
         this.#pos = pos;
-        this.dtRunner.requiredFrameCount = fireDelay;
+        this.#tickRunner = new TickRunner(fireDelay, () => this.enableFire());
 
         this.#bulletGrid = bulletGrid;
         this.#bulletSpriteMaker = bulletSpriteMaker;
         this.#bulletDamage = bulletDamage;
         this.#bulletSpeed = bulletSpeed;
         this.#canFire = true;
-
-        this.enableFire = this.enableFire.bind(this);
     }
 
     /** Allow the gun to fire. */
@@ -70,9 +70,8 @@ class Gun extends GameObject {
     }
 
     /** Update components.
-     *  @see GameObject.update
-     *  @param {number} dt */
-    update(dt) { if (!this.#canFire) this.dtRunner.deltaTimeUpdate(dt, this.enableFire);  }
+     *  @see GameObject.update */
+    update() { if (!this.#canFire) this.#tickRunner.update(); }
 
     /** Draw the object.
      *  @see GameObject.draw

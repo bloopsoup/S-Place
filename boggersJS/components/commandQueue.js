@@ -1,20 +1,11 @@
-import DeltaTimeRunner from './deltaTimeRunner.js';
-
-/** Executes queued up functions based on delta time.
+/** Executes queued up functions every tick.
  *  @memberof Components */
 class CommandQueue {
-    /** @type {DeltaTimeRunner} */
-    #dtRunner
     /** @type {Object<string, CallableFunction>} */
     #queue
 
     /** Create the CommandQueue. */
-    constructor() {
-        this.#dtRunner = new DeltaTimeRunner(1, 80);
-        this.#queue = {};
-
-        this.run = this.run.bind(this);
-    }
+    constructor() { this.#queue = {}; }
 
     /** Add a command to the queue. If the command was already in the
      *  queue, nothing happens.
@@ -28,11 +19,6 @@ class CommandQueue {
         this.#queue = {};
     }
 
-    /** Processes commands after enough time has passed.
-     *  @param {number} dt - The milliseconds between the last two frames. */
-    update(dt) {
-        if (Object.keys(this.#queue).length) this.#dtRunner.deltaTimeUpdate(dt, this.run);
-    }
+    /** Processes commands after every tick. */
+    update() { if (Object.keys(this.#queue).length) this.run(); }
 }
-
-export default CommandQueue;

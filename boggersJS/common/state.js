@@ -61,9 +61,8 @@ class State {
      *  @param {InputTracker} inputs - The currently tracked inputs. */
     handleInputs(inputs) { throw new Error('Implement!'); }
 
-    /** Updates frame-reliant components based on delta time.
-     *  @param {number} dt - The milliseconds between the last two frames. */
-    update(dt) { throw new Error('Implement!'); }
+    /** Updates components. */
+    update() { throw new Error('Implement!'); }
 
     /** Draws state elements and game objects onto the canvas.
      *  @param {CanvasRenderingContext2D} context - The context to draw on. */

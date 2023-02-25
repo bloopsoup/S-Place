@@ -90,11 +90,10 @@ class Pool {
         this.#controllers.forEach(controller => controller.passInputs(inputs));
     }
 
-    /** Updates the state of the game objects contained in all layers.
-     *  @param {number} dt - The milliseconds between the last two frames. */
-    update(dt) { 
+    /** Updates the state of the game objects contained in all layers. */
+    update() { 
         this.handleLayerCollisions(); 
-        Object.keys(this.#layers).forEach(key => this.#layers[key].update(dt)); 
+        Object.keys(this.#layers).forEach(key => this.#layers[key].update()); 
     }
 
     /** Draw the game objects contained in all layers.

@@ -41,9 +41,8 @@ class Layer {
      *  @param {InputTracker} inputs - The currently tracked inputs. */
     handleInputs(inputs) { this.#gameObjects.forEach(i => i.handleInputs(inputs)); }
 
-    /** Update the components of the layer's game objects.
-     *  @param {number} dt - The milliseconds between the last two frames. */
-    update(dt) { this.clean(); this.#gameObjects.forEach(i => i.update(dt)); }
+    /** Update the components of the layer's game objects. */
+    update() { this.clean(); this.#gameObjects.forEach(i => i.update()); }
 
     /** Draw the layer's GameObjects.
      *  @param {CanvasRenderingContext2D} context - The context to draw on. */

@@ -46,12 +46,11 @@ class Player extends GameObject {
     }
 
     /** Update components.
-     *  @see GameObject.update
-     *  @param {number} dt */
-    update(dt) {
-        this.sprite.updateFrame(dt);
-        this.movable.update(dt);
-        this.collider.update(dt);
+     *  @see GameObject.update */
+    update() {
+        this.sprite.updateFrame();
+        this.movable.update();
+        this.collider.update();
         this.handleTileCollisions();
     }
 

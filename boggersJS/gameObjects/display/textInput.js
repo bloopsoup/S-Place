@@ -14,6 +14,8 @@ class TextInput extends GameObject {
     #func
     /** @type {string} */
     #text
+    /** @type {Array<Vector2>} */
+    #frames = [new Vector2(0, 0), new Vector2(1, 0)];
     /** @type {boolean} */
     #isActive
 
@@ -66,7 +68,7 @@ class TextInput extends GameObject {
      *  @param {CanvasRenderingContext2D} context */
     draw(context){
         context.save();
-        this.sprite.drawFrame(context, this.movable.pos, !this.#isActive ? new Vector2(0, 0) : new Vector2(1, 0));
+        this.sprite.drawFrame(context, this.movable.pos, !this.#isActive ? this.#frames[0] : this.#frames[1]);
         context.font = this.#font;
         context.fillText(this.#text, this.movable.pos.x, this.movable.pos.y + this.movable.dimensions.y);
         context.restore();

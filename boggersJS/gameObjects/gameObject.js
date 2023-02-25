@@ -1,5 +1,5 @@
 import { InputTracker } from '../common/index.js';
-import { Sprite, DeltaTimeRunner, Movable, Collider, CollisionMap, Health } from '../components/index.js';
+import { Sprite, Movable, Collider, CollisionMap, Health } from '../components/index.js';
 
 /** The primary object that all game states will deal with. This class is responsible for 
  *  handling inputs, updating its own state, and drawing itself on the screen. It also features 
@@ -8,8 +8,6 @@ import { Sprite, DeltaTimeRunner, Movable, Collider, CollisionMap, Health } from
 class GameObject {
     /** @type {Sprite} */
     #sprite
-    /** @type {DeltaTimeRunner} */
-    #dtRunner
     /** @type {Movable} */
     #movable
     /** @type {Collider} */
@@ -27,17 +25,12 @@ class GameObject {
      *  @param {Sprite} sprite - The sprite representing the GameObject. */
     constructor(sprite) {
         this.#sprite = sprite;
-        this.#dtRunner = new DeltaTimeRunner(20, 1000);
         this.#canDelete = false;
     }
 
     /** Gets the sprite.
      *  @return {Sprite} The sprite. */
     get sprite() { return this.#sprite; }
-
-    /** Gets the DeltaTimeRunner.
-     *  @return {DeltaTimeRunner} The runner. */
-    get dtRunner() { return this.#dtRunner; }
 
     /** Gets the Movable.
      *  @return {Movable} The movable. */
@@ -100,10 +93,9 @@ class GameObject {
      *  @param {InputTracker} inputs - The currently tracked inputs. */
     handleInputs(inputs) {}
 
-    /** Update the components of the GameObject using delta time.
-     *  To be optionally implemented by subclasses.
-     *  @param {number} dt - The milliseconds between the last two frames. */
-    update(dt) {}
+    /** Update the components of the GameObject.
+     *  To be optionally implemented by subclasses. */
+    update() {}
 
     /** Draw the GameObject. Must be implemented by subclasses.
      *  @param {CanvasRenderingContext2D} context - The context to draw on. */

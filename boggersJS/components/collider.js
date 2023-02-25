@@ -1,6 +1,6 @@
 import { Movable } from './movable/index.js';
 import { Vector2 } from '../common/index.js';
-import DeltaTimeRunner from './deltaTimeRunner.js';
+import TickRunner from './tickRunner.js';
 
 /** Handles buffered and instant collisions between two Movable objects.
  *  Buffered collisions have a cooldown which can be used to call collision 
@@ -9,14 +9,14 @@ import DeltaTimeRunner from './deltaTimeRunner.js';
 class Collider {
     /** @type {boolean} */
     #intangible
-    /** @type {DeltaTimeRunner} */
-    #dtRunner
+    /** @type {TickRunner} */
+    #runner
 
     /** Create a Collider.
-     *  @param {number} intangibilityFrames - The cooldown period between buffered collisions. */
-    constructor(intangibilityFrames) {
+     *  @param {number} intangibilityTicks - The cooldown period between buffered collisions. */
+    constructor(intangibilityTicks) {
         this.#intangible = false;
-        this.#dtRunner = new DeltaTimeRunner(intangibilityFrames);
+        this.#runner = new TickRunner(intangibilityTicks, () => this.#intangible = false);
     }
 
     /** Checks if a position is within a Movable.
@@ -55,11 +55,8 @@ class Collider {
         return false;
     }
 
-    /** Toggles intangibility after a certain amount of time has passed.
-     *  @param {number} dt - The milliseconds between the last two frames. */
-    update(dt) {
-        if (this.#intangible) this.#dtRunner.deltaTimeUpdate(dt, () => this.#intangible = false);
-    }
+    /** Toggles intangibility after a certain amount of time has passed. */
+    update() { if (this.#intangible) this.#runner.update(); }
 }
 
 export default Collider;
