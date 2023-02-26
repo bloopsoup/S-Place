@@ -26,7 +26,7 @@ class InputTracker {
      *  @param {string} name - The name of the input.
      *  @param {Vector2} pos - The mouse position of the input. */
     add(name, pos) {
-        if (name in this.#inputs) pos.copyTo(this.#inputs[name].pos);
+        if (name in this.#inputs) pos.copyTo(this.#inputs[name].basePos);
         else this.#inputs[name] = new Input(name, pos);
         if (name === 'MouseMove' && 'MouseHold' in this.#inputs)
             this.#inputs['MouseHold'] = new Input('MouseHold', pos);
@@ -58,7 +58,8 @@ class InputTracker {
      *  Used when working with Cameras. 
      *  @param {Vector2} offset - The offset to apply. */
     applyOffset(offset) {
-        Object.keys(this.#inputs).forEach(key => this.#inputs[key].offset = offset);
+        if ('MouseMove' in this.#inputs) this.#inputs['MouseMove'].offset = offset;
+        if ('MouseHold' in this.#inputs) this.#inputs['MouseHold'].offset = offset;
     }
 }
 

@@ -85,6 +85,22 @@ class Sprite {
             this.#dimensions.x, this.#dimensions.y, Math.floor(pos.x), Math.floor(pos.y), this.#dimensions.x, this.#dimensions.y);
     }
 
+    /** Draw a sprite from the current frame at a position rotated around a point.
+     *  @param {CanvasRenderingContext2D} context - The context to draw on.
+     *  @param {Vector2} pos - The position to draw the sprite.
+     *  @param {Vector2} rotatePos - The position of the point in which the sprite
+     *     is rotated around. Note that the position is RELATIVE to the position
+     *     to draw the sprite.
+     *  @param {number} angle - The angle of rotation in radians. */
+    drawRotated(context, pos, rotatePos, angle) {
+        context.save();
+        context.translate(pos.x + rotatePos.x, pos.y + rotatePos.y);
+        context.rotate(angle);
+        context.drawImage(this.#image, this.#frame.x * this.#dimensions.x, this.#frame.y * this.#dimensions.y, 
+            this.#dimensions.x, this.#dimensions.y, -rotatePos.x, -rotatePos.y, this.#dimensions.x, this.#dimensions.y);
+        context.restore();
+    }
+
     /** Draw a sprite from the current frame at a position.
      *  @param {CanvasRenderingContext2D} context - The context to draw on.
      *  @param {Vector2} pos - The position to draw the sprite. */

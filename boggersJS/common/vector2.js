@@ -173,6 +173,10 @@ class Vector2 {
         this.#y /= norm;
     }
 
+    /** Returns the angle represented by the vector.
+     *  @returns {number} The angle in radians. */
+    toAngle() { return Math.atan2(this.#y, this.#x); }
+
     /** Blend this vector with another. A convenience function used for interpolation.
      *  @param {Vector2} other - The other vector.
      *  @param {number} alpha - The blending factor which is in [0, 1].

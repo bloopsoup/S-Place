@@ -11,7 +11,7 @@ export default class Test extends State {
 
         this.tileMap = new TileMap(maps['test'], sprites['blue']());
 
-        this.gun = new Gun(sprites['tiles'](), new Vector2(100, 200), 5, sprites['bullet'], maps['test'], 10, 5);
+        this.gun = new Gun(sprites['tiles'](), new Vector2(100, 200), new Vector2(0, 40), 5, sprites['bullet'], maps['test'], 10, 5);
         this.player = new Player(sprites['player'](), maps['test'], new Vector2(100, 20), new Vector2(5, 5), new Vector2(0.45, 0.45), new Vector2(0.25, 0.25), -8, 10);
         this.controller = new Controller('StandingRight', playerStates, this.player);
 
