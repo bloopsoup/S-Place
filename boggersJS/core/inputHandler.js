@@ -31,7 +31,7 @@ class InputHandler {
      *  of canvas.
      *  @param {Vector2} pos - The position to check.
      *  @return {boolean} The result. */
-    withinCanvas(pos) {
+    #withinCanvas(pos) {
         const rect = this.#canvas.getBoundingClientRect();
         const buffer = new Vector2(rect.left + rect.width, rect.top + rect.height);
         if (!pos.lessThan(buffer)) return false;
@@ -52,7 +52,7 @@ class InputHandler {
      *  real coordinate system may have a different size than a 1 unit distance in the client
      *  coordinate system, which means you also have to scale the canvas-relative position.
      *  @param {Vector2} clientPos - The client position. */
-    toRealPos(clientPos) {
+    #toRealPos(clientPos) {
         const rect = this.#canvas.getBoundingClientRect();
         const buffer = new Vector2(rect.left, rect.top);
         clientPos.sub(buffer);
@@ -70,9 +70,9 @@ class InputHandler {
         switch (name) {
             case 'MouseHold':
             case 'MouseMove':
-                if (!this.withinCanvas(pos)) break;
+                if (!this.#withinCanvas(pos)) break;
             default:
-                this.toRealPos(pos);
+                this.#toRealPos(pos);
                 this.#inputs.add(name, pos);
         }
     }

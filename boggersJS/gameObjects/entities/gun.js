@@ -35,7 +35,7 @@ class Gun extends GameObject {
     constructor(sprite, pos, fireDelay, bulletSpriteMaker, bulletGrid, bulletDamage, bulletSpeed) {
         super(sprite);
         this.#pos = pos;
-        this.#tickRunner = new TickRunner(fireDelay, () => this.enableFire());
+        this.#tickRunner = new TickRunner(fireDelay, () => this.#enableFire());
 
         this.#bulletGrid = bulletGrid;
         this.#bulletSpriteMaker = bulletSpriteMaker;
@@ -45,12 +45,12 @@ class Gun extends GameObject {
     }
 
     /** Allow the gun to fire. */
-    enableFire() { this.#canFire = true; }
+    #enableFire() { this.#canFire = true; }
 
     /** Add a projectile that will originate from the gun and go towards
      *  the terminal position via the pool hook.
      *  @param {Vector2} terminalPos */
-    addBullet(terminalPos) {
+    #addBullet(terminalPos) {
         const bulletVelocity = terminalPos.subCopy(this.#pos);
         bulletVelocity.normalize();
         bulletVelocity.mulScalar(this.#bulletSpeed);
@@ -64,7 +64,7 @@ class Gun extends GameObject {
      *  @param {InputTracker} inputs */
     handleInputs(inputs) {
         if (inputs.has('MouseHold') && this.#canFire) {
-            this.addBullet(inputs.get('MouseHold').pos);
+            this.#addBullet(inputs.get('MouseHold').pos);
             this.#canFire = false;
         }
     }

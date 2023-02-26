@@ -155,14 +155,7 @@ class Movable {
 
     /** Gets the interpolated position.
      *  @param {number} alpha - Used for interpolation when rendering between two states. */
-    interpolatePos(alpha) {
-        const before = this.#oldPos.copy();
-        before.mulScalar(1 - alpha);
-        const after = this.#pos.copy();
-        after.mulScalar(alpha);
-        after.add(before);
-        return after;
-    }
+    interpolatePos(alpha) { return this.#oldPos.blend(this.#pos, alpha); }
 
     /** Update the old position and increment the current position via velocity. */
     incrementPos() {

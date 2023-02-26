@@ -27,7 +27,7 @@ class StateManager {
     get isQuitting() { return this.#isQuitting; }
 
     /** Transitions from one state to another. */
-    changeStates() {
+    #changeStates() {
         const previous = this.#currentStateName;
         this.#currentStateName = this.#currentState.next;
         this.#currentState.reset();
@@ -45,7 +45,7 @@ class StateManager {
      *  state wants to transition or quit. */
     update() {
         if (this.#currentState.isQuitting) this.#isQuitting = true;
-        else if (this.#currentState.isDone) this.changeStates();
+        else if (this.#currentState.isDone) this.#changeStates();
         this.#currentState.update();
     }
 

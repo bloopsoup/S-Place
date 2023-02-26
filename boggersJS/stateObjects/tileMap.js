@@ -50,7 +50,7 @@ class TileMap {
     }
 
     /** Prerenders the TileMap to improve performance. Should be called ONCE. */
-    preDraw() {
+    #preDraw() {
         const context = this.#cachedCanvas.getContext('2d');
         this.#grid.forEach((pos, element) => {
             if (element) this.#sprite.drawFrame(context, pos, this.#frames[element]); 
@@ -61,7 +61,7 @@ class TileMap {
     /** Draw the TileMap.
      *  @param {CanvasRenderingContext2D} context - The context to draw on. */
     draw(context) {
-        if (!this.#hasRendered) this.preDraw();
+        if (!this.#hasRendered) this.#preDraw();
         context.drawImage(this.#cachedCanvas, 0, 0);
     }
 }

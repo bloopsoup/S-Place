@@ -173,6 +173,16 @@ class Vector2 {
         this.#y /= norm;
     }
 
+    /** Blend this vector with another. A convenience function used for interpolation.
+     *  @param {Vector2} other - The other vector.
+     *  @param {number} alpha - The blending factor which is in [0, 1].
+     *  @return {Vector2} The result. */
+    blend(other, alpha) {
+        const aX = this.#x * (1 - alpha), aY = this.#y * (1 - alpha);
+        const bX = other.#x * alpha, bY = other.#y * alpha;
+        return new Vector2(aX + bX, aY + bY);
+    }
+
     /** Return a copy of this vector.
      *  @returns {Vector2} The copy. */
     copy() { return new Vector2(this.#x, this.#y); }

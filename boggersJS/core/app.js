@@ -35,7 +35,7 @@ class App {
         this.#inputHandler = new InputHandler(canvas);
 
         this.#dt = 1 / gameFps;
-        this.#maxDt = 25 * this.#dt;
+        this.#maxDt = 10 * this.#dt;
         this.#accumulator = 0;
         this.#lastTime = 0;
 
@@ -43,7 +43,13 @@ class App {
     }
 
     /** Runs the next frame which involves passing inputs, updating components, and drawing
-     *  objects. The timestamp argument will be used with lastTime to calculate dt.
+     *  objects. The timestamp argument will be used with lastTime to calculate dt. 
+     * 
+     *  Note that input passing and component updates occur at a FIXED timestep while 
+     *  drawing is (usually) synced to your monitor's refresh rate.
+     * 
+     *  This code is based on the tutorial
+     *  {@link https://www.gafferongames.com/post/fix_your_timestep/ Fix Your Timestep!}.
      *  @param {number} timestamp - The time passed in via requestAnimationFrame. */
     runTick(timestamp) {
         let currentDt = (timestamp - this.#lastTime) / 1000;

@@ -28,7 +28,7 @@ class Controller {
     }
 
     /** Transition to the next control state. */
-    changeStates() {
+    #changeStates() {
         this.#currentStateName = this.#currentState.next;
         this.#currentState.reset();
         this.#currentState = this.#states[this.#currentStateName];
@@ -39,7 +39,7 @@ class Controller {
      *  finished, then it will change states before passing inputs. 
      *  @param {InputTracker} inputs - The currently tracked inputs. */
     passInputs(inputs) {
-        if (this.#currentState.isDone) this.changeStates();
+        if (this.#currentState.isDone) this.#changeStates();
         this.#currentState.handleInputs(this.#target, inputs); 
     }
 }

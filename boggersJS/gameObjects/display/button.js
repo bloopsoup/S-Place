@@ -32,7 +32,7 @@ class Button extends GameObject {
     /** Returns the correct frame for the button display based on
      *  its current state.
      *  @returns {Vector2} The current frame of the button. */
-    currentFrame() {
+    #currentFrame() {
         if (this.#isClicked) return this.#frames[2];
         else if (this.#isHovered) return this.#frames[1];
         else return this.#frames[0];
@@ -58,7 +58,7 @@ class Button extends GameObject {
      *  @param {CanvasRenderingContext2D} context
      *  @param {number} alpha */
     draw(context, alpha) {
-        this.sprite.drawFrame(context, this.movable.pos, this.currentFrame());
+        this.sprite.drawFrame(context, this.movable.pos, this.#currentFrame());
     }
 }
 
