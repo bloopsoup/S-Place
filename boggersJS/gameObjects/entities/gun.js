@@ -96,7 +96,7 @@ class Gun extends GameObject {
      *  @param {CanvasRenderingContext2D} context
      *  @param {number} alpha */
     draw(context, alpha) {
-        this.sprite.drawRotated(context, this.movable.pos, this.#rotatePos, this.#direction.toAngle())
+        this.sprite.drawRotated(context, this.movable.interpolatePos(alpha), this.#rotatePos, this.#direction.toAngle())
     }
 }
 

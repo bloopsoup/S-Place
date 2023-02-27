@@ -24,5 +24,6 @@ export const sprites = {
     'bullet': () => new Sprite('bullet', new Vector2(10, 10), [1]),
     'zito': () => new Sprite('zito', new Vector2(60, 80), [13]),
     'textinput': () => new Sprite('textinput', new Vector2(600, 75), [2]),
-    'blue': () => new Sprite('blue', new Vector2(80, 80), [7, 7, 7, 7, 7])
+    'blue': () => new Sprite('blue', new Vector2(80, 80), [7, 7, 7, 7, 7]),
+    'gun': () => new Sprite('gun', new Vector2(58, 25), [1])
 };
