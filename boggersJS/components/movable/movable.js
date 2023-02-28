@@ -105,14 +105,6 @@ class Movable {
      *  @return {Array<Vector2>} The positions of all corners. */
     get corners() { return [this.topRightPos, this.topLeftPos, this.bottomLeftPos, this.bottomRightPos]; }
 
-    /** Set the position.
-     *  @param {Vector2} pos - The position. */
-    set pos(pos) { this.#pos = pos; }
-
-    /** Set the velocity. 
-     *  @param {Vector2} velocity - The velocity. */
-    set velocity(velocity) { this.#velocity = velocity; }
-
     /** Checks if the Movable is clipping past the left wall.
      *  @returns {boolean} The result. */
     pastLeftWall() { return this.#pos.x <= 0; }
@@ -152,6 +144,13 @@ class Movable {
     /** Checks if the Movable is completely out of bounds.
      *  @returns {boolean} The result. */
     outOfBoundsComplete() { return this.pastLeftWallComplete() || this.pastRightWallComplete() || this.pastCeilingComplete() || this.pastFloorComplete(); }
+
+    /** Replace the current position with a new position. 
+     *  @param {Vector2} pos - The new position. */
+    replacePos(pos) {
+        this.#pos.copyTo(this.#oldPos);
+        pos.copyTo(this.#pos);
+    }
 
     /** Gets the interpolated position.
      *  @param {number} alpha - Used for interpolation when rendering between two states. */

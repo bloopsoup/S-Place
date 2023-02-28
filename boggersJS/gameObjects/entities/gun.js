@@ -1,10 +1,9 @@
-import Projectile from './projectile.js'
 import GameObject from '../gameObject.js';
-import { Grid, InputTracker, Vector2 } from '../../common/index.js';
+import { InputTracker, Vector2 } from '../../common/index.js';
 import { Sprite, Movable, TickRunner } from '../../components/index.js';
 
 /** An entity responsible for creating projectiles that go towards the
- *  position of a user's mouse click. Essentially a projectile factory.
+ *  position of a user's mouse click.
  *  @author Mr.Nut and bloopsoup
  *  @augments GameObject 
  *  @memberof GameObjects.Entities */
@@ -16,13 +15,7 @@ class Gun extends GameObject {
     /** @type {TickRunner} */
     #tickRunner
     /** @type {CallableFunction} */
-    #bulletSpriteMaker
-    /** @type {Grid} */
-    #bulletGrid
-    /** @type {number} */
-    #bulletDamage
-    /** @type {number} */
-    #bulletSpeed
+    #bulletFunc
     /** @type {boolean} */
     #canFire
 
@@ -32,21 +25,15 @@ class Gun extends GameObject {
      *  @param {Vector2} rotatePos - The point in which the gun is rotated around. You can 
      *      treat this like an offset since its relative to the gun's own position.
      *  @param {number} fireDelay - The delay between spawning consecutive projectiles.
-     *  @param {CallableFunction} bulletSpriteMaker - The gun's bullets' sprite constructor.
-     *  @param {Grid} bulletGrid - The grid that the gun's bullets reside in.
-     *  @param {number} bulletDamage - The gun's bullets' damage.
-     *  @param {number} bulletSpeed - The gun's bullets' speed. */
-    constructor(sprite, pos, rotatePos, fireDelay, bulletSpriteMaker, bulletGrid, bulletDamage, bulletSpeed) {
+     *  @param {CallableFunction} bulletFunc - The function called to create a projectile.
+     *     The signature is: FUNC(pos: Vector2, direction: Vector2) */
+    constructor(sprite, pos, rotatePos, fireDelay, bulletFunc) {
         super(sprite);
         this.movable = new Movable(new Vector2(0, 0), this.sprite.dimensions, pos, new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0));
         this.#rotatePos = rotatePos;
         this.#direction = new Vector2(0, 0);
         this.#tickRunner = new TickRunner(fireDelay, () => this.#enableFire());
-
-        this.#bulletGrid = bulletGrid;
-        this.#bulletSpriteMaker = bulletSpriteMaker;
-        this.#bulletDamage = bulletDamage;
-        this.#bulletSpeed = bulletSpeed;
+        this.#bulletFunc = bulletFunc;
         this.#canFire = true;
     }
 
@@ -69,10 +56,7 @@ class Gun extends GameObject {
         bulletPos.mulScalar(this.movable.dimensions.x);
         bulletPos.add(this.movable.pos);
         bulletPos.add(this.#rotatePos);
-        const bulletVelocity = this.#direction.copy();
-        bulletVelocity.mulScalar(this.#bulletSpeed);
-        const projectile = new Projectile(this.#bulletSpriteMaker(), this.#bulletGrid, bulletPos, bulletVelocity, this.#bulletDamage);
-        this.poolHook('bullets', projectile);
+        this.poolHook('bullets', this.#bulletFunc(bulletPos, this.#direction.copy()));
     }
 
     /** Handle inputs.

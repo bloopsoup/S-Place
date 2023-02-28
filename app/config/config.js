@@ -1,5 +1,6 @@
 import { Grid, Vector2 } from '../../boggersJS/common/index.js';
 import { Sprite } from '../../boggersJS/components/index.js';
+import { Projectile } from '../../boggersJS/gameObjects/index.js';
 
 export const maps = {
     'test': new Grid(new Vector2(80, 80), [
@@ -27,3 +28,11 @@ export const sprites = {
     'blue': () => new Sprite('blue', new Vector2(80, 80), [7, 7, 7, 7, 7]),
     'gun': () => new Sprite('gun', new Vector2(58, 25), [1])
 };
+
+/** Creates a standard projectile.
+ *  @param {Vector2} pos - The starting position of the bullet.
+ *  @param {Vector2} direction - The direction of the bullet. */
+export function createProjectile(pos, direction) {
+    direction.mulScalar(10);
+    return new Projectile(sprites['bullet'](), maps['test'], pos, direction, 10);
+}
