@@ -135,23 +135,23 @@ class CollisionMap {
         const collisionType = this.#grid.get(buffer);
         this.#grid.toRealPos(buffer);
         switch (collisionType) {
-            case 1 : return this.#collideTop(target, buffer);
-            case 2 : return this.#collideBottom(target, buffer);
-            case 3 : return this.#collideLeft(target, buffer);
-            case 4 : return this.#collideRight(target, buffer);
-            case 5 : return this.#collideMany(target, buffer, true, true, false, false);
-            case 6 : return this.#collideMany(target, buffer, true, false, true, false);
-            case 7 : return this.#collideMany(target, buffer, true, false, false, true);
-            case 8 : return this.#collideMany(target, buffer, false, true, true, false);
-            case 9 : return this.#collideMany(target, buffer, false, true, false, true);
-            case 10: return this.#collideMany(target, buffer, false, false, true, true);
-            case 11: return this.#collideMany(target, buffer, true, true, true, false);
-            case 12: return this.#collideMany(target, buffer, true, true, false, true);
-            case 13: return this.#collideMany(target, buffer, true, false, true, true);
-            case 14: return this.#collideMany(target, buffer, false, true, true, true);
-            case 15: return this.#collideMany(target, buffer, true, true, true, true);
-            case 16: return this.#collideSlopeUp(target, buffer);
-            case 17: return this.#collideSlopeDown(target, buffer);
+            case '1-T' : return this.#collideTop(target, buffer);
+            case '1-D' : return this.#collideBottom(target, buffer);
+            case '1-L' : return this.#collideLeft(target, buffer);
+            case '1-R' : return this.#collideRight(target, buffer);
+            case '2-TD': return this.#collideMany(target, buffer, true, true, false, false);
+            case '2-TL': return this.#collideMany(target, buffer, true, false, true, false);
+            case '2-TR': return this.#collideMany(target, buffer, true, false, false, true);
+            case '2-DL': return this.#collideMany(target, buffer, false, true, true, false);
+            case '2-DR': return this.#collideMany(target, buffer, false, true, false, true);
+            case '2-LR': return this.#collideMany(target, buffer, false, false, true, true);
+            case '3-R' : return this.#collideMany(target, buffer, true, true, true, false);
+            case '3-L' : return this.#collideMany(target, buffer, true, true, false, true);
+            case '3-D' : return this.#collideMany(target, buffer, true, false, true, true);
+            case '3-T' : return this.#collideMany(target, buffer, false, true, true, true);
+            case '4'   : return this.#collideMany(target, buffer, true, true, true, true);
+            case 'S-DR': return this.#collideSlopeUp(target, buffer);
+            case 'S-DL': return this.#collideSlopeDown(target, buffer);
             default: return null;
         }
     }

@@ -1,21 +1,7 @@
-import { Grid, Vector2 } from '../../boggersJS/common/index.js';
+import { testCollide } from './maps.js';
+import { Vector2 } from '../../boggersJS/common/index.js';
 import { Sprite } from '../../boggersJS/components/index.js';
 import { Projectile } from '../../boggersJS/gameObjects/index.js';
-
-export const maps = {
-    'test': new Grid(new Vector2(80, 80), [
-        [0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0],
-        [0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0],
-        [0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0],
-        [0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0],
-        [0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0],
-        [0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0],
-        [0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0],
-        [0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 16, 1 , 1 , 17, 0 , 0 , 0 , 0 , 0 , 0 , 0],
-        [0 , 0 , 0 , 0 , 0 , 0 , 6 , 1 , 1 , 19, 22, 22, 20, 17, 0 , 0 , 0 , 0 , 0 , 0],
-        [1 , 1 , 1 , 1 , 1 , 1 , 19, 22, 22, 22, 22, 22, 22, 20, 1 , 1 , 1 , 1 , 1 , 1]
-    ])
-}
 
 export const sprites = {
     'player': () => new Sprite('player', new Vector2(80, 80), [9, 9, 9, 9, 9, 9]),
@@ -25,7 +11,7 @@ export const sprites = {
     'bullet': () => new Sprite('bullet', new Vector2(10, 10), [1]),
     'zito': () => new Sprite('zito', new Vector2(60, 80), [13]),
     'textinput': () => new Sprite('textinput', new Vector2(600, 75), [2]),
-    'blue': () => new Sprite('blue', new Vector2(80, 80), [7, 7, 7, 7, 7]),
+    'minimal': () => new Sprite('minimal', new Vector2(80, 80), [5, 5, 5, 5, 5, 5, 5, 5]),
     'gun': () => new Sprite('gun', new Vector2(58, 25), [1])
 };
 
@@ -34,5 +20,5 @@ export const sprites = {
  *  @param {Vector2} direction - The direction of the bullet. */
 export function createProjectile(pos, direction) {
     direction.mulScalar(10);
-    return new Projectile(sprites['bullet'](), maps['test'], pos, direction, 10);
+    return new Projectile(sprites['bullet'](), testCollide, pos, direction, 10);
 }

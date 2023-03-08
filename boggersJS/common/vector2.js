@@ -42,6 +42,13 @@ class Vector2 {
         this.#y = y; 
     }
 
+    /** Swaps the x and y values. */
+    swap() {
+        const tmp = this.#x;
+        this.#x = this.#y;
+        this.#y = tmp;
+    }
+
     /** Add to the x value.
      *  @param {number} x - The x value to add. */
     addToX(x) { this.#x += x; }
