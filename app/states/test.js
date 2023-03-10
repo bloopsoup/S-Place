@@ -3,7 +3,7 @@ import { testCollide, testDeco } from '../config/maps.js';
 import { minimal } from '../config/tilesets.js';
 
 import { State, Vector2 } from '../../boggersJS/common/index.js';
-import { Shooter, Gun, Player, Pool, playerStates, Controller } from '../../boggersJS/gameObjects/index.js';
+import { Shooter, Gun, Player, Pool, playerStates, gunStates, Controller } from '../../boggersJS/gameObjects/index.js';
 import { Camera, TileMap } from '../../boggersJS/stateObjects/index.js';
 
 export default class Test extends State {
@@ -19,11 +19,14 @@ export default class Test extends State {
         this.shooter = new Shooter(this.player, this.gun);
 
         this.controller = new Controller('StandingRight', playerStates, this.player);
+        this.gunController = new Controller('IdleRight', gunStates, this.gun);
+
         this.camera = new Camera(this.canvasDimensions, this.player.movable);
  
         this.pool = new Pool(["players", "bullets"], []);
         this.pool.addObjectToLayer('players', this.shooter);
         this.pool.addController(this.controller);
+        this.pool.addController(this.gunController);
     }
 
     startup() {}

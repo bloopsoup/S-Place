@@ -73,7 +73,10 @@ class Gun extends GameObject {
 
     /** Update components.
      *  @see GameObject.update */
-    update() { if (!this.#canFire) this.#tickRunner.update(); }
+    update() {
+        this.sprite.updateFrame();
+        if (!this.#canFire) this.#tickRunner.update(); 
+    }
 
     /** Draw the object.
      *  @see GameObject.draw

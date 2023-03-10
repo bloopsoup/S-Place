@@ -3,4 +3,5 @@
  *  @namespace GameObjects.Controller */
 export { default as Controller } from './controller.js';
 export { default as ControlState } from './controlState.js';
+export { default as gunStates } from './gunStates.js';
 export { default as playerStates } from './playerStates.js';
