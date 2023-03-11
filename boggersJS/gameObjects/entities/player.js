@@ -26,16 +26,8 @@ class Player extends GameObject {
         this.health = new Health(health);
     }
 
-    /** Handle collisions.
-     *  @see GameObject.handleCollisions
-     *  @param {GameObject} other */
-    handleCollisions(other) {
-        if (this.collider.collides(this.movable, other.movable, true)) console.log('PLAYER GOES OUCH');
-    }
-
-    /** Handle tile collisions.
-     *  @see GameObject.handleTileCollisions */
-    handleTileCollisions() {
+    /** Snaps player to tiles if it's about to go out of bounds. */
+    snapToTiles() {
         const corners = this.movable.corners;
         for (let i in corners) {
             const correction = this.collisionMap.callCollisionHandler(this.movable, corners[i]);
@@ -45,18 +37,19 @@ class Player extends GameObject {
         }
     }
 
+    /** Handle collisions.
+     *  @see GameObject.handleCollisions
+     *  @param {GameObject} other */
+    handleCollisions(other) {
+        if (this.collider.collides(this.movable, other.movable, true)) console.log('PLAYER GOES OUCH');
+    }
+
     /** Handle inputs and update components.
      *  @see GameObject.update
      *  @param {InputTracker} inputs */
     update(inputs) {
         this.sprite.updateFrame();
-
-        this.movable.incrementPos();
-        this.movable.snap();
-        this.movable.decrementVelocity(0);
-
         this.collider.update();
-        this.handleTileCollisions();
     }
 
     /** Draw the object.

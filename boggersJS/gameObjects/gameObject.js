@@ -85,9 +85,6 @@ class GameObject {
      *  @param {GameObject} other - The other GameObject. */
     handleCollisions(other) {}
 
-    /** Handles collisions between this GameObject and its CollisionMap. */
-    handleTileCollisions() {}
-
     /** Processes the inputs given by the InputHandler and updates the 
      *  components of the GameObject. To be optionally implemented by subclasses. 
      *  @param {InputTracker} inputs - The currently tracked inputs. */
