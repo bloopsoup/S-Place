@@ -14,8 +14,8 @@ export default class Test extends State {
 
         this.tileMap = new TileMap(testDeco, sprites['minimal'](), minimal);
 
-        this.gun = new Gun(sprites['gun'](), new Vector2(100, 200), new Vector2(0, 5), 30, createProjectile);
-        this.player = new Player(sprites['player'](), testCollide, new Vector2(100, 20), new Vector2(5, 5), new Vector2(0.45, 0.45), new Vector2(0.25, 0.25), -8, 10);
+        this.gun = new Gun(sprites['gun'](), new Vector2(100, 200), new Vector2(0, 5), 10, createProjectile);
+        this.player = new Player(sprites['player'](), testCollide, new Vector2(100, 20), new Vector2(5, 5), new Vector2(0.6, 0.4), new Vector2(0.35, 0.25), -8, 10);
         this.shooter = new Shooter(this.player, this.gun);
 
         this.controller = new Controller('StandingRight', playerStates, this.player);

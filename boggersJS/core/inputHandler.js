@@ -26,19 +26,6 @@ class InputHandler {
      *  @return {InputTracker} A copy of the InputHandler's currently tracked inputs. */
     get inputs() { return this.#inputs; }
 
-    /** Checks whether a point is within a canvas space. Used to determine whether to track 
-     *  a recent mouse input depending on whether the event happened within canvas or outside 
-     *  of canvas.
-     *  @param {Vector2} pos - The position to check.
-     *  @return {boolean} The result. */
-    #withinCanvas(pos) {
-        const rect = this.#canvas.getBoundingClientRect();
-        const buffer = new Vector2(rect.left + rect.width, rect.top + rect.height);
-        if (!pos.lessThan(buffer)) return false;
-        buffer.setBoth(rect.left, rect.top);
-        return pos.greaterThan(buffer); 
-    }
-
     /** Converts a client position into a real position (which uses the coordinate system
      *  that all gameObjects will operate in). The reason for this indirection comes from 
      *  how Javascript defines the origin when determining the position of your mouse click. 
@@ -68,9 +55,6 @@ class InputHandler {
      *  @param {Vector2} pos - The mouse position of the input. */
     addInput(name, pos = new Vector2(0, 0)) {
         switch (name) {
-            case 'MouseHold':
-            case 'MouseMove':
-                if (!this.#withinCanvas(pos)) break;
             default:
                 this.#toRealPos(pos);
                 this.#inputs.add(name, pos);
