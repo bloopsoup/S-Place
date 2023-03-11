@@ -8,8 +8,6 @@ import { Vector2 } from '../../common/index.js';
 class MovablePhysics extends Movable {
     /** @type {number} */
     #jumpPower
-    /** @type {boolean} */
-    #canJump
 
     /** Create the MovablePhysics.
      *  @param {Vector2} maxDimensions - Assuming origin is (0, 0), limits how far the Movable can go down and right.
@@ -23,38 +21,13 @@ class MovablePhysics extends Movable {
     constructor(maxDimensions, dimensions, pos, velocity, maxSpeed, acceleration, deceleration, jumpPower) {
         super(maxDimensions, dimensions, pos, velocity, maxSpeed, acceleration, deceleration);
         this.#jumpPower = jumpPower;
-        this.#canJump = true;
     }
-
-    /** Checks whether the Movable can jump again.
-     *  @returns {boolean} The result. */
-    get canJump() { return this.#canJump; }
-
-    /** Enable jumping. */
-    enableJump() { this.#canJump = true; }
 
     /** Jump. */
-    jump() { 
-        if (this.#canJump) {
-            this.velocity.y = this.#jumpPower; 
-            this.#canJump = false;
-        }
-    }
+    jump() { this.velocity.y = this.#jumpPower; }
 
     /** Fall until you hit the floor. */
-    fall() { 
-        if (!this.pastFloor()) this.velocity.y += this.deceleration.y;
-        else this.#canJump = true;
-    }
-
-    /** Increments/snaps the position when needed. 
-     *  Also accounts for deceleration and gravity. */
-    update() {
-        this.incrementPos();
-        this.snap();
-        this.decrementVelocity(0);
-        this.fall();
-    }
+    fall() { if (!this.pastFloor()) this.velocity.y += this.deceleration.y; }
 }
 
 export default MovablePhysics;

@@ -41,7 +41,6 @@ class Player extends GameObject {
             const correction = this.collisionMap.callCollisionHandler(this.movable, corners[i]);
             if (!correction) continue;
             const [ axis, axisPos, axisVelocity ] = correction;
-            if (axis === 1) this.movable.enableJump();
             this.movable.snapCustom(axis, axisPos, axisVelocity);
         }
     }
@@ -50,7 +49,11 @@ class Player extends GameObject {
      *  @see GameObject.update */
     update() {
         this.sprite.updateFrame();
-        this.movable.update();
+
+        this.movable.incrementPos();
+        this.movable.snap();
+        this.movable.decrementVelocity(0);
+
         this.collider.update();
         this.handleTileCollisions();
     }
