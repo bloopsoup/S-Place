@@ -12,7 +12,8 @@ class MovingBackground extends GameObject {
      *  @param {Sprite} sprite -  The background image itself.
      *  @param {Vector2} velocity - The direction and speed of the background. */
     constructor(maxDimensions, sprite, velocity) {
-        super(sprite);
+        super();
+        this.sprite = sprite;
         this.movable = new MovableBG(maxDimensions, this.sprite.dimensions, velocity);
     }
 

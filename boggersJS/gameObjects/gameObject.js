@@ -21,12 +21,8 @@ class GameObject {
     /** @type {boolean} */
     #canDelete
 
-    /** Create the GameObject.
-     *  @param {Sprite} sprite - The sprite representing the GameObject. */
-    constructor(sprite) {
-        this.#sprite = sprite;
-        this.#canDelete = false;
-    }
+    /** Create the GameObject. */
+    constructor() { this.#canDelete = false; }
 
     /** Gets the sprite.
      *  @return {Sprite} The sprite. */
@@ -56,6 +52,10 @@ class GameObject {
     /** Checks whether this object can be deleted.
      *  @return {boolean} The result. */
     get canDelete() { return this.#canDelete; }
+
+    /** Sets the Sprite. Used by subclasses.
+     *  @param {Sprite} sprite - The new Sprite. */
+    set sprite(sprite) { this.#sprite = sprite; }
 
     /** Sets the Movable. Used by subclasses.
      *  @param {Movable} movable - The new Movable. */

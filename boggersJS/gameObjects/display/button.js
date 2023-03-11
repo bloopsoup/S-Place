@@ -21,7 +21,8 @@ class Button extends GameObject {
      *  @param {Vector2} pos - The position of the button.
      *  @param {CallableFunction} func - The function that is called when the button is pressed. */
     constructor(sprite, pos, func) {
-        super(sprite);
+        super();
+        this.sprite = sprite;
         this.movable = new Movable(new Vector2(0, 0), this.sprite.dimensions, pos, new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0));
         this.collider = new Collider(0);
         this.#func = func;

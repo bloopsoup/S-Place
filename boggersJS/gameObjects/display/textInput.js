@@ -27,7 +27,8 @@ class TextInput extends GameObject {
      *  @param {string} font - The font of the text input.
      *  @param {CallableFunction} func - The function that is called when the text input is submitted. */
     constructor(sprite, pos, maxLength, font, func) {
-        super(sprite);
+        super();
+        this.sprite = sprite;
         this.movable = new Movable(new Vector2(0, 0), this.sprite.dimensions, pos, new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0));
         this.collider = new Collider(0);
 

@@ -4,7 +4,8 @@ import { InputTracker, Vector2 } from '../../common/index.js';
 
 class DialogueBox extends GameObject {
     constructor(sprite, pos, msgArray) {
-        super(sprite);
+        super();
+        this.sprite = sprite;
         this.pos = pos;
         this.msgArray = msgArray;
 

@@ -16,7 +16,7 @@ class Shooter extends GameObject {
      *  @param {Player} player - The player.
      *  @param {Gun} gun - The gun. */
     constructor(player, gun) {
-        super(null);
+        super();
         this.#player = player;
         this.#gun = gun;
     }

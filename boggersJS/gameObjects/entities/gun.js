@@ -28,7 +28,8 @@ class Gun extends GameObject {
      *  @param {CallableFunction} bulletFunc - The function called to create a projectile.
      *     The signature is: FUNC(pos: Vector2, direction: Vector2) */
     constructor(sprite, pos, rotatePos, fireDelay, bulletFunc) {
-        super(sprite);
+        super();
+        this.sprite = sprite;
         this.movable = new Movable(new Vector2(0, 0), this.sprite.dimensions, pos, new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0));
         this.#rotatePos = rotatePos;
         this.#direction = new Vector2(0, 0);

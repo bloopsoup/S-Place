@@ -18,7 +18,8 @@ class Player extends GameObject {
      *  @param {number} jumpPower - How high the player can jump.
      *  @param {number} health - The starting health. */
     constructor(sprite, grid, pos, maxSpeed, acceleration, deceleration, jumpPower, health) {
-        super(sprite);
+        super();
+        this.sprite = sprite;
         this.movable = new MovablePhysics(grid.dimensions, this.sprite.dimensions, pos, new Vector2(0, 0), maxSpeed, acceleration, deceleration, jumpPower);
         this.collider = new Collider(100);
         this.collisionMap = new CollisionMap(grid);

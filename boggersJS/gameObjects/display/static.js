@@ -13,7 +13,8 @@ class Static extends GameObject {
      *  @param {Sprite} sprite - The image itself.
      *  @param {Vector2} pos - The position of the image. */
     constructor(sprite, pos) {
-        super(sprite);
+        super();
+        this.sprite = sprite;
         this.#pos = pos;
     }
 

@@ -17,7 +17,8 @@ class Projectile extends GameObject {
      *  @param {Vector2} velocity - The velocity of the projectile.
      *  @param {number} damage - The amount of damage that the projectile will deal. */
     constructor(sprite, grid, pos, velocity, damage) {
-        super(sprite);
+        super();
+        this.sprite = sprite;
         this.movable = new Movable(grid.dimensions, this.sprite.dimensions, pos, velocity, new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0));
         this.collider = new Collider(50);
         this.collisionMap = new CollisionMap(grid);
