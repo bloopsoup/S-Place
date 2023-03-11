@@ -39,10 +39,10 @@ class Button extends GameObject {
         else return this.#frames[0];
     }
 
-    /** Handle inputs.
-     *  @see GameObject.handleInputs
+    /** Handle inputs and update components.
+     *  @see GameObject.update
      *  @param {InputTracker} inputs */
-    handleInputs(inputs) {
+    update(inputs) {
         if (!inputs.has('MouseMove')) return;
         if (this.collider.pointOverlaps(this.movable, inputs.get('MouseMove').pos)) {
             this.#isHovered = true;

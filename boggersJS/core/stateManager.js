@@ -37,16 +37,13 @@ class StateManager {
         this.#currentState.startup();
     }
 
-    /** Pass inputs from the InputHandler into the current state.
+    /** Pass inputs from the InputHandler and update the current state's components.
+     *  The manager also checks if the state wants to transition or quit.
      *  @param {InputTracker} inputs - The currently tracked inputs. */
-    passInputs(inputs) { this.#currentState.handleInputs(inputs); }
-
-    /** Update the current state's components and check if the 
-     *  state wants to transition or quit. */
-    update() {
+    update(inputs) {
         if (this.#currentState.isQuitting) this.#isQuitting = true;
         else if (this.#currentState.isDone) this.#changeStates();
-        this.#currentState.update();
+        this.#currentState.update(inputs);
     }
 
     /** Draws the current state's components.

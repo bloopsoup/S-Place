@@ -1,5 +1,5 @@
 import GameObject from '../gameObject.js';
-import { Vector2 } from '../../common/index.js';
+import { InputTracker, Vector2 } from '../../common/index.js';
 import { MovableBG, Sprite } from '../../components/index.js';
 
 /** An infinitely scrolling background. Velocity is used to indicate a cardinal
@@ -17,9 +17,13 @@ class MovingBackground extends GameObject {
         this.movable = new MovableBG(maxDimensions, this.sprite.dimensions, velocity);
     }
 
-    /** Update components.
-     *  @see GameObject.update */
-    update() { this.movable.update(); }
+    /** Handle inputs and update components.
+     *  @see GameObject.update
+     *  @param {InputTracker} inputs */
+    update(inputs) { 
+        this.movable.incrementPos();
+        if (this.movable.outOfBoundsComplete()) this.movable.resetPos(); 
+    }
 
     /** Draw the object.
      *  @see GameObject.draw

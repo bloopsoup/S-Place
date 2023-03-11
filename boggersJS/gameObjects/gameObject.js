@@ -88,14 +88,10 @@ class GameObject {
     /** Handles collisions between this GameObject and its CollisionMap. */
     handleTileCollisions() {}
 
-    /** Processes the inputs given by the InputHandler.
-     *  To be optionally implemented by subclasses.
+    /** Processes the inputs given by the InputHandler and updates the 
+     *  components of the GameObject. To be optionally implemented by subclasses. 
      *  @param {InputTracker} inputs - The currently tracked inputs. */
-    handleInputs(inputs) {}
-
-    /** Update the components of the GameObject.
-     *  To be optionally implemented by subclasses. */
-    update() {}
+    update(inputs) {}
 
     /** Draw the GameObject. Must be implemented by subclasses.
      *  @param {CanvasRenderingContext2D} context - The context to draw on.

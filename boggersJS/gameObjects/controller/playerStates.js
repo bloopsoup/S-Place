@@ -12,7 +12,7 @@ class StandingLeft extends ControlState {
     /** Handle inputs and change control states when necessary. 
      *  @param {Player} target - The player to modify. 
      *  @param {InputTracker} inputs - The currently tracked inputs. */
-    handleInputs(target, inputs) {
+    update(target, inputs) {
         if (target.movable.velocity.y > 0) this.goToDest('FallingLeft');
         else if (inputs.has('w')) { target.movable.jump(); this.goToDest('JumpingLeft'); }
         else if (inputs.has('d')) this.goToDest('RunningRight');
@@ -31,7 +31,7 @@ class StandingRight extends ControlState {
     /** Handle inputs and change control states when necessary. 
      *  @param {Player} target - The player to modify. 
      *  @param {InputTracker} inputs - The currently tracked inputs. */
-    handleInputs(target, inputs) {
+    update(target, inputs) {
         if (target.movable.velocity.y > 0) this.goToDest('FallingRight');
         else if (inputs.has('w')) { target.movable.jump(); this.goToDest('JumpingRight'); }
         else if (inputs.has('d')) this.goToDest('RunningRight');
@@ -50,7 +50,7 @@ class RunningLeft extends ControlState {
     /** Handle inputs and change control states when necessary. 
      *  @param {Player} target - The player to modify. 
      *  @param {InputTracker} inputs - The currently tracked inputs. */
-    handleInputs(target, inputs) {
+    update(target, inputs) {
         if (target.movable.velocity.y > 0) this.goToDest('FallingLeft');
         else if (inputs.has('w')) { target.movable.jump(); this.goToDest('JumpingLeft'); }
         else if (inputs.has('d')) this.goToDest('RunningRight');
@@ -70,7 +70,7 @@ class RunningRight extends ControlState {
     /** Handle inputs and change control states when necessary. 
      *  @param {Player} target - The player to modify. 
      *  @param {InputTracker} inputs - The currently tracked inputs. */
-    handleInputs(target, inputs) {
+    update(target, inputs) {
         if (target.movable.velocity.y > 0) this.goToDest('FallingRight');
         else if (inputs.has('w')) { target.movable.jump(); this.goToDest('JumpingRight'); }
         else if (inputs.has('d')) target.movable.incrementVelocity(new Vector2(1, 0));
@@ -90,7 +90,7 @@ class JumpingLeft extends ControlState {
     /** Handle inputs and change control states when necessary. 
      *  @param {Player} target - The player to modify. 
      *  @param {InputTracker} inputs - The currently tracked inputs. */
-    handleInputs(target, inputs) {
+    update(target, inputs) {
         if (target.movable.velocity.y >= 0) this.goToDest('FallingLeft');
         else if (inputs.has('d')) this.goToDest('JumpingRight');
         else if (inputs.has('a')) target.movable.incrementVelocity(new Vector2(-1, 0));
@@ -108,7 +108,7 @@ class JumpingRight extends ControlState {
     /** Handle inputs and change control states when necessary. 
      *  @param {Player} target - The player to modify. 
      *  @param {InputTracker} inputs - The currently tracked inputs. */
-    handleInputs(target, inputs) {
+    update(target, inputs) {
         if (target.movable.velocity.y >= 0) this.goToDest('FallingRight');
         else if (inputs.has('d')) target.movable.incrementVelocity(new Vector2(1, 0));
         else if (inputs.has('a')) this.goToDest('JumpingLeft');
@@ -126,7 +126,7 @@ class FallingLeft extends ControlState {
     /** Handle inputs and change control states when necessary. 
      *  @param {Player} target - The player to modify. 
      *  @param {InputTracker} inputs - The currently tracked inputs. */
-    handleInputs(target, inputs) {
+    update(target, inputs) {
         if (target.movable.velocity.y === 0) this.goToDest('StandingLeft');
         else if (inputs.has('d')) this.goToDest('FallingRight');
         else if (inputs.has('a')) target.movable.incrementVelocity(new Vector2(-1, 0));
@@ -144,7 +144,7 @@ class FallingRight extends ControlState {
     /** Handle inputs and change control states when necessary. 
      *  @param {Player} target - The player to modify. 
      *  @param {InputTracker} inputs - The currently tracked inputs. */
-    handleInputs(target, inputs) {
+    update(target, inputs) {
         if (target.movable.velocity.y === 0) this.goToDest('StandingRight');
         else if (inputs.has('d')) target.movable.incrementVelocity(new Vector2(1, 0));
         else if (inputs.has('a')) this.goToDest('FallingLeft');

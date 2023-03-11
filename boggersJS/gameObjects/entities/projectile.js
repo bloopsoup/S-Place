@@ -1,5 +1,5 @@
 import GameObject from '../gameObject.js';
-import { Grid, Vector2 } from '../../common/index.js';
+import { Grid, InputTracker, Vector2 } from '../../common/index.js';
 import { Sprite, Movable, Collider, CollisionMap } from '../../components/index.js';
 
 /** A moving effect which starts at a position and moves according to velocity. 
@@ -35,9 +35,10 @@ class Projectile extends GameObject {
         }
     }
 
-    /** Update components.
-     *  @see GameObject.update */
-    update() {
+    /** Handle inputs and update components.
+     *  @see GameObject.update
+     *  @param {InputTracker} inputs */
+    update(inputs) {
         this.sprite.updateFrame();
         this.movable.incrementPos();
         if (this.movable.outOfBoundsComplete()) this.markForDeletion();

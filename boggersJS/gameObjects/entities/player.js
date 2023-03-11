@@ -1,5 +1,5 @@
 import GameObject from '../gameObject.js';
-import { Grid, Vector2 } from '../../common/index.js';
+import { Grid, InputTracker, Vector2 } from '../../common/index.js';
 import { Sprite, MovablePhysics, Collider, CollisionMap, Health } from '../../components/index.js';
 
 /** The player character meant to be controlled via Controller. Has physics-based
@@ -45,9 +45,10 @@ class Player extends GameObject {
         }
     }
 
-    /** Update components.
-     *  @see GameObject.update */
-    update() {
+    /** Handle inputs and update components.
+     *  @see GameObject.update
+     *  @param {InputTracker} inputs */
+    update(inputs) {
         this.sprite.updateFrame();
 
         this.movable.incrementPos();

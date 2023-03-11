@@ -58,13 +58,11 @@ class App {
 
         this.#accumulator += currentDt;
         while (this.#accumulator >= this.#dt) {
-            this.#stateManager.passInputs(this.#inputHandler.inputs);
-            this.#stateManager.update();
+            this.#stateManager.update(this.#inputHandler.inputs);
             this.#accumulator -= this.#dt;
         }
 
         const alpha = this.#accumulator / this.#dt;
-
         this.#context.clearRect(0, 0, this.#canvas.width, this.#canvas.height);
         this.#stateManager.draw(this.#context, alpha);
         requestAnimationFrame(this.runTick);

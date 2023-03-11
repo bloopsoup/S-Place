@@ -35,19 +35,13 @@ class Shooter extends GameObject {
         this.#player.handleCollisions(other);
     }
 
-    /** Handle inputs.
-     *  @see GameObject.handleInputs
+    /** Handle inputs and update components.
+     *  @see GameObject.update
      *  @param {InputTracker} inputs */
-    handleInputs(inputs) {
-        this.#gun.handleInputs(inputs);
-    }
-
-    /** Update components.
-     *  @see GameObject.update */
-    update() {
-        this.#player.update();
+    update(inputs) {
+        this.#player.update(inputs);
         this.#gun.movable.replacePos(this.#player.movable.pos);
-        this.#gun.update();
+        this.#gun.update(inputs);
     }
 
     /** Draw the object.

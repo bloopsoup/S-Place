@@ -37,12 +37,10 @@ class Layer {
         }
     }
 
-    /** Pass down the currently tracked inputs to the layer's game objects.
+    /** Pass down the currently tracked inputs and update the components of 
+     *  the layer's game objects. 
      *  @param {InputTracker} inputs - The currently tracked inputs. */
-    handleInputs(inputs) { this.#gameObjects.forEach(i => i.handleInputs(inputs)); }
-
-    /** Update the components of the layer's game objects. */
-    update() { this.clean(); this.#gameObjects.forEach(i => i.update()); }
+    update(inputs) { this.clean(); this.#gameObjects.forEach(i => i.update(inputs)); }
 
     /** Draw the layer's GameObjects.
      *  @param {CanvasRenderingContext2D} context - The context to draw on.

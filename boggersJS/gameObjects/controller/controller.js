@@ -38,9 +38,9 @@ class Controller {
     /** Pass inputs to the control state. If the state indicates it's
      *  finished, then it will change states before passing inputs. 
      *  @param {InputTracker} inputs - The currently tracked inputs. */
-    passInputs(inputs) {
+    update(inputs) {
         if (this.#currentState.isDone) this.#changeStates();
-        this.#currentState.handleInputs(this.#target, inputs); 
+        this.#currentState.update(this.#target, inputs); 
     }
 }
 

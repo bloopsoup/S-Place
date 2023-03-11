@@ -57,12 +57,9 @@ class State {
      *  getting rid of garbage. */
     cleanup() { throw new Error('Implement!'); }
 
-    /** Processes the inputs given by the InputHandler.
+    /** Processes the inputs given by the InputHandler and updates components. 
      *  @param {InputTracker} inputs - The currently tracked inputs. */
-    handleInputs(inputs) { throw new Error('Implement!'); }
-
-    /** Updates components. */
-    update() { throw new Error('Implement!'); }
+    update(inputs) { throw new Error('Implement!'); }
 
     /** Draws state elements and game objects onto the canvas.
      *  @param {CanvasRenderingContext2D} context - The context to draw on.

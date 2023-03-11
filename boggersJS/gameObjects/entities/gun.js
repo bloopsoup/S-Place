@@ -60,21 +60,17 @@ class Gun extends GameObject {
         this.poolHook('bullets', this.#bulletFunc(bulletPos, this.#direction.copy()));
     }
 
-    /** Handle inputs.
-     *  @see GameObject.handleInputs
+    /** Handle inputs and update components.
+     *  @see GameObject.update
      *  @param {InputTracker} inputs */
-    handleInputs(inputs) {
+    update(inputs) {
         if (!inputs.has('MouseMove')) return;
         this.#updateDirection(inputs.get('MouseMove').pos);
         if (inputs.has('MouseHold') && this.#canFire) {
             this.#addBullet();
             this.#canFire = false;
         }
-    }
 
-    /** Update components.
-     *  @see GameObject.update */
-    update() {
         this.sprite.updateFrame();
         if (!this.#canFire) this.#tickRunner.update(); 
     }

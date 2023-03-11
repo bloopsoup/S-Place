@@ -46,10 +46,10 @@ class TextInput extends GameObject {
         this.#isActive = false;
     }
 
-    /** Handle inputs.
-     *  @see GameObject.handleInputs
+    /** Handle inputs and update components.
+     *  @see GameObject.update
      *  @param {InputTracker} inputs */
-    handleInputs(inputs) {
+    update(inputs) {
         if (inputs.has('MouseHold')) {
             if (this.collider.pointOverlaps(this.movable, inputs.get('MouseHold').pos)) this.#isActive = true;
             else this.#isActive = false;

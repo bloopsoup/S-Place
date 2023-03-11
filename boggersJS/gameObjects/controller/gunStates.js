@@ -10,7 +10,7 @@ class IdleLeft extends ControlState {
     /** Handle inputs and change control states when necessary. 
      *  @param {Gun} target - The player to modify. 
      *  @param {InputTracker} inputs - The currently tracked inputs. */
-    handleInputs(target, inputs) {
+    update(target, inputs) {
         if (inputs.has('MouseHold')) this.goToDest('ShootLeft');
         else if (inputs.has('d')) this.goToDest('IdleRight');
     }
@@ -24,7 +24,7 @@ class IdleRight extends ControlState {
     /** Handle inputs and change control states when necessary. 
      *  @param {Gun} target - The player to modify. 
      *  @param {InputTracker} inputs - The currently tracked inputs. */
-    handleInputs(target, inputs) {
+    update(target, inputs) {
         if (inputs.has('MouseHold')) this.goToDest('ShootRight');
         else if (inputs.has('a')) this.goToDest('IdleLeft');
     }
@@ -38,7 +38,7 @@ class ShootLeft extends ControlState {
     /** Handle inputs and change control states when necessary. 
      *  @param {Gun} target - The player to modify. 
      *  @param {InputTracker} inputs - The currently tracked inputs. */
-    handleInputs(target, inputs) {
+    update(target, inputs) {
         if (!inputs.has('MouseHold')) this.goToDest('IdleLeft');
         else if (inputs.has('d')) this.goToDest('ShootRight');
     }
@@ -52,7 +52,7 @@ class ShootRight extends ControlState {
     /** Handle inputs and change control states when necessary. 
      *  @param {Gun} target - The player to modify. 
      *  @param {InputTracker} inputs - The currently tracked inputs. */
-    handleInputs(target, inputs) {
+    update(target, inputs) {
         if (!inputs.has('MouseHold')) this.goToDest('IdleRight');
         else if (inputs.has('a')) this.goToDest('ShootLeft');
     }

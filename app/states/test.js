@@ -32,14 +32,10 @@ export default class Test extends State {
     startup() {}
     cleanup() {}
 
-    handleInputs(inputs) {
+    update(inputs) { 
         const offset = this.camera.getBoundedOffset();
         inputs.applyOffset(offset);
-        this.pool.handleInputs(inputs); 
-    }
-
-    update() { 
-        this.pool.update();
+        this.pool.update(inputs);
     }
 
     draw(context, alpha) {

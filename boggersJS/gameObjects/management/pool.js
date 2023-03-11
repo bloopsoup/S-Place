@@ -83,17 +83,13 @@ class Pool {
         }
     }
 
-    /** Pass the currently tracked inputs into all layers.
+    /** Pass the currently tracked inputs and updates the state of the game 
+     *  objects contained in all layers.
      *  @param {InputTracker} inputs - The currently tracked inputs. */
-    handleInputs(inputs) { 
-        Object.keys(this.#layers).forEach(key => this.#layers[key].handleInputs(inputs)); 
-        this.#controllers.forEach(controller => controller.passInputs(inputs));
-    }
-
-    /** Updates the state of the game objects contained in all layers. */
-    update() { 
-        this.handleLayerCollisions(); 
-        Object.keys(this.#layers).forEach(key => this.#layers[key].update()); 
+    update(inputs) { 
+        this.handleLayerCollisions();
+        this.#controllers.forEach(controller => controller.update(inputs));
+        Object.keys(this.#layers).forEach(key => this.#layers[key].update(inputs)); 
     }
 
     /** Draw the game objects contained in all layers.

@@ -37,12 +37,6 @@ class MovableBG extends Movable {
     /** Sets the background's position to the starting position.
      *  Used when the background is completely out of bounds. */
     resetPos() { this.#startPos.copyTo(this.pos); }
-
-    /** Increments the background position and resets the position if needed. */
-    update() {
-        this.incrementPos();
-        if (this.outOfBoundsComplete()) this.resetPos();   
-    }
 }
 
 export default MovableBG;
