@@ -13,8 +13,8 @@ class IdleLeft extends ControlState {
     update(target, inputs) {
         if (inputs.has('MouseMove')) target.updateDirection(inputs.get('MouseMove').pos);
 
-        if (inputs.has('MouseHold')) this.goToDest('ShootLeft');
-        else if (inputs.has('d')) this.goToDest('IdleRight');
+        if (target.orientation === 'right') this.goToDest('IdleRight');
+        else if (inputs.has('MouseHold')) this.goToDest('ShootLeft');
     }
 }
 
@@ -29,8 +29,8 @@ class IdleRight extends ControlState {
     update(target, inputs) {
         if (inputs.has('MouseMove')) target.updateDirection(inputs.get('MouseMove').pos);
 
-        if (inputs.has('MouseHold')) this.goToDest('ShootRight');
-        else if (inputs.has('a')) this.goToDest('IdleLeft');
+        if (target.orientation === 'left') this.goToDest('IdleLeft');
+        else if (inputs.has('MouseHold')) this.goToDest('ShootRight');
     }
 }
 
@@ -45,8 +45,8 @@ class ShootLeft extends ControlState {
     update(target, inputs) {
         if (inputs.has('MouseMove')) target.updateDirection(inputs.get('MouseMove').pos);
 
-        if (!inputs.has('MouseHold')) this.goToDest('IdleLeft');
-        else if (inputs.has('d')) this.goToDest('ShootRight');
+        if (target.orientation === 'right') this.goToDest('ShootRight');
+        else if (!inputs.has('MouseHold')) this.goToDest('IdleLeft');
         target.addBullet();
     }
 }
@@ -62,8 +62,8 @@ class ShootRight extends ControlState {
     update(target, inputs) {
         if (inputs.has('MouseMove')) target.updateDirection(inputs.get('MouseMove').pos);
 
-        if (!inputs.has('MouseHold')) this.goToDest('IdleRight');
-        else if (inputs.has('a')) this.goToDest('ShootLeft');
+        if (target.orientation === 'left') this.goToDest('ShootLeft');
+        else if (!inputs.has('MouseHold')) this.goToDest('IdleRight');
         target.addBullet();
     }
 }

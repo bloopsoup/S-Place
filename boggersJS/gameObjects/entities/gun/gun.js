@@ -4,7 +4,6 @@ import { Sprite, Movable, TickRunner } from '../../../components/index.js';
 
 /** An entity responsible for creating projectiles that go towards the
  *  position of a user's mouse click.
- *  @author Mr.Nut and bloopsoup
  *  @augments GameObject 
  *  @memberof GameObjects.Entities.Gun */
 class Gun extends GameObject {
@@ -22,25 +21,36 @@ class Gun extends GameObject {
     /** Create the Gun.
      *  @param {Sprite} sprite - The gun's sprite.
      *  @param {Vector2} pos - The gun's position.
-     *  @param {Vector2} rotatePos - The point in which the gun is rotated around. You can 
-     *      treat this like an offset since its relative to the gun's own position.
+     *  @param {number} rotateY - An offset to the gun's y value which determines the pivot.
      *  @param {number} fireDelay - The delay between spawning consecutive projectiles.
      *  @param {CallableFunction} bulletFunc - The function called to create a projectile.
      *     The signature is: FUNC(pos: Vector2, direction: Vector2) */
-    constructor(sprite, pos, rotatePos, fireDelay, bulletFunc) {
+    constructor(sprite, pos, rotateY, fireDelay, bulletFunc) {
         super();
         this.sprite = sprite;
         this.movable = new Movable(new Vector2(0, 0), this.sprite.dimensions, pos, new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0));
-        this.#rotatePos = rotatePos;
+        this.#rotatePos = new Vector2(0, rotateY);
         this.#direction = new Vector2(0, 0);
         this.#tickRunner = new TickRunner(fireDelay, () => this.#enableFire());
         this.#bulletFunc = bulletFunc;
         this.#canFire = true;
     }
 
-    /** Gets the gun's direction.
-     *  @return {Vector2} The direction. */
-    get direction() { return this.#direction; }
+    /** Gets the gun's orientation.
+     *  @return {string} A string of either '', 'left', or 'right'. */
+    get orientation() { return this.#direction.x < 0 ? 'left' : 'right'; }
+
+    /** Adjusts the rotation position of the gun based on orientation and then returns it.
+     *  @return {Vector2} The adjusted rotation position. */
+    get adjustedRotatePos() {
+        this.#rotatePos.x = this.orientation === 'left' ? this.sprite.dimensions.x : 0;
+        return this.#rotatePos;
+    }
+
+    /** Gets the angle offset based on orientation. This is a workaround to how Javascript
+     *  draws rotated sprites by adding PI to the drawing angle.
+     *  @return {number} The angle offset. */
+    get angleOffset() { return this.orientation === 'left' ? Math.PI : 0; }
 
     /** Allow the gun to fire. */
     #enableFire() { this.#canFire = true; }
@@ -50,7 +60,7 @@ class Gun extends GameObject {
     updateDirection(terminalPos) {
         terminalPos.copyTo(this.#direction);
         this.#direction.sub(this.movable.pos);
-        this.#direction.sub(this.#rotatePos);
+        this.#direction.sub(this.adjustedRotatePos);
         this.#direction.normalize();
     }
 
@@ -61,7 +71,7 @@ class Gun extends GameObject {
         const bulletPos = this.#direction.copy();
         bulletPos.mulScalar(this.movable.dimensions.x);
         bulletPos.add(this.movable.pos);
-        bulletPos.add(this.#rotatePos);
+        bulletPos.add(this.adjustedRotatePos);
         this.poolHook('bullets', this.#bulletFunc(bulletPos, this.#direction.copy()));
         this.#canFire = false;
     }
@@ -79,7 +89,7 @@ class Gun extends GameObject {
      *  @param {CanvasRenderingContext2D} context
      *  @param {number} alpha */
     draw(context, alpha) {
-        this.sprite.drawRotated(context, this.movable.interpolatePos(alpha), this.#rotatePos, this.#direction.toAngle())
+        this.sprite.drawRotated(context, this.movable.interpolatePos(alpha), this.adjustedRotatePos, this.#direction.toAngle() + this.angleOffset);
     }
 }
 

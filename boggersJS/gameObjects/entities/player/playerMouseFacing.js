@@ -17,7 +17,7 @@ class StandingLeft extends PlayerState {
         if (inputs.has('MouseMove')) target.updateOrientation(inputs.get('MouseMove').pos);
 
         if (target.movable.velocity.y > 0) this.goToDest('FallingLeft');
-        else if (target.orientation == 'right') this.goToDest('StandingRight');
+        else if (target.orientation === 'right') this.goToDest('StandingRight');
         else if (inputs.has('w')) { target.movable.jump(); this.goToDest('JumpingLeft'); }
         else if (inputs.has('d') || inputs.has('a')) this.goToDest('RunningLeft');
         this.move(target);
@@ -38,7 +38,7 @@ class StandingRight extends PlayerState {
         if (inputs.has('MouseMove')) target.updateOrientation(inputs.get('MouseMove').pos);
 
         if (target.movable.velocity.y > 0) this.goToDest('FallingRight');
-        else if (target.orientation == 'left') this.goToDest('StandingLeft');
+        else if (target.orientation === 'left') this.goToDest('StandingLeft');
         else if (inputs.has('w')) { target.movable.jump(); this.goToDest('JumpingRight'); }
         else if (inputs.has('d') || inputs.has('a')) this.goToDest('RunningRight');
         this.move(target);
@@ -59,7 +59,7 @@ class RunningLeft extends PlayerState {
         if (inputs.has('MouseMove')) target.updateOrientation(inputs.get('MouseMove').pos);
 
         if (target.movable.velocity.y > 0) this.goToDest('FallingLeft');
-        else if (target.orientation == 'right') this.goToDest('RunningRight');
+        else if (target.orientation === 'right') this.goToDest('RunningRight');
         else if (inputs.has('w')) { target.movable.jump(); this.goToDest('JumpingLeft'); }
         else if (inputs.has('d')) target.movable.incrementVelocity(new Vector2(1, 0));
         else if (inputs.has('a')) target.movable.incrementVelocity(new Vector2(-1, 0));
@@ -82,7 +82,7 @@ class RunningRight extends PlayerState {
         if (inputs.has('MouseMove')) target.updateOrientation(inputs.get('MouseMove').pos);
 
         if (target.movable.velocity.y > 0) this.goToDest('FallingRight');
-        else if (target.orientation == 'left') this.goToDest('RunningLeft');
+        else if (target.orientation === 'left') this.goToDest('RunningLeft');
         else if (inputs.has('w')) { target.movable.jump(); this.goToDest('JumpingRight'); }
         else if (inputs.has('d')) target.movable.incrementVelocity(new Vector2(1, 0));
         else if (inputs.has('a')) target.movable.incrementVelocity(new Vector2(-1, 0));
@@ -105,7 +105,7 @@ class JumpingLeft extends PlayerState {
         if (inputs.has('MouseMove')) target.updateOrientation(inputs.get('MouseMove').pos);
 
         if (target.movable.velocity.y >= 0) this.goToDest('FallingLeft');
-        else if (target.orientation == 'right') this.goToDest('JumpingRight');
+        else if (target.orientation === 'right') this.goToDest('JumpingRight');
         else if (inputs.has('d')) target.movable.incrementVelocity(new Vector2(1, 0));
         else if (inputs.has('a')) target.movable.incrementVelocity(new Vector2(-1, 0));
         this.move(target);
@@ -126,7 +126,7 @@ class JumpingRight extends PlayerState {
         if (inputs.has('MouseMove')) target.updateOrientation(inputs.get('MouseMove').pos);
 
         if (target.movable.velocity.y >= 0) this.goToDest('FallingRight');
-        else if (target.orientation == 'left') this.goToDest('JumpingLeft');
+        else if (target.orientation === 'left') this.goToDest('JumpingLeft');
         else if (inputs.has('d')) target.movable.incrementVelocity(new Vector2(1, 0));
         else if (inputs.has('a')) target.movable.incrementVelocity(new Vector2(-1, 0));
         this.move(target);
@@ -147,7 +147,7 @@ class FallingLeft extends PlayerState {
         if (inputs.has('MouseMove')) target.updateOrientation(inputs.get('MouseMove').pos);
 
         if (target.movable.velocity.y === 0) this.goToDest('StandingLeft');
-        else if (target.orientation == 'right') this.goToDest('FallingRight');
+        else if (target.orientation === 'right') this.goToDest('FallingRight');
         else if (inputs.has('d')) target.movable.incrementVelocity(new Vector2(1, 0));
         else if (inputs.has('a')) target.movable.incrementVelocity(new Vector2(-1, 0));
         this.move(target);
@@ -168,7 +168,7 @@ class FallingRight extends PlayerState {
         if (inputs.has('MouseMove')) target.updateOrientation(inputs.get('MouseMove').pos);
 
         if (target.movable.velocity.y === 0) this.goToDest('StandingRight');
-        else if (target.orientation == 'left') this.goToDest('FallingLeft');
+        else if (target.orientation === 'left') this.goToDest('FallingLeft');
         else if (inputs.has('d')) target.movable.incrementVelocity(new Vector2(1, 0));
         else if (inputs.has('a')) target.movable.incrementVelocity(new Vector2(-1, 0));
         this.move(target);
