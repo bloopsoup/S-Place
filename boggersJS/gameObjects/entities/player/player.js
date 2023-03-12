@@ -8,6 +8,9 @@ import { Sprite, MovablePhysics, Collider, CollisionMap, Health } from '../../..
  *  @augments GameObject
  *  @memberof GameObjects.Entities.Player */
 class Player extends GameObject {
+    /** @type {string} */
+    #orientation
+
     /** Create the Player.
      *  @param {Sprite} sprite - The player's sprite.
      *  @param {Grid} grid - The grid the player operates in.
@@ -24,6 +27,17 @@ class Player extends GameObject {
         this.collider = new Collider(100);
         this.collisionMap = new CollisionMap(grid);
         this.health = new Health(health);
+        this.#orientation = '';
+    }
+
+    /** Gets the player's orientation.
+     *  @return {string} A string of either '', 'left', or 'right'. */
+    get orientation() { return this.#orientation; }
+
+    /** Updates the player's currently tracked orientation.
+     *  @param {Vector2} terminalPos - The mouse position. */
+    updateOrientation(terminalPos) {
+        this.#orientation = terminalPos.x < this.movable.pos.x + (this.movable.dimensions.x / 2) ? 'left' : 'right';
     }
 
     /** Snaps player to tiles if it's about to go out of bounds. */
