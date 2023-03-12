@@ -1,12 +1,12 @@
-import GameObject from '../gameObject.js';
-import { InputTracker, Vector2 } from '../../common/index.js';
-import { Sprite, Movable, TickRunner } from '../../components/index.js';
+import GameObject from '../../gameObject.js';
+import { InputTracker, Vector2 } from '../../../common/index.js';
+import { Sprite, Movable, TickRunner } from '../../../components/index.js';
 
 /** An entity responsible for creating projectiles that go towards the
  *  position of a user's mouse click.
  *  @author Mr.Nut and bloopsoup
  *  @augments GameObject 
- *  @memberof GameObjects.Entities */
+ *  @memberof GameObjects.Entities.Gun */
 class Gun extends GameObject {
     /** @type {Vector2} */
     #rotatePos

@@ -1,6 +1,6 @@
-import ControlState from './controlState.js';
-import { Player } from '../entities/index.js';
-import { InputTracker, Vector2 } from '../../common/index.js';
+import Player from './player.js';
+import { ControlState } from '../../controller/index.js';
+import { InputTracker, Vector2 } from '../../../common/index.js';
 
 /** A player control state.
  *  @augments ControlState */
@@ -135,7 +135,7 @@ class JumpingRight extends PlayerState {
 class FallingLeft extends PlayerState {
     /** Modify the target upon entering the state.
      *  @param {Player} target - The player to modify. */
-    startup(target) { target.sprite.row = 0; }
+    startup(target) { target.sprite.row = 6; }
 
     /** Handle inputs and change control states when necessary. 
      *  @param {Player} target - The player to modify. 
@@ -153,7 +153,7 @@ class FallingLeft extends PlayerState {
 class FallingRight extends PlayerState {
     /** Modify the target upon entering the state.
      *  @param {Player} target - The player to modify. */
-    startup(target) { target.sprite.row = 1; }
+    startup(target) { target.sprite.row = 7; }
 
     /** Handle inputs and change control states when necessary. 
      *  @param {Player} target - The player to modify. 
@@ -168,7 +168,7 @@ class FallingRight extends PlayerState {
 
 /** All the states needed for controlling a player.
  *  @type {Object<string, ControlState>} 
- *  @memberof GameObjects.Controller */
+ *  @memberof GameObjects.Entities.Player */
 const playerStates = {
     'StandingLeft': new StandingLeft(),
     'StandingRight': new StandingRight(),

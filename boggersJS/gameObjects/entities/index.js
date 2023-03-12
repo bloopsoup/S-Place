@@ -1,6 +1,6 @@
 /** Interactive elements.
  *  @namespace GameObjects.Entities */
-export { default as Gun } from './gun.js';
-export { default as Player } from './player.js';
+export * from './gun/index.js';
+export * from './player/index.js'
 export { default as Projectile } from './projectile.js';
 export { default as Shooter } from './shooter.js';
