@@ -38,12 +38,16 @@ class Gun extends GameObject {
         this.#canFire = true;
     }
 
+    /** Gets the gun's direction.
+     *  @return {Vector2} The direction. */
+    get direction() { return this.#direction; }
+
     /** Allow the gun to fire. */
     #enableFire() { this.#canFire = true; }
 
     /** Updates the gun's currently tracked direction.
      *  @param {Vector2} terminalPos - The mouse position. */
-    #updateDirection(terminalPos) {
+    updateDirection(terminalPos) {
         terminalPos.copyTo(this.#direction);
         this.#direction.sub(this.movable.pos);
         this.#direction.sub(this.#rotatePos);
@@ -52,25 +56,20 @@ class Gun extends GameObject {
 
     /** Add a projectile that will originate from the gun and follow
      *  the currently tracked position to the Pool via the hook. */
-    #addBullet() {
+    addBullet() {
+        if (!this.#canFire) return;
         const bulletPos = this.#direction.copy();
         bulletPos.mulScalar(this.movable.dimensions.x);
         bulletPos.add(this.movable.pos);
         bulletPos.add(this.#rotatePos);
         this.poolHook('bullets', this.#bulletFunc(bulletPos, this.#direction.copy()));
+        this.#canFire = false;
     }
 
     /** Handle inputs and update components.
      *  @see GameObject.update
      *  @param {InputTracker} inputs */
     update(inputs) {
-        if (!inputs.has('MouseMove')) return;
-        this.#updateDirection(inputs.get('MouseMove').pos);
-        if (inputs.has('MouseHold') && this.#canFire) {
-            this.#addBullet();
-            this.#canFire = false;
-        }
-
         this.sprite.updateFrame();
         if (!this.#canFire) this.#tickRunner.update(); 
     }
