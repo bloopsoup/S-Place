@@ -67,6 +67,14 @@ class Vector2 {
      *  @return {Vector2} The result. */
     addToYCopy(y) { return new Vector2(this.#x, this.#y + y); }
 
+    /** Add to both the x and y values.
+     *  @param {number} x - The x value to add.
+     *  @param {number} y - The y value to add. */
+    addToBoth(x, y) {
+        this.#x += x;
+        this.#y += y;
+    }
+
     /** Add a vector to this vector element-wise. 
      *  @param {Vector2} other - The vector to add to this vector. */
     add(other) { 

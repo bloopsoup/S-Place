@@ -16,7 +16,7 @@ export default class Test extends State {
 
         this.gun = new Gun(sprites['gun'](), new Vector2(100, 200), 5, 10, createProjectile);
         this.player = new Player(sprites['player'](), testCollide, new Vector2(100, 20), new Vector2(5, 5), new Vector2(0.6, 0.4), new Vector2(0.35, 0.25), -8, 10);
-        this.shooter = new Shooter(this.player, this.gun);
+        this.shooter = new Shooter(this.player, this.gun, new Vector2(10, 35));
 
         this.controller = new Controller('StandingRight', playerMouseFacing, this.player);
         this.gunController = new Controller('IdleRight', gunStandard, this.gun);
