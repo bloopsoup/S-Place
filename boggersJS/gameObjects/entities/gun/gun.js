@@ -40,13 +40,6 @@ class Gun extends GameObject {
      *  @return {string} A string of either '', 'left', or 'right'. */
     get orientation() { return this.#direction.x < 0 ? 'left' : 'right'; }
 
-    /** Adjusts the rotation position of the gun based on orientation and then returns it.
-     *  @return {Vector2} The adjusted rotation position. */
-    get adjustedRotatePos() {
-        this.#rotatePos.x = this.orientation === 'left' ? this.sprite.dimensions.x : 0;
-        return this.#rotatePos;
-    }
-
     /** Gets the angle offset based on orientation. This is a workaround to how Javascript
      *  draws rotated sprites by adding PI to the drawing angle.
      *  @return {number} The angle offset. */
@@ -60,9 +53,12 @@ class Gun extends GameObject {
     updateDirection(terminalPos) {
         terminalPos.copyTo(this.#direction);
         this.#direction.sub(this.movable.pos);
-        this.#direction.sub(this.adjustedRotatePos);
+        this.#direction.sub(this.#rotatePos);
         this.#direction.normalize();
     }
+
+    /** Adjusts the rotation position of the gun based on orientation and then returns it. */
+    updateRotatePos() { this.#rotatePos.x = this.orientation === 'left' ? this.sprite.dimensions.x : 0; }
 
     /** Add a projectile that will originate from the gun and follow
      *  the currently tracked position to the Pool via the hook. */
@@ -71,7 +67,7 @@ class Gun extends GameObject {
         const bulletPos = this.#direction.copy();
         bulletPos.mulScalar(this.movable.dimensions.x);
         bulletPos.add(this.movable.pos);
-        bulletPos.add(this.adjustedRotatePos);
+        bulletPos.add(this.#rotatePos);
         this.poolHook('bullets', this.#bulletFunc(bulletPos, this.#direction.copy()));
         this.#canFire = false;
     }
@@ -80,6 +76,7 @@ class Gun extends GameObject {
      *  @see GameObject.update
      *  @param {InputTracker} inputs */
     update(inputs) {
+        this.updateRotatePos();
         this.sprite.updateFrame();
         if (!this.#canFire) this.#tickRunner.update(); 
     }
@@ -89,7 +86,7 @@ class Gun extends GameObject {
      *  @param {CanvasRenderingContext2D} context
      *  @param {number} alpha */
     draw(context, alpha) {
-        this.sprite.drawRotated(context, this.movable.interpolatePos(alpha), this.adjustedRotatePos, this.#direction.toAngle() + this.angleOffset);
+        this.sprite.drawRotated(context, this.movable.interpolatePos(alpha), this.#rotatePos, this.#direction.toAngle() + this.angleOffset);
     }
 }
 
