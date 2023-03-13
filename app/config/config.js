@@ -1,4 +1,4 @@
-import { testCollide } from './maps.js';
+import { testBulletCollide } from './maps.js';
 import { Vector2 } from '../../boggersJS/common/index.js';
 import { Sprite } from '../../boggersJS/components/index.js';
 import { Projectile } from '../../boggersJS/gameObjects/index.js';
@@ -20,5 +20,5 @@ export const sprites = {
  *  @param {Vector2} direction - The direction of the bullet. */
 export function createProjectile(pos, direction) {
     direction.mulScalar(10);
-    return new Projectile(sprites['bullet'](), testCollide, pos, direction, 10);
+    return new Projectile(sprites['bullet'](), testBulletCollide, pos, direction, 10);
 }
