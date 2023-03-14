@@ -5,7 +5,6 @@ import { Projectile } from '../../boggersJS/gameObjects/index.js';
 
 export const sprites = {
     'player': () => new Sprite('player', new Vector2(80, 80), [20, 20, 5, 5, 1, 1, 1, 1]),
-    'wires': () => new Sprite('wires', new Vector2(1440, 720), [1]),
     'tiles': () => new Sprite('tiles', new Vector2(80, 80), [4, 4]),
     'button': () => new Sprite('button', new Vector2(200, 50), [3]),
     'bullet': () => new Sprite('bullet', new Vector2(10, 10), [1]),
