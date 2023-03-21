@@ -1,4 +1,5 @@
-import { sprites, createProjectile } from '../config/config.js';
+import { createProjectile } from '../config/presets.js';
+import { characters, decoration, weapons } from '../assets/loader.js';
 import { testPlayerCollide, testDeco } from '../config/maps.js';
 import { minimal } from '../config/tilesets.js';
 
@@ -12,10 +13,10 @@ export default class Test extends State {
     constructor(canvasDimensions) {
         super(canvasDimensions);
 
-        this.tileMap = new TileMap(testDeco, sprites['minimal'](), minimal);
+        this.tileMap = new TileMap(testDeco, decoration['tiles-grass'](), minimal);
 
-        this.gun = new Gun(sprites['gun'](), new Vector2(100, 200), 5, 10, createProjectile);
-        this.player = new Player(sprites['player'](), testPlayerCollide, new Vector2(100, 20), new Vector2(5, 5), new Vector2(0.6, 0.4), new Vector2(0.35, 0.25), -8, 10);
+        this.gun = new Gun(weapons['smg'](), new Vector2(100, 200), 5, 10, createProjectile);
+        this.player = new Player(characters['xoki'](), testPlayerCollide, new Vector2(100, 20), new Vector2(5, 5), new Vector2(0.6, 0.4), new Vector2(0.35, 0.25), -8, 10);
         this.shooter = new Shooter(this.player, this.gun, new Vector2(10, 35));
 
         this.controller = new Controller('StandingRight', playerMouseFacing, this.player);
@@ -23,11 +24,14 @@ export default class Test extends State {
 
         this.camera = new Camera(this.canvasDimensions, this.player.movable);
  
-        this.pool = new Pool(['backbackbackground', 'backbackground', 'background', 'players', 'bullets'], []);
+        this.pool = new Pool(['bg-back', 'bg-mid', 'bg-front', 'players', 'bullets'], []);
+
         this.pool.addObjectToLayer('players', this.shooter);
-        this.pool.addObjectToLayer('background', new ContinuousBackground(sprites['background1'](), testDeco, new Vector2(0, 0)));
-        this.pool.addObjectToLayer('backbackground', new ContinuousBackground(sprites['background2'](), testDeco, new Vector2(0, 0)));
-        this.pool.addObjectToLayer('backbackbackground', new ContinuousBackground(sprites['background3'](), testDeco, new Vector2(0, 0)));
+
+        this.pool.addObjectToLayer('bg-front', new ContinuousBackground(decoration['bg-front-bench'](), testDeco, new Vector2(0, 0)));
+        this.pool.addObjectToLayer('bg-mid', new ContinuousBackground(decoration['bg-mid-flag'](), testDeco, new Vector2(0, 0)));
+        this.pool.addObjectToLayer('bg-back', new ContinuousBackground(decoration['bg-back-peaks'](), testDeco, new Vector2(0, 0)));
+
         this.pool.addController(this.controller);
         this.pool.addController(this.gunController);
     }

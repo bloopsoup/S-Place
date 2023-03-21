@@ -1,3 +1,3 @@
 Work in progress!
 
-![ScreenShot](/app/assets/misc/boggers_logo.png)
+![ScreenShot](/app/assets/images/misc/boggers-logo.png)
