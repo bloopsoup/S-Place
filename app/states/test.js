@@ -23,8 +23,11 @@ export default class Test extends State {
 
         this.camera = new Camera(this.canvasDimensions, this.player.movable);
  
-        this.pool = new Pool(['backbackground', 'background', 'players', 'bullets'], []);
+        this.pool = new Pool(['backbackbackground', 'backbackground', 'background', 'players', 'bullets'], []);
         this.pool.addObjectToLayer('players', this.shooter);
+        this.pool.addObjectToLayer('background', new ContinuousBackground(sprites['background1'](), testDeco, new Vector2(0, 0)));
+        this.pool.addObjectToLayer('backbackground', new ContinuousBackground(sprites['background2'](), testDeco, new Vector2(0, 0)));
+        this.pool.addObjectToLayer('backbackbackground', new ContinuousBackground(sprites['background3'](), testDeco, new Vector2(0, 0)));
         this.pool.addController(this.controller);
         this.pool.addController(this.gunController);
     }

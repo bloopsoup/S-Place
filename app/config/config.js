@@ -11,7 +11,10 @@ export const sprites = {
     'zito': () => new Sprite('zito', new Vector2(60, 80), [13]),
     'textinput': () => new Sprite('textinput', new Vector2(600, 75), [2]),
     'minimal': () => new Sprite('minimal', new Vector2(80, 80), [5, 5, 5, 5, 5, 5, 5, 5]),
-    'gun': () => new Sprite('gun', new Vector2(100, 36), [1, 1, 10, 10, 1, 1])
+    'gun': () => new Sprite('gun', new Vector2(100, 36), [1, 1, 10, 10, 1, 1]),
+    'background1': () => new Sprite('background1', new Vector2(1280, 720), [1]),
+    'background2': () => new Sprite('background2', new Vector2(1280, 720), [1]),
+    'background3': () => new Sprite('background3', new Vector2(1280, 720), [1])
 };
 
 /** Creates a standard projectile.
