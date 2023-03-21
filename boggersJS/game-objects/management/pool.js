@@ -1,5 +1,5 @@
 import Layer from "./layer.js";
-import GameObject from "../gameObject.js";
+import GameObject from "../game-object.js";
 import { Controller } from '../controller/index.js';
 import { InputTracker } from '../../common/index.js';
 

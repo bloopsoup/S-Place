@@ -1,4 +1,4 @@
-import InputTracker from './inputTracker.js';
+import InputTracker from './input-tracker.js';
 import Vector2 from './vector2.js';
 
 /** A state abstract class that is managed by a StateManager. Actual game states 

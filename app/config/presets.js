@@ -1,7 +1,7 @@
 import { testBulletCollide } from './maps.js';
 import { weapons } from '../assets/loader.js';
 import { Vector2 } from '../../boggersJS/common/index.js';
-import { Projectile } from '../../boggersJS/gameObjects/index.js';
+import { Projectile } from '../../boggersJS/game-objects/index.js';
 
 /** Creates a standard projectile.
  *  @param {Vector2} pos - The starting position of the bullet.

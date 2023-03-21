@@ -4,8 +4,8 @@ import { testPlayerCollide, testDeco } from '../config/maps.js';
 import { minimal } from '../config/tilesets.js';
 
 import { State, Vector2 } from '../../boggersJS/common/index.js';
-import { Shooter, Gun, Player, Pool, playerMouseFacing, gunStandard, Controller, ContinuousBackground } from '../../boggersJS/gameObjects/index.js';
-import { Camera, TileMap } from '../../boggersJS/stateObjects/index.js';
+import { Shooter, Gun, Player, Pool, playerMouseFacing, gunStandard, Controller, ContinuousBackground } from '../../boggersJS/game-objects/index.js';
+import { Camera, TileMap } from '../../boggersJS/state-objects/index.js';
 
 export default class Test extends State {
     /** A test state for testing displays and features. */

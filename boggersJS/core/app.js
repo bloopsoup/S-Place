@@ -1,6 +1,6 @@
 import { State } from '../common/index.js';
-import StateManager from './stateManager.js';
-import InputHandler from './inputHandler.js';
+import StateManager from './state-manager.js';
+import InputHandler from './input-handler.js';
 
 /** The main application which encompasses states, inputs, and the entire game loop. 
  *  All game applications running on boggersJS must start by calling the runTick method. 

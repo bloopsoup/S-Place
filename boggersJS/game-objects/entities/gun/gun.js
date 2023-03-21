@@ -1,4 +1,4 @@
-import GameObject from '../../gameObject.js';
+import GameObject from '../../game-object.js';
 import { InputTracker, Vector2 } from '../../../common/index.js';
 import { Sprite, Movable, TickRunner } from '../../../components/index.js';
 

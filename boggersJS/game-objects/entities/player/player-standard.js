@@ -1,5 +1,5 @@
 import Player from './player.js';
-import PlayerState from './playerState.js';
+import PlayerState from './player-state.js';
 import { ControlState } from '../../controller/index.js';
 import { InputTracker, Vector2 } from '../../../common/index.js';
 

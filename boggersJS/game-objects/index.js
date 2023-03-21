@@ -5,4 +5,4 @@ export * from './controller/index.js';
 export * from './display/index.js';
 export * from './entities/index.js';
 export * from './management/index.js';
-export { default as GameObject } from './gameObject.js';
+export { default as GameObject } from './game-object.js';

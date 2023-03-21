@@ -1,5 +1,5 @@
-import GameObject from "../gameObject.js";
-import ControlState from "./controlState.js";
+import GameObject from "../game-object.js";
+import ControlState from "./control-state.js";
 import { InputTracker } from "../../common/index.js";
 
 /** Controllers are a much more robust substitute to a game object's 

@@ -1,4 +1,4 @@
-import GameObject from '../gameObject.js';
+import GameObject from '../game-object.js';
 import { Movable, Collider, Sprite } from '../../components/index.js';
 import { InputTracker, Vector2 } from '../../common/index.js';
 

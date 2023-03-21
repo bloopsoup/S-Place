@@ -1,4 +1,4 @@
-import GameObject from '../gameObject.js';
+import GameObject from '../game-object.js';
 import { InputTracker } from '../../common/index.js';
 
 /** A control state. These are the modules that actually modify the controlled element.

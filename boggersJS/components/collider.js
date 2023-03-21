@@ -1,6 +1,6 @@
 import { Movable } from './movable/index.js';
 import { Vector2 } from '../common/index.js';
-import TickRunner from './tickRunner.js';
+import TickRunner from './tick-runner.js';
 
 /** Handles buffered and instant collisions between two Movable objects.
  *  Buffered collisions have a cooldown which can be used to call collision 

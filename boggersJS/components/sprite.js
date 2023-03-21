@@ -1,5 +1,5 @@
 import { Vector2 } from '../common/index.js';
-import TickRunner from './tickRunner.js';
+import TickRunner from './tick-runner.js';
 
 /** The Sprite class provides methods for displaying the proper frames from an
  *  underlying spritesheet. It has two modes you can use to iterate through frames.

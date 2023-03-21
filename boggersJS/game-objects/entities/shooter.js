@@ -1,6 +1,6 @@
 import { Gun } from './gun/index.js';
 import { Player } from './player/index.js';
-import GameObject from '../gameObject.js';
+import GameObject from '../game-object.js';
 import { InputTracker, Vector2 } from '../../common/index.js';
 
 /** A combination of a player and a gun.

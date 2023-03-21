@@ -1,4 +1,4 @@
-import GameObject from "../gameObject.js";
+import GameObject from "../game-object.js";
 import { InputTracker } from '../../common/index.js';
 
 /** Handles a list of gameObjects. Meant to be used with Pool which manages multiple
