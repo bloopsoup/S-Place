@@ -21,7 +21,11 @@ class Sprite {
     /** Create the Sprite.
      *  @param {string} name - The ID pointing to the HTMLElement containing the spritesheet. 
      *  @param {Vector2} dimensions - The dimensions of each frame in the spritesheet.
-     *  @param {Array<number>} gridFormat - A list where index i is the ith row and the number is the frames present in that row. */
+     *  @param {Array<number>} gridFormat - A list where index i is the ith row and the number is the frames present in that row.
+     *  @example <caption>Creating a Sprite.</caption>
+     *  // Create a Sprite by loading an image element called 'test' where each frame is 80x80px.
+     *  // [1, 4, 2] means: 1st row has 1 frame, 2nd row has 4 frames, 3rd row has 2 frames.
+     *  const sprite = new Sprite('test', new Vector2(80, 80), [1, 4, 2]); */
     constructor(name, dimensions, gridFormat) {
         this.#image = document.getElementById(name);
         this.#dimensions = dimensions;

@@ -33,7 +33,12 @@ class Grid {
     /** Apply a function to each element in the grid. The function signature 
      *  should be as follows: FUNC(pos: Vector2, element: any)
      *  @param {CallableFunction} func - The function applied to each element in the grid. 
-     *  @param {boolean} useRealPos - Whether to convert the grid position into a real position. */
+     *  @param {boolean} useRealPos - Whether to convert the grid position into a real position.
+     *  @example <caption>Using the Grid's forEach function.</caption>
+     *  // Create a 2 x 2 Grid.
+     *  const grid = new Grid(new Vector2(10, 10), [[2, 2], [2, 2]]);
+     *  // Using the Grid's forEach function.
+     *  grid.forEach((pos, element) => console.log(`Position: (${pos.x}, ${pos.y}) Element: ${element}`), false); */
     forEach(func, useRealPos) {
         const pos = new Vector2(0, 0);
         for (let i in this.#grid) {

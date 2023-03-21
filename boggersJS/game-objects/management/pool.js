@@ -26,9 +26,9 @@ class Pool {
      *      of the layer handling collisions and the second element is the name of the layer
      *      that's being collided with. 
      *  @example <caption>Creating a Pool object with collision checking.</caption>
-     *  // Create the Pool with three layers and have layer1 check for collisions with layer2 and layer3
+     *  // Create the Pool with three layers and have layer1 check for collisions with layer2 and layer3.
      *  // Note that when processing collisions, layer1 will check for collisions with layer3 FIRST.
-     *  const pool = Pool(['layer1', 'layer2', 'layer3'], [['layer1', 'layer3'], ['layer2', 'layer3']]); */
+     *  const pool = new Pool(['layer1', 'layer2', 'layer3'], [['layer1', 'layer3'], ['layer2', 'layer3']]); */
     constructor(names, collisionOrder) { 
         this.#layers = {};
         this.#controllers = [];
