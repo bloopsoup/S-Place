@@ -1,7 +1,7 @@
 import { createProjectile } from '../config/presets.js';
 import { characters, decoration, weapons } from '../assets/loader.js';
 import { testPlayerCollide, testDeco } from '../config/maps.js';
-import { minimal } from '../config/tilesets.js';
+import { grass, smallBuildings } from '../config/tilesets.js';
 
 import { State, Vector2 } from '../../boggersJS/common/index.js';
 import { Shooter, Gun, Player, Pool, playerMouseFacing, gunStandard, Controller, ContinuousBackground } from '../../boggersJS/game-objects/index.js';
@@ -13,7 +13,8 @@ export default class Test extends State {
     constructor(canvasDimensions) {
         super(canvasDimensions);
 
-        this.tileMap = new TileMap(testDeco, decoration['tiles-grass'](), minimal);
+        this.tileMap = new TileMap(testDeco, decoration['tiles-grass'](), grass);
+        this.bMap = new TileMap(testDeco, decoration['tiles-bld-small'](), smallBuildings);
 
         this.gun = new Gun(weapons['smg'](), new Vector2(100, 200), 5, 10, createProjectile);
         this.player = new Player(characters['xoki'](), testPlayerCollide, new Vector2(100, 20), new Vector2(5, 5), new Vector2(0.6, 0.4), new Vector2(0.35, 0.25), -8, 10);
@@ -50,6 +51,7 @@ export default class Test extends State {
         const offset = this.camera.getInterpolatedBoundedOffset(alpha);
         context.translate(offset.x, offset.y);
         this.pool.draw(context, alpha); 
+        this.bMap.draw(context);
         this.tileMap.draw(context);
         context.restore();
     }

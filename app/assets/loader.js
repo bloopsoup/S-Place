@@ -14,13 +14,7 @@ export const decoration = {
     'bg-front-bench':   () => new Sprite('bg-front-bench', new Vector2(1280, 720), [1]),
     'bg-mid-flag':      () => new Sprite('bg-mid-flag', new Vector2(1280, 720), [1]),
 
-    'bld-small-band':   () => new Sprite('bld-small-band', new Vector2(160, 160), [1]),
-    'bld-small-blocks': () => new Sprite('bld-small-blocks', new Vector2(160, 160), [1]),
-    'bld-small-cafe':   () => new Sprite('bld-small-cafe', new Vector2(160, 160), [1]),
-    'bld-small-shop':   () => new Sprite('bld-small-shop', new Vector2(160, 160), [1]),
-    'bld-small-sloped': () => new Sprite('bld-small-sloped', new Vector2(160, 160), [1]),
-    'bld-small-window': () => new Sprite('bld-small-window', new Vector2(160, 160), [1]),
-
+    'tiles-bld-small':  () => new Sprite('tiles-bld-small', new Vector2(160, 160), [2, 2, 2]),
     'tiles-grass':      () => new Sprite('tiles-grass', new Vector2(80, 80), [5, 5, 5, 5, 5, 5, 5, 5])
 };
 
