@@ -14,7 +14,7 @@ export const decoration = {
     'bg-front-bench':   () => new Sprite('bg-front-bench', new Vector2(1280, 720), [1]),
     'bg-mid-flag':      () => new Sprite('bg-mid-flag', new Vector2(1280, 720), [1]),
 
-    'tiles-bld-small':  () => new Sprite('tiles-bld-small', new Vector2(160, 160), [2, 2, 2]),
+    'tiles-bld-small':  () => new Sprite('tiles-bld-small', new Vector2(240, 240), [2, 2, 2]),
     'tiles-grass':      () => new Sprite('tiles-grass', new Vector2(80, 80), [5, 5, 5, 5, 5, 5, 5, 5])
 };
 
