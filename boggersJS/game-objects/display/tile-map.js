@@ -1,9 +1,11 @@
-import { Grid, Vector2 } from '../common/index.js';
-import { Sprite } from '../components/index.js';
+import GameObject from '../game-object.js';
+import { Grid, Vector2 } from '../../common/index.js';
+import { Sprite } from '../../components/index.js';
 
-/** A 2D-grid that handles drawing tiles. 
- *  @memberof StateObjects */
-class TileMap {
+/** A 2D-grid that handles drawing tiles.
+ *  @augments GameObject
+ *  @memberof GameObjects.Display */
+class TileMap extends GameObject {
     /** @type {Grid} */
     #grid
     /** @type {Sprite} */
@@ -20,6 +22,7 @@ class TileMap {
      *  @param {Sprite} sprite - The tile sheet to represent different types of tiles.
      *  @param {Object<string, Vector2>} frameLookup - A map which links names to frame locations. */
     constructor(grid, sprite, frameLookup) {
+        super();
         this.#grid = grid;
         this.#sprite = sprite;
         this.#frameLookup = frameLookup;
