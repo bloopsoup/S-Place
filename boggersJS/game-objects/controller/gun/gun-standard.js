@@ -1,5 +1,5 @@
-import Gun from './gun.js';
-import { ControlState } from '../../controller/index.js';
+import ControlState from '../control-state.js';
+import { Gun } from '../../entities/index.js';
 import { InputTracker } from '../../../common/index.js';
 
 class IdleLeft extends ControlState {
@@ -70,7 +70,7 @@ class ShootRight extends ControlState {
 
 /** All the states needed for controlling a gun.
  *  @type {Object<string, ControlState>} 
- *  @memberof GameObjects.Entities.Gun */
+ *  @memberof GameObjects.Controller.Gun */
 const gunStandard = {
     'IdleLeft': new IdleLeft(),
     'IdleRight': new IdleRight(),

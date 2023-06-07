@@ -1,12 +1,12 @@
-import GameObject from '../../game-object.js';
-import { Grid, InputTracker, Vector2 } from '../../../common/index.js';
-import { Sprite, MovablePhysics, Collider, CollisionMap, Health } from '../../../components/index.js';
+import GameObject from '../game-object.js';
+import { Grid, InputTracker, Vector2 } from '../../common/index.js';
+import { Sprite, MovablePhysics, Collider, CollisionMap, Health } from '../../components/index.js';
 
 /** The player character meant to be controlled via Controller. Has physics-based
  *  movement behavior which supports tile-based collision. Also has a health
  *  component to determine when to die (delete itself).
  *  @augments GameObject
- *  @memberof GameObjects.Entities.Player */
+ *  @memberof GameObjects.Entities */
 class Player extends GameObject {
     /** @type {string} */
     #orientation

@@ -1,6 +1,6 @@
-import Player from './player.js';
 import PlayerState from './player-state.js';
-import { ControlState } from '../../controller/index.js';
+import ControlState from '../control-state.js';
+import { Player } from '../../entities/index.js';
 import { InputTracker, Vector2 } from '../../../common/index.js';
 
 /** When the target is not moving and facing leftwards.
@@ -155,7 +155,7 @@ class FallingRight extends PlayerState {
 
 /** All the states needed for controlling a player.
  *  @type {Object<string, ControlState>} 
- *  @memberof GameObjects.Entities.Player */
+ *  @memberof GameObjects.Controller.Player */
 const playerStandard = {
     'StandingLeft': new StandingLeft(),
     'StandingRight': new StandingRight(),

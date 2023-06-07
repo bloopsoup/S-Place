@@ -1,9 +1,9 @@
-import Player from './player.js';
-import { ControlState } from '../../controller/index.js';
+import ControlState from '../control-state.js';
+import { Player } from '../../entities/index.js';
 
 /** A player control state.
  *  @augments ControlState
- *  @memberof GameObjects.Entities.Player */
+ *  @memberof GameObjects.Controller.Player */
 class PlayerState extends ControlState {
     /** Moves the Player based on its velocity and snaps when needed.
      *  @param {Player} target - The player to modify. */

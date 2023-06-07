@@ -1,5 +1,5 @@
-import { Gun } from './gun/index.js';
-import { Player } from './player/index.js';
+import Gun from './gun.js';
+import Player from './player.js';
 import GameObject from '../game-object.js';
 import { InputTracker, Vector2 } from '../../common/index.js';
 
