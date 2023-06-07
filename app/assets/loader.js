@@ -28,5 +28,5 @@ export const ui = {
  *  @type {Object<string, CallableFunction>} */
 export const weapons = {
     'bullet':           () => new Sprite('bullet', new Vector2(10, 10), [1]),
-    'smg':              () => new Sprite('smg', new Vector2(100, 36), [1, 1, 10, 10, 1, 1])
+    'smg':              () => new Sprite('smg', new Vector2(100, 36), [1, 1, 10, 10, 1, 1], 10)
 }
