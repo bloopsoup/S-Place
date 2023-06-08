@@ -13,7 +13,7 @@ export default class Test extends State {
     constructor(canvasDimensions) {
         super(canvasDimensions);
 
-        this.gun = new Gun(weapons['smg'](), new Vector2(100, 200), 5, 10, createProjectile);
+        this.gun = new Gun(weapons['smg'](), new Vector2(100, 200), 5, createProjectile);
         this.player = new Player(characters['xoki'](), testPlayerCollide, new Vector2(100, 20), new Vector2(5, 5), new Vector2(0.6, 0.4), new Vector2(0.35, 0.25), -8, 10);
         this.shooter = new Shooter(this.player, this.gun, new Vector2(10, 35));
 

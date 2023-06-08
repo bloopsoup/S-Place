@@ -11,29 +11,22 @@ class Gun extends GameObject {
     #rotatePos
     /** @type {Vector2} */
     #direction
-    /** @type {TickRunner} */
-    #tickRunner
     /** @type {CallableFunction} */
     #bulletFunc
-    /** @type {boolean} */
-    #canFire
 
     /** Create the Gun.
      *  @param {Sprite} sprite - The gun's sprite.
      *  @param {Vector2} pos - The gun's position.
      *  @param {number} rotateY - An offset to the gun's y value which determines the pivot.
-     *  @param {number} fireDelay - The delay between spawning consecutive projectiles.
      *  @param {CallableFunction} bulletFunc - The function called to create a projectile.
      *     The signature is: FUNC(pos: Vector2, direction: Vector2) */
-    constructor(sprite, pos, rotateY, fireDelay, bulletFunc) {
+    constructor(sprite, pos, rotateY, bulletFunc) {
         super();
         this.sprite = sprite;
         this.movable = new Movable(new Vector2(0, 0), this.sprite.dimensions, pos, new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0));
         this.#rotatePos = new Vector2(0, rotateY);
         this.#direction = new Vector2(0, 0);
-        this.#tickRunner = new TickRunner(fireDelay, () => this.#enableFire());
         this.#bulletFunc = bulletFunc;
-        this.#canFire = true;
     }
 
     /** Gets the gun's orientation.
@@ -44,9 +37,6 @@ class Gun extends GameObject {
      *  draws rotated sprites by adding PI to the drawing angle.
      *  @return {number} The angle offset. */
     get angleOffset() { return this.orientation === 'left' ? Math.PI : 0; }
-
-    /** Allow the gun to fire. */
-    #enableFire() { this.#canFire = true; }
 
     /** Updates the gun's currently tracked direction.
      *  @param {Vector2} terminalPos - The mouse position. */
@@ -63,13 +53,11 @@ class Gun extends GameObject {
     /** Add a projectile that will originate from the gun and follow
      *  the currently tracked position to the Pool via the hook. */
     addBullet() {
-        if (!this.#canFire) return;
         const bulletPos = this.#direction.copy();
         bulletPos.mulScalar(this.movable.dimensions.x);
         bulletPos.add(this.movable.pos);
         bulletPos.add(this.#rotatePos);
         this.poolHook('bullets', this.#bulletFunc(bulletPos, this.#direction.copy()));
-        this.#canFire = false;
     }
 
     /** Handle inputs and update components.
@@ -78,7 +66,6 @@ class Gun extends GameObject {
     update(inputs) {
         this.updateRotatePos();
         this.sprite.updateFrame();
-        if (!this.#canFire) this.#tickRunner.update(); 
     }
 
     /** Draw the object.

@@ -51,6 +51,10 @@ class Sprite {
      *  @param {number} row - The new row. */    
     set row(row) { this.#frame.x = 0; this.#frame.y = row; }
 
+    /** Sets the current row, WITHOUT resetting frameX. 
+     *  @param {number} row - The new row. */
+    set row_continue(row) { this.#frame.y = row; }
+
     /** Check if the current frame is on the last row.
      *  @returns {boolean} The result. */
     onLastRow() { return this.#frame.y >= this.#gridFormat.length - 1; }
