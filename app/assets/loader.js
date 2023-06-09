@@ -18,6 +18,13 @@ export const decoration = {
     'tiles-grass':      () => new Sprite('tiles-grass', new Vector2(80, 80), [5, 5, 5, 5, 5, 5, 5, 5])
 };
 
+/** All loaded levels.
+ *  @type {Object<string, CallableFunction>} */
+export const levels = {
+    'town-grass':       () => new Sprite('town-grass', new Vector2(4000, 800), [1]),
+    'town-bld':         () => new Sprite('town-bld', new Vector2(4000, 800), [1])
+};
+
 /** All loaded UI sprites.
  *  @type {Object<string, CallableFunction>} */
 export const ui = {

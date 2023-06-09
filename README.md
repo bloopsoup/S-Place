@@ -15,7 +15,7 @@ and gain power and allies to reach your goal. This game was built on a custom ga
 Powered by `boggersJS`.
 
 <p align="center">
-    <img src="docs/assets/boggers-logo.png">
+    <img height="110" src="docs/assets/boggers-logo.png">
 </p>
 
 The engine, `boggersJS`, is supposed to be an improvement over the Python game engine I
