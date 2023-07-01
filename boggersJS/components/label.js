@@ -28,6 +28,7 @@ class Label {
         this.#dimensions = dimensions;
         this.#padding = padding;
         this.#text = '';
+        this.#preRender();
     }
 
     /** Gets the label's text.
@@ -37,6 +38,7 @@ class Label {
     /** Renders the text onto the internal canvas. This is to avoid rendering text
      *  multiple times if the text never changes. */
     #preRender() {
+        this.#textContext.clearRect(0, 0, this.#textCanvas.width, this.#textCanvas.height);
         const fontAscent = Math.abs(this.#textContext.measureText('M').actualBoundingBoxAscent);
         this.#textContext.fillText(this.#text, this.#padding.x, this.#padding.y + fontAscent);
     }
@@ -46,13 +48,14 @@ class Label {
      *  @returns {boolean} The result. */
     #willOverflow(char) {
         const textLength = this.#textContext.measureText(this.#text + char).width;
-        return textLength + this.#padding.x <= this.#dimensions.x - this.#padding.x;
+        return textLength + this.#padding.x >= this.#dimensions.x - this.#padding.x;
     }
 
     /** Adds a character to the label's text.
-     *  @param {string} char - The character to add to the label. */
-    add(char) {
-        if (this.#willOverflow(char)) return;
+     *  @param {string} char - The character to add to the label.
+     *  @param {boolean} check - Whether to check for overflow before adding the character. */
+    add(char, check) {
+        if (check && this.#willOverflow(char)) return;
         this.#text += char;
         this.#preRender();
     }

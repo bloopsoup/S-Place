@@ -1,21 +1,19 @@
 import GameObject from '../game-object.js';
-import { Movable, Collider, Sprite } from '../../components/index.js';
+import { Movable, Collider, Sprite, Label } from '../../components/index.js';
 import { InputTracker, Vector2 } from '../../common/index.js';
 
 /** A textbox which displays user input text.
  *  @augments GameObject 
  *  @memberof GameObjects.Display */
 class TextInput extends GameObject {
+    /** @type {Label} */
+    #label
     /** @type {CallableFunction} */
     #func
     /** @type {Array<Vector2>} */
     #frames = [new Vector2(0, 0), new Vector2(1, 0)];
-    /** @type {string} */
-    #text
     /** @type {boolean} */
     #isActive
-    /** @type {HTMLCanvasElement} */
-    #testCanvas
 
     /** Create the text input.
      *  @param {Sprite} sprite - The sprites of the text input. Spritesheet should have one row of
@@ -28,35 +26,16 @@ class TextInput extends GameObject {
         this.sprite = sprite;
         this.movable = new Movable(new Vector2(0, 0), this.sprite.dimensions, pos, new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0));
         this.collider = new Collider(0);
+        this.#label = new Label(this.sprite.dimensions, new Vector2(10, 10), font);
 
         this.#func = func;
-        this.#text = '';
-        this.#isActive = false;
-
-        this.#testCanvas = document.createElement('canvas');
-        this.#testCanvas.width = this.sprite.dimensions.x, this.#testCanvas.height = this.sprite.dimensions.y;
-        this.#testCanvas.getContext('2d').font = font;
-    }
-
-    /** Draws the text onto the internal canvas. This avoids having to change the state of the primary canvas. */
-    #preDraw() {
-        // metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
-        const context = this.#testCanvas.getContext('2d');
-        context.fillText(this.#text, 0, 0);
-    }
-
-    /** Determines whether adding char will make the text go past its boundaries.
-     *  @param {string} char - The character that will be added. 
-     *  @returns {boolean} The result. */
-    #willOverflow(char) {
-        const context = this.#testCanvas.getContext('2d');
-        return context.measureText(this.#text + char).width <= this.sprite.dimensions.x;
+        this.#isActive = false;   
     }
 
     /** Calls the function with the input text as an argument and then clears itself. */
     submitText() {
-        this.#func(this.#text);
-        this.#text = '';
+        this.#func(this.#label.text);
+        this.#label.clear();
         this.#isActive = false;
     }
 
@@ -70,9 +49,9 @@ class TextInput extends GameObject {
         }
         if (this.#isActive) {
             if (inputs.consumeInput('Enter')) this.submitText();
-            if (inputs.consumeInput('Backspace')) this.#text = this.#text.slice(0, -1);
+            if (inputs.consumeInput('Backspace')) this.#label.back();
             const char = inputs.consumePrintableInput();
-            if (char && !this.#willOverflow(char)) this.#text += char; 
+            if (char) this.#label.add(char, true); 
         }   
     }
 
@@ -81,9 +60,8 @@ class TextInput extends GameObject {
      *  @param {CanvasRenderingContext2D} context
      *  @param {number} alpha */
     draw(context, alpha){
-        this.#preDraw();
         this.sprite.drawFrame(context, this.movable.pos, !this.#isActive ? this.#frames[0] : this.#frames[1]);
-        context.drawImage(this.#testCanvas, this.movable.pos.x, this.movable.pos.y);
+        this.#label.draw(context, this.movable.pos);
     }
 }
 

@@ -1,9 +1,9 @@
 import { createProjectile } from '../config/presets.js';
-import { characters, decoration, levels, weapons } from '../assets/loader.js';
+import { characters, decoration, levels, weapons, ui } from '../assets/loader.js';
 import { townCollide } from '../config/maps.js';
 
 import { State, Vector2 } from '../../boggersJS/common/index.js';
-import { Shooter, Gun, Player, Pool, playerMouseFacing, gunStandard, Controller, ContinuousBackground, Static } from '../../boggersJS/game-objects/index.js';
+import { Shooter, Gun, Player, Pool, playerMouseFacing, gunStandard, Controller, ContinuousBackground, Static, TextInput } from '../../boggersJS/game-objects/index.js';
 import { Camera } from '../../boggersJS/state-objects/index.js';
 
 export default class Test extends State {
@@ -20,6 +20,7 @@ export default class Test extends State {
         this.gunController = new Controller('IdleRight', gunStandard, this.gun);
 
         this.camera = new Camera(this.canvasDimensions, this.player.movable);
+        this.input = new TextInput(ui['text-input'](), new Vector2(10, 300), "50px Arial", text => console.log(text));
  
         this.pool = new Pool(['bg-back', 'bg-mid', 'bg-front', 'buildings', 'players', 'bullets', 'tiles'], []);
 
@@ -29,6 +30,7 @@ export default class Test extends State {
         this.pool.addObjectToLayer('bg-mid', new ContinuousBackground(decoration['bg-mid-flag'](), townCollide, new Vector2(0, 0)));
         this.pool.addObjectToLayer('bg-back', new ContinuousBackground(decoration['bg-back-peaks'](), townCollide, new Vector2(0, 0)));
 
+        this.pool.addObjectToLayer('buildings', this.input);
         this.pool.addObjectToLayer('buildings', new Static(levels['town-bld'](), new Vector2(0, 0)));
         this.pool.addObjectToLayer('tiles', new Static(levels["town-grass"](), new Vector2(0, 0)));
 
