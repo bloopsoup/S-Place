@@ -26,7 +26,7 @@ class TextInput extends GameObject {
         this.sprite = sprite;
         this.movable = new Movable(new Vector2(0, 0), this.sprite.dimensions, pos, new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0));
         this.collider = new Collider(0);
-        this.#label = new Label(this.sprite.dimensions, new Vector2(10, 10), font);
+        this.#label = new Label('', this.sprite.dimensions, new Vector2(10, 10), font);
 
         this.#func = func;
         this.#isActive = false;   

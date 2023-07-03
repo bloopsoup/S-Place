@@ -177,6 +177,10 @@ class Vector2 {
         this.#y = (this.#y === 0) ? other.#y : this.#y;
     }
 
+    /** Checks if both elements in the vector are zero.
+     *  @returns {boolean} The result. */
+    isZero() { return this.#x === 0 && this.#y === 0; }
+
     /** Checks if either element in the vector is negative.
      *  @return {boolean} The result. */
     isNegative() { return this.#x < 0 || this.#y < 0; }

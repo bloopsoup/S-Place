@@ -8,32 +8,45 @@ class Label {
     /** @type {CanvasRenderingContext2D} */
     #textContext
     /** @type {Vector2} */
-    #dimensions
-    /** @type {Vector2} */
     #padding
     /** @type {string} */
     #text
 
     /** Create the label.
-     *  @param {Vector2} dimensions - The bounding dimensions of the label.
+     *  @param {string} text - The initial text of the label.
+     *  @param {Vector2} dimensions - The bounding dimensions of the label. To default to standard
+     *      dimensions, provide a zero vector; the dimensions will fit the provided text.
      *  @param {Vector2} padding - The amount of space between the text and the border defined
      *      by the provided dimensions.
      *  @param {string} font - The font of the label. */
-    constructor(dimensions, padding, font) {
+    constructor(text, dimensions, padding, font) {
         this.#textCanvas = document.createElement('canvas');
-        this.#textCanvas.width = dimensions.x, this.#textCanvas.height = dimensions.y;
+
+        if (dimensions.isZero()) this.#setDefaultDimensions(text, font);
+        else this.#textCanvas.width = dimensions.x, this.#textCanvas.height = dimensions.y;
+
         this.#textContext = this.#textCanvas.getContext('2d');
         this.#textContext.font = font;
 
-        this.#dimensions = dimensions;
         this.#padding = padding;
-        this.#text = '';
+        this.#text = text;
         this.#preRender();
     }
 
     /** Gets the label's text.
      *  @return {string} The text. */
     get text() { return this.#text; }
+
+    /** Sets the canvas dimensions to the default dimensions which encompasses the provided text
+     *  with the given font.
+     *  @param {string} text - The initial text.
+     *  @param {string} font - The font that is used. */
+    #setDefaultDimensions(text, font) {
+        const context = this.#textCanvas.getContext('2d');
+        context.font = font;
+        const metric = context.measureText(text);
+        this.#textCanvas.width = metric.width, this.#textCanvas.height = metric.actualBoundingBoxAscent + metric.actualBoundingBoxDescent;
+    }
 
     /** Renders the text onto the internal canvas. This is to avoid rendering text
      *  multiple times if the text never changes. */
@@ -48,7 +61,7 @@ class Label {
      *  @returns {boolean} The result. */
     #willOverflow(char) {
         const textLength = this.#textContext.measureText(this.#text + char).width;
-        return textLength + this.#padding.x >= this.#dimensions.x - this.#padding.x;
+        return textLength + this.#padding.x >= this.#textCanvas.width - this.#padding.x;
     }
 
     /** Adds a character to the label's text.
