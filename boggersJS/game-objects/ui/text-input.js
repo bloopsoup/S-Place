@@ -51,7 +51,7 @@ class TextInput extends GameObject {
             if (inputs.consumeInput('Enter')) this.submitText();
             if (inputs.consumeInput('Backspace')) this.#label.back();
             const char = inputs.consumePrintableInput();
-            if (char) this.#label.add(char, true); 
+            if (char) this.#label.add(char); 
         }   
     }
 
