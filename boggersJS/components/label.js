@@ -35,7 +35,22 @@ class Label {
 
     /** Gets the label's first line of text.
      *  @return {string} The text. */
-    get text() { return this.#text[0].join(' '); }
+    get text() { return this.#getLine(0); }
+
+    /** Gets the height of a label's line of text. M is typically a good approximation.
+     *  @return {number} The height. */
+    get #lineHeight() {
+        const metric = this.#textContext.measureText('M');
+        return metric.actualBoundingBoxAscent + metric.actualBoundingBoxDescent;
+    }
+
+    /** Gets the label's ith line of text as a complete string.
+     *  @param {number} i - The ith line of text to get.
+     *  @return {string} The string. */
+    #getLine(i) {
+        const line = this.#text[i];
+        return (line[line.length-1].length === 0 ? line.slice(0, -1) : line).join(' ');
+    }
 
     /** Determines whether the label is empty.
      *  @returns {boolean} The result. */
@@ -56,7 +71,7 @@ class Label {
      *  @param {string} char - The character that will be added. 
      *  @returns {boolean} The result. */
     #willOverflowHorizontal(char) {
-        const metric = this.#textContext.measureText(this.#text[this.#text.length-1].join(' ') + char);
+        const metric = this.#textContext.measureText(this.#getLine(this.#text.length-1) + char);
         const textLength = metric.width + this.#padding.x;
         return textLength >= this.#textCanvas.width - this.#padding.x;
     }
@@ -64,8 +79,7 @@ class Label {
     /** Determines whether adding a new line will make the text go past its vertical boundaries.
      *  @returns {boolean} The result. */
     #willOverflowVertical() {
-        const metric = this.#textContext.measureText('M');
-        const textHeight = (this.#text.length + 1) * (metric.actualBoundingBoxAscent + metric.actualBoundingBoxDescent + this.#padding.y);
+        const textHeight = (this.#text.length + 1) * (this.#lineHeight + this.#padding.y);
         return textHeight >= this.#textCanvas.height - this.#padding.y;
     }
 
@@ -82,11 +96,9 @@ class Label {
      *  multiple times if the text never changes. */
     #preRender() {
         this.#textContext.clearRect(0, 0, this.#textCanvas.width, this.#textCanvas.height);
-        const metric = this.#textContext.measureText('M');
-        const textHeight = metric.actualBoundingBoxAscent + metric.actualBoundingBoxDescent;
         const fontAscent = Math.abs(this.#textContext.measureText('M').actualBoundingBoxAscent);
         for (let i = 0; i < this.#text.length; i++) {
-            this.#textContext.fillText(this.#text[i].join(' '), this.#padding.x, this.#padding.y + fontAscent + (i * textHeight));
+            this.#textContext.fillText(this.#getLine(i), this.#padding.x, fontAscent + ((i + 1) * this.#padding.y) + (i * this.#lineHeight));
         }
     }
 
@@ -94,7 +106,7 @@ class Label {
      *  @param {string} char - The character to add to the label. */
     add(char) {
         const lastLine = this.#text[this.#text.length-1];
-        if (char === ' ') lastLine.push('');
+        if (char === ' ') { if (lastLine[lastLine.length-1].length > 0) lastLine.push(''); }
         else if (!this.#willOverflowHorizontal(char)) lastLine[lastLine.length-1] += char;
         else if (!this.#willOverflowVertical()) this.#text.push([lastLine.pop() + char]);
         this.#preRender();
