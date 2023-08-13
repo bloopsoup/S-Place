@@ -2,11 +2,6 @@
  *  In addition, it contains references to other nodes to represent a progression.
  *  @memberof Components.Dialogue */
 class DialogueNode {
-    /** Internal object to represent the node's choices/neighbors.
-     *  @typedef {Object} NextEntry
-     *  @property {string} dest - The message of the entry.
-     *  @property {DialogueNode} node - The corresponding node. */
-
     /** @type {string} */
     #name
     /** @type {string} */
@@ -17,7 +12,9 @@ class DialogueNode {
     #isChoice
     /** @type {string} */
     #label
-    /** @type {Array<NextEntry>} */
+    /** @type {string} */
+    #choiceMessage
+    /** @type {Array<DialogueNode>} */
     #next
 
     /** Create the DialogueNode.
@@ -26,13 +23,17 @@ class DialogueNode {
      *  @param {string} message - The message of the part.
      *  @param {boolean} isChoice - If the node is a choice node.
      *  @param {string} label - The label of the part. Used to aid in parsing or
-     *      to specify additional information like a category. */
-    constructor(name, emotion, message, isChoice, label = '') {
+     *      to specify additional information like a category. 
+     *  @param {string} choiceMessage - The incoming message of a node following
+     *      a choice node. This message is used to represent the choices rather
+     *      than the content itself. */
+    constructor(name, emotion, message, isChoice, label = '', choiceMessage = '') {
         this.#name = name;
         this.#emotion = emotion;
         this.#message = message;
         this.#isChoice = isChoice;
         this.#label = label;
+        this.#choiceMessage = choiceMessage;
         this.#next = [];
     }
 
@@ -56,15 +57,21 @@ class DialogueNode {
      *  @returns {string} The label. */
     get label() { return this.#label; }
 
+    /** Gets the speaker's incoming choice message.
+     *  @returns {string} The choice message. */
+    get choiceMessage() { return this.#choiceMessage; }
+
     /** Gets the neighbors of the node.
-     *  @returns {Array<NextEntry>} The neighbors. */
+     *  @returns {Array<DialogueNode>} The neighbors. */
     get next() { return this.#next; }
 
+    /** Sets the speaker's incoming choice message.
+     *  @param {string} choiceMessage - The message. */
+    set choiceMessage(choiceMessage) { this.#choiceMessage = choiceMessage; }
+
     /** Adds a new neighboring node.
-     *  @param {DialogueNode} node - The next node.
-     *  @param {string} dest - The message corresponding to the next node.
-     *       Defaults to '' for adding a destination to a message node. */
-    addNeighbor(node, dest = '') { this.#next.push({ dest, node }); }
+     *  @param {DialogueNode} node - The next node. */
+    addNeighbor(node) { this.#next.push(node); }
 
     /** Returns the next neighboring node.
      *  @param {number} i - The index corresponding to the next node to return. 
@@ -73,7 +80,7 @@ class DialogueNode {
      *      is invalid. */
     to(i = 0) {
         if (i < 0 || i >= this.#next.length) return null;
-        return this.#next[i]['node']; 
+        return this.#next[i]; 
     }
 }
 
