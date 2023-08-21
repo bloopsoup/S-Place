@@ -40,3 +40,14 @@ export function readRaw(name, valid) {
     const folder = valid ? 'valid' : 'invalid';
     return readFileSync(path.join(__dirname, `scripts/${folder}/${name}.dscript`)).toString();
 }
+
+/** Reads the requested DScript file as a raw string and inserts it into the template.
+ * @param {string} name - The name of the DScript file.
+ * @param {boolean} valid - Whether to read in a valid DScript file or an invalid one.
+ * @returns {string} The resulting string. */
+export function readTemplatedRaw(name, valid) {
+    const folder = valid ? 'valid' : 'invalid';
+    const script = readFileSync(path.join(__dirname, `scripts/${folder}/${name}.dscript`)).toString();
+    const template = readFileSync(path.join(__dirname, `scripts/template`)).toString();
+    return script.replace("[REPLACE]", template);
+}

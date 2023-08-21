@@ -1,0 +1,27 @@
+Bob angry M
+I am angry right now.
+
+Alice angry M
+I am also angry right now.
+
+Richard angry M
+I am semi-angry right now.
+
+# Note that the below construct is not valid DScript
+# but is used to template DScript files for testing
+[REPLACE]
+
+Fanagle happy M
+I am anti-angry right now.
+
+Eric happy M
+I am okay-angry right now.
+
+Bob angry C
+I am angry right now. Are you?
+Yes -> FRIENDSHIP
+No -> FIGHT
+Maybe -> IGNORE
+
+Bob pissed M FIGHT
+Okay then, let's FIGHT!

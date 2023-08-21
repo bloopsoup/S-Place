@@ -1,7 +1,7 @@
 import { strict as assert } from 'node:assert';
 import { beforeEach, describe, it } from 'node:test';
 import { DialogueNode, DScriptReader } from './index.js';
-import { assertNodeArrayEqual, readRaw } from './helpers.js';
+import { assertNodeArrayEqual, readRaw, readTemplatedRaw } from './helpers.js';
 
 describe('DScriptReader read', () => {
     describe('valid cases', () => {
@@ -61,13 +61,35 @@ describe('DScriptReader read', () => {
             assert.strictEqual(new DScriptReader(readRaw(name, false)).read(), null, 'Expected null');
         }
 
+        /** Asserts that the provided templated script is invalid.
+         *  @param {string} name - The name of the DScript file. 
+         *  @throws {AssertionError} If the result of reading is NOT null. */
+        function assertTemplatedScriptInvalid(name) {
+            assert.strictEqual(new DScriptReader(readTemplatedRaw(name, false)).read(), null, 'Expected null');
+        }
+
         it('should error on an empty script', () => assertScriptInvalid('only-empty'));
         it('should error on a whitespace-only script', () => assertScriptInvalid('only-spaces'));
         it('should error on a comment-only script', () => assertScriptInvalid('only-comments'));
-        it('should error if a message node has no header', () => assertScriptInvalid('no-header'));
-        it('should error if a message node has no header in a mostly valid script', () => assertScriptInvalid('no-header-many'));
-        it('should error if a message node has no message', () => assertScriptInvalid('no-message'));
-        it('should error if a message node has no message in a mostly valid script', () => assertScriptInvalid('no-message-many'));
-        it('should error if a choice node has no choices', () => assertScriptInvalid('no-choices'));
+
+        it('should error if a node has no header', () => assertScriptInvalid('header-blank'));
+        it('should error if a node header has too few elements', () => assertScriptInvalid('header-too-few'));
+        it('should error if a node header too much elements', () => assertScriptInvalid('header-too-much'));
+        it('should error if a node header has an invalid type', () => assertScriptInvalid('header-type'));
+
+        it('should error if a node has no message', () => assertScriptInvalid('message-blank'));
+
+        it('should error if a choice node has no choices', () => assertScriptInvalid('choices-blank'));
+        it('should error if a choice node has badly formatted choices', () => assertScriptInvalid('choices-format'));
+        it('should error if a choice node does not END its choices if there is an upcoming node', () => assertScriptInvalid('choices-no-end'));
+
+        it('should error if there exists an error in an otherwise valid script', () => {
+            const names = [
+                'header-blank', 'header-too-few', 'header-too-much', 'header-type',
+                'message-blank',
+                'choices-blank', 'choices-format', 'choices-no-end'
+            ];
+            names.forEach(name => assertTemplatedScriptInvalid(name));
+        });
     });
 });
