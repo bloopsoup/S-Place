@@ -1,7 +1,7 @@
-import { DialogueNode } from './index.js';
-import { DialogeNodeEqual } from './helpers.js';
 import { strict as assert } from 'node:assert';
 import { beforeEach, describe, it } from 'node:test';
+import { DialogueNode } from './index.js';
+import { assertNodeEqual } from './helpers.js';
 
 describe('DialogueNode methods', () => {
     describe('constructor', () => {
@@ -55,14 +55,14 @@ describe('DialogueNode methods', () => {
         node = new DialogueNode('Bob', 'angry', 'message', false, 'root', 'choice message');
         nodeReference = new DialogueNode('Alice', 'happy', 'message2', true, 'root2', 'choice message2');
         nodeReference2 = new DialogueNode('Mallow', 'pissed', 'message3', false, 'root3', 'choice message3');
-      })
+      });
 
       it('should add another node', () => {
         const newNode = new DialogueNode('Alice', 'happy', 'message2', true, 'root2', 'choice message2');
         node.addNeighbor(newNode);
 
         assert.strictEqual(node.next.length, 1);
-        assert.ok(DialogeNodeEqual(node.next[0], nodeReference));
+        assertNodeEqual(node.next[0], nodeReference);
       });
 
       it('should add many nodes', () => {
@@ -72,8 +72,8 @@ describe('DialogueNode methods', () => {
         node.addNeighbor(newNode2);
 
         assert.strictEqual(node.next.length, 2);
-        assert.ok(DialogeNodeEqual(node.next[0], nodeReference));
-        assert.ok(DialogeNodeEqual(node.next[1], nodeReference2));
+        assertNodeEqual(node.next[0], nodeReference);
+        assertNodeEqual(node.next[1], nodeReference2);
       });
 
       it('should add another nested node', () => {
@@ -86,8 +86,8 @@ describe('DialogueNode methods', () => {
 
         assert.strictEqual(node.next.length, 1);
         assert.strictEqual(newNode.next.length, 1);
-        assert.ok(DialogeNodeEqual(node.next[0], nodeReference));
-        assert.ok(DialogeNodeEqual(newNode.next[0], nodeReference2));
+        assertNodeEqual(node.next[0], nodeReference);
+        assertNodeEqual(newNode.next[0], nodeReference2);
       });
     });
 
@@ -106,7 +106,7 @@ describe('DialogueNode methods', () => {
 
         node.addNeighbor(nodeReference);
         node.addNeighbor(nodeReference2);
-      })
+      });
 
       it('should access the requested neighbors', () => {
         const retrievedNode = node.to(0);
@@ -114,15 +114,15 @@ describe('DialogueNode methods', () => {
 
         assert.ok(retrievedNode);
         assert.ok(retrievedNode2);
-        assert.ok(DialogeNodeEqual(retrievedNode, nodeReference));
-        assert.ok(DialogeNodeEqual(retrievedNode2, nodeReference2));
+        assertNodeEqual(retrievedNode, nodeReference);
+        assertNodeEqual(retrievedNode2, nodeReference2);
       });
 
       it('should access the first neighbor by default', () => {
         const retrievedNode = node.to();
 
         assert.ok(retrievedNode);
-        assert.ok(DialogeNodeEqual(retrievedNode, nodeReference));
+        assertNodeEqual(retrievedNode, nodeReference);
       });
 
       it('should be able to modify the neighbor and have its changes seen in the parent', () => {
@@ -134,7 +134,7 @@ describe('DialogueNode methods', () => {
         assert.ok(retrievedNodeAgain);
 
         assert.strictEqual(retrievedNodeAgain.choiceMessage, 'new message');
-        assert.ok(DialogeNodeEqual(retrievedNodeAgain, nodeReference));
+        assertNodeEqual(retrievedNodeAgain, nodeReference);
       });
 
       it('should return null on invalid indices', () => {

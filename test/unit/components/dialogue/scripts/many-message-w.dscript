@@ -1,0 +1,19 @@
+### BEGIN DIALOGUE
+Bob angry M
+I am angry right now.
+
+### CUE IN SIDE CHARACTERS
+    Alice angry M
+    I am also angry right now.
+
+    # Note that semi-angry is still angry
+    # But let's include a space to emphasize this
+    Richard angry M
+
+    I am semi-angry right now.
+
+### CUE IN SPECIAL FORMATTING
+    Fanagle happy M    
+    I am anti-angry right now.    
+Eric happy M
+I am okay-angry right now.
