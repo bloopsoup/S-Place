@@ -63,7 +63,7 @@ class DScriptReader {
             const [ choiceMessage, label ] = choiceDetails;
             choices[label] = choiceMessage;
         }
-        if (choices.length === 0) return null;
+        if (Object.keys(choices).length === 0) return null;
         return choices;
     }
     
