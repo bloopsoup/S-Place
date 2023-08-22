@@ -1,3 +1,5 @@
+# MAIN PATH
+
 Bob angry M
 I am angry right now.
 
@@ -6,10 +8,6 @@ I am also angry right now.
 
 Richard angry M
 I am semi-angry right now.
-
-# Note that the below construct is not valid DScript
-# but is used to template DScript files for testing
-[REPLACE]
 
 Fanagle happy M
 I am anti-angry right now.
@@ -24,5 +22,26 @@ No -> FIGHT
 Maybe -> IGNORE
 END
 
+# FIGHT PATH
+
 Bob pissed M FIGHT
-Okay then, let's FIGHT!
+Okay then, FIGHT!
+
+Bob pissed M FIGHT
+TIME TO BOX.
+
+# FRIENDSHIP PATH
+
+Bob pissed M FRIENDSHIP
+Okay then, FRIEND!
+
+Bob pissed M FRIENDSHIP
+TIME FOR SHOTS.
+
+# IGNORE PATH
+
+Bob pissed M IGNORE
+...
+
+Bob pissed M IGNORE
+...hm?

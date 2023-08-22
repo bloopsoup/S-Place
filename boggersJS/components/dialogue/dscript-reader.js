@@ -32,11 +32,11 @@ class DScriptReader {
     /** Attempts to read a header from the provided lines. It will keep shifting lines until 
      *  it sees a header or lines becomes empty.
      *  @returns {Array<string> | null} List of strings reprsenting the parts of the header.
-     *      Is null if (1) there is no header or (2) the header has an invalid format. */
+     *      Is null if the header has an invalid format. Note that we are guranteed text at this
+     *      stage otherwise the caller READ will terminate beforehand. */
     #readHeader() {
-        if (this.#atEndOfScript) return null;
         const header = this.#lines.shift();    
-        const headerDetails = header.split(' ');
+        const headerDetails = header.split(' ').filter(i => i.length > 0);
         if (headerDetails.length < 2 || headerDetails.length > 4) return null;
         return headerDetails;
     }

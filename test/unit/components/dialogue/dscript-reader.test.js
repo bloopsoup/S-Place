@@ -13,14 +13,14 @@ describe('DScriptReader read', () => {
             const chunks = new DScriptReader(readRaw(name, true)).read();
             assert.ok(chunks);
             assert.deepStrictEqual(chunks, reference);
-            assertNodeArrayEqual(chunks.map(chunk => chunk.node), reference.map(chunk => chunk.node));
+            assertNodeArrayEqual(chunks.filter(chunk => chunk.node).map(chunk => chunk.node), reference.filter(chunk => chunk.node).map(chunk => chunk.node));
         }
 
         it('should handle a script with one message node', () => {
             const reference = [
                 { status: "GOOD", convergingLabel: null, node: new DialogueNode('Bob', 'angry', 'I am angry right now.', false, ''), choices: null }
             ];
-            assertScriptOutputEqual('one-message', reference);
+            assertScriptOutputEqual('linear-single', reference);
         });
 
         it('should handle a script with many message nodes', () => {
@@ -31,7 +31,7 @@ describe('DScriptReader read', () => {
                 { status: "GOOD", convergingLabel: null, node: new DialogueNode('Fanagle', 'happy', 'I am anti-angry right now.', false, ''), choices: null },
                 { status: "GOOD", convergingLabel: null, node: new DialogueNode('Eric', 'happy', 'I am okay-angry right now.', false, ''), choices: null }
             ];
-            assertScriptOutputEqual('many-message', reference);
+            assertScriptOutputEqual('linear-simple', reference);
         });
 
         it('should handle a script with many message nodes with comments and whitespace', () => {
@@ -42,14 +42,54 @@ describe('DScriptReader read', () => {
                 { status: "GOOD", convergingLabel: null, node: new DialogueNode('Fanagle', 'happy', 'I am anti-angry right now.', false, ''), choices: null },
                 { status: "GOOD", convergingLabel: null, node: new DialogueNode('Eric', 'happy', 'I am okay-angry right now.', false, ''), choices: null }
             ];
-            assertScriptOutputEqual('many-message-w', reference);
+            assertScriptOutputEqual('linear-simple-comment', reference);
         });
 
         it('should handle a script with one choice node', () => {
             const reference = [
                 { status: "GOOD", convergingLabel: null, node: new DialogueNode('Bob', 'angry', 'I am angry right now. Are you?', true, ''), choices: { FIGHT: 'No', FRIENDSHIP: 'Yes', IGNORE: 'Maybe' } }
             ];
-            assertScriptOutputEqual('one-choice', reference);
+            assertScriptOutputEqual('branch-single', reference);
+        });
+
+        it('should handle a script with a branch', () => {
+            const reference = [
+                { status: "GOOD", convergingLabel: null, node: new DialogueNode('Bob', 'angry', 'I am angry right now.', false, ''), choices: null },
+                { status: "GOOD", convergingLabel: null, node: new DialogueNode('Alice', 'angry', 'I am also angry right now.', false, ''), choices: null },
+                { status: "GOOD", convergingLabel: null, node: new DialogueNode('Richard', 'angry', 'I am semi-angry right now.', false, ''), choices: null },
+                { status: "GOOD", convergingLabel: null, node: new DialogueNode('Fanagle', 'happy', 'I am anti-angry right now.', false, ''), choices: null },
+                { status: "GOOD", convergingLabel: null, node: new DialogueNode('Eric', 'happy', 'I am okay-angry right now.', false, ''), choices: null },
+                { status: "GOOD", convergingLabel: null, node: new DialogueNode('Bob', 'angry', 'I am angry right now. Are you?', true, ''), choices: { FIGHT: 'No', FRIENDSHIP: 'Yes', IGNORE: 'Maybe' } },
+                { status: "GOOD", convergingLabel: null, node: new DialogueNode('Bob', 'pissed', 'Okay then, FIGHT!', false, 'FIGHT'), choices: null },
+                { status: "GOOD", convergingLabel: null, node: new DialogueNode('Bob', 'pissed', 'TIME TO BOX.', false, 'FIGHT'), choices: null },
+                { status: "GOOD", convergingLabel: null, node: new DialogueNode('Bob', 'pissed', 'Okay then, FRIEND!', false, 'FRIENDSHIP'), choices: null },
+                { status: "GOOD", convergingLabel: null, node: new DialogueNode('Bob', 'pissed', 'TIME FOR SHOTS.', false, 'FRIENDSHIP'), choices: null },
+                { status: "GOOD", convergingLabel: null, node: new DialogueNode('Bob', 'pissed', '...', false, 'IGNORE'), choices: null },
+                { status: "GOOD", convergingLabel: null, node: new DialogueNode('Bob', 'pissed', '...hm?', false, 'IGNORE'), choices: null }
+            ];
+            assertScriptOutputEqual('branch-simple', reference);
+        });
+
+        it('should handle a script with a branch that converges', () => {
+            const reference = [
+                { status: "GOOD", convergingLabel: null, node: new DialogueNode('Bob', 'angry', 'I am angry right now.', false, ''), choices: null },
+                { status: "GOOD", convergingLabel: null, node: new DialogueNode('Alice', 'angry', 'I am also angry right now.', false, ''), choices: null },
+                { status: "GOOD", convergingLabel: null, node: new DialogueNode('Richard', 'angry', 'I am semi-angry right now.', false, ''), choices: null },
+                { status: "GOOD", convergingLabel: null, node: new DialogueNode('Fanagle', 'happy', 'I am anti-angry right now.', false, ''), choices: null },
+                { status: "GOOD", convergingLabel: null, node: new DialogueNode('Eric', 'happy', 'I am okay-angry right now.', false, ''), choices: null },
+                { status: "GOOD", convergingLabel: null, node: new DialogueNode('Bob', 'angry', 'I am angry right now. Are you?', true, ''), choices: { FIGHT: 'No', FRIENDSHIP: 'Yes', IGNORE: 'Maybe' } },
+                { status: "GOOD", convergingLabel: null, node: new DialogueNode('Bob', 'pissed', 'Okay then, FIGHT!', false, 'FIGHT'), choices: null },
+                { status: "GOOD", convergingLabel: null, node: new DialogueNode('Bob', 'pissed', 'TIME TO BOX.', false, 'FIGHT'), choices: null },
+                { status: "GOOD", convergingLabel: 'FIGHT', node: null, choices: null },
+                { status: "GOOD", convergingLabel: null, node: new DialogueNode('Bob', 'pissed', 'Okay then, FRIEND!', false, 'FRIENDSHIP'), choices: null },
+                { status: "GOOD", convergingLabel: null, node: new DialogueNode('Bob', 'pissed', 'TIME FOR SHOTS.', false, 'FRIENDSHIP'), choices: null },
+                { status: "GOOD", convergingLabel: 'FRIENDSHIP', node: null, choices: null },
+                { status: "GOOD", convergingLabel: null, node: new DialogueNode('Bob', 'pissed', '...', false, 'IGNORE'), choices: null },
+                { status: "GOOD", convergingLabel: null, node: new DialogueNode('Bob', 'pissed', '...hm?', false, 'IGNORE'), choices: null },
+                { status: "GOOD", convergingLabel: 'IGNORE', node: null, choices: null },
+                { status: "GOOD", convergingLabel: null, node: new DialogueNode('Bob', 'neutral', 'Meh, you are alright...', false, ''), choices: null }
+            ];
+            assertScriptOutputEqual('branch-simple-converge', reference);
         });
     });
 
@@ -83,11 +123,15 @@ describe('DScriptReader read', () => {
         it('should error if a choice node has badly formatted choices', () => assertScriptInvalid('choices-format'));
         it('should error if a choice node does not END its choices if there is an upcoming node', () => assertScriptInvalid('choices-no-end'));
 
+        it('should error if a converge has no label', () => assertScriptInvalid('converge-no-label'));
+        it('should error if a converge has the wrong keyword', () => assertScriptInvalid('converge-wrong-word'));
+
         it('should error if there exists an error in an otherwise valid script', () => {
             const names = [
                 'header-blank', 'header-too-few', 'header-too-much', 'header-type',
                 'message-blank',
-                'choices-blank', 'choices-format', 'choices-no-end'
+                'choices-blank', 'choices-format', 'choices-no-end',
+                'converge-no-label', 'converge-wrong-word'
             ];
             names.forEach(name => assertTemplatedScriptInvalid(name));
         });
