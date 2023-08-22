@@ -1,4 +1,6 @@
-# MAIN PATH
+################################
+##### MAIN PATH
+################################
 
 Bob angry M
 I am angry right now.
@@ -22,26 +24,32 @@ No -> FIGHT
 Maybe -> IGNORE
 END
 
-# FIGHT PATH
+    ################################
+    ##### FIGHT PATH
+    ################################
 
-Bob pissed M FIGHT
-Okay then, FIGHT!
+    Bob pissed M FIGHT
+    Okay then, FIGHT!
 
-Bob pissed M FIGHT
-TIME TO BOX.
+    Bob pissed M FIGHT
+    TIME TO BOX.
 
-# FRIENDSHIP PATH
+    ################################
+    ##### FRIENDSHIP PATH
+    ################################
 
-Bob pissed M FRIENDSHIP
-Okay then, FRIEND!
+    Bob pissed M FRIENDSHIP
+    Okay then, FRIEND!
 
-Bob pissed M FRIENDSHIP
-TIME FOR SHOTS.
+    Bob pissed M FRIENDSHIP
+    TIME FOR SHOTS.
 
-# IGNORE PATH
+    ################################
+    ##### IGNORE PATH
+    ################################
 
-Bob pissed M IGNORE
-...
+    Bob pissed M IGNORE
+    ...
 
-Bob pissed M IGNORE
-...hm?
+    Bob pissed M IGNORE
+    ...hm?

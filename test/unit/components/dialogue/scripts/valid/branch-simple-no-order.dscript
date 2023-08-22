@@ -1,0 +1,38 @@
+################################
+##### MAIN PATH
+################################
+
+Bob angry M
+I am angry right now.
+
+Bob angry C
+I am angry right now. Are you?
+Yes -> FRIENDSHIP
+No -> FIGHT
+Maybe -> IGNORE
+END
+
+    ################################
+    ##### INTERLEAVED PATHS
+    ################################
+
+    # Not the best way to write your 
+    # paths but you can do it anyway
+
+    Bob pissed M FIGHT
+    Okay then, FIGHT!
+
+    Bob pissed M FRIENDSHIP
+    Okay then, FRIEND!
+
+    Bob pissed M IGNORE
+    ...
+
+    Bob pissed M FIGHT
+    TIME TO BOX.
+
+    Bob pissed M FRIENDSHIP
+    TIME FOR SHOTS.
+
+    Bob pissed M IGNORE
+    ...hm?

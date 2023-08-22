@@ -5,23 +5,10 @@
 Bob angry M
 I am angry right now.
 
-Alice angry M
-I am also angry right now.
-
-Richard angry M
-I am semi-angry right now.
-
-Fanagle happy M
-I am anti-angry right now.
-
-Eric happy M
-I am okay-angry right now.
-
 Bob angry C
 I am angry right now. Are you?
 Yes -> FRIENDSHIP
 No -> FIGHT
-Maybe -> IGNORE
 END
 
     ################################
@@ -33,6 +20,39 @@ END
 
     Bob pissed M FIGHT
     TIME TO BOX.
+
+    YOU scared C FIGHT
+    Pick an attack.
+    Punch -> LOSE
+    Kick -> WIN
+    END
+
+        ################################
+        ##### LOSE PATH
+        ################################
+
+        Bob happy M LOSE
+        Har har! Bad move.
+
+        YOU dead M LOSE
+        I am dead.
+
+        CONVERGE LOSE
+
+        ################################
+        ##### WIN PATH
+        ################################
+
+        Bob sad M WIN
+        Oh no! You found the right move...
+
+        YOU happy M WIN
+        I am not dead.
+
+        CONVERGE WIN
+
+    Bob happy M FIGHT
+    Welp, good effort.
 
     CONVERGE FIGHT
 
@@ -47,18 +67,6 @@ END
     TIME FOR SHOTS.
 
     CONVERGE FRIENDSHIP
-
-    ################################
-    ##### IGNORE PATH
-    ################################
-
-    Bob pissed M IGNORE
-    ...
-
-    Bob pissed M IGNORE
-    ...hm?
-
-    CONVERGE IGNORE
 
 Bob neutral M
 Meh, you are alright...

@@ -1,3 +1,7 @@
+################################
+##### MAIN PATH
+################################
+
 Bob angry M
 I am angry right now.
 
@@ -7,8 +11,9 @@ I am also angry right now.
 Richard angry M
 I am semi-angry right now.
 
-# Note that the below construct is not valid DScript
-# but is used to template DScript files for testing
+# Note that the below construct 
+# is not valid DScript but is used 
+# to template DScript files to test
 [REPLACE]
 
 Fanagle happy M
@@ -24,5 +29,9 @@ No -> FIGHT
 Maybe -> IGNORE
 END
 
-Bob pissed M FIGHT
-Okay then, let's FIGHT!
+    ################################
+    ##### FIGHT PATH
+    ################################
+
+    Bob pissed M FIGHT
+    Okay then, let's FIGHT!
