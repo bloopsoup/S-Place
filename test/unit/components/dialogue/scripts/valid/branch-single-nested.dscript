@@ -1,0 +1,14 @@
+# This showcases back-to-back choices
+
+Bob angry C
+I am angry right now. Are you?
+Yes -> FRIENDSHIP
+No -> FIGHT
+Maybe -> IGNORE
+END
+
+    YOU scared C FIGHT
+    Pick an attack.
+    Punch -> LOSE
+    Kick -> WIN
+    END

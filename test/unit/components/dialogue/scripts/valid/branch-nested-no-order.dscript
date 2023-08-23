@@ -1,0 +1,50 @@
+################################
+##### MAIN PATH
+################################
+
+Bob angry M
+I am angry right now.
+
+Bob angry C
+I am angry right now. Are you?
+Yes -> FRIENDSHIP
+No -> FIGHT
+END
+
+    ################################
+    ##### INTERLEAVED
+    ################################
+
+    Bob pissed M FIGHT
+    Okay then, FIGHT!
+
+    Bob pissed M FRIENDSHIP
+    Okay then, FRIEND!
+
+    Bob pissed M FIGHT
+    TIME TO BOX.
+
+    YOU scared C FIGHT
+    Pick an attack.
+    Punch -> LOSE
+    Kick -> WIN
+    END
+
+        ################################
+        ##### INTERLEAVED
+        ################################
+
+        Bob happy M LOSE
+        Har har! Bad move.
+
+        Bob sad M WIN
+        Oh no! You found the right move...
+
+    Bob pissed M FRIENDSHIP
+    TIME FOR SHOTS.
+
+        YOU dead M LOSE
+        I am dead.
+
+        YOU happy M WIN
+        I am not dead.

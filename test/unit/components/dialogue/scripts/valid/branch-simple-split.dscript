@@ -1,0 +1,84 @@
+################################
+##### MAIN PATH
+################################
+
+Bob angry M
+I am angry right now.
+
+Alice angry M
+I am also angry right now.
+
+Richard angry M
+I am semi-angry right now.
+
+Fanagle happy M
+I am anti-angry right now.
+
+Eric happy M
+I am okay-angry right now.
+
+Bob angry C
+I am angry right now. Are you?
+Yes -> FRIENDSHIP
+No -> FIGHT
+Maybe -> IGNORE
+END
+
+    ################################
+    ##### FIGHT PATH
+    ################################
+
+    Bob pissed M FIGHT
+    Okay then, FIGHT!
+
+    Bob pissed M FIGHT
+    TIME TO BOX.
+
+    Bob pissed M FIGHT
+    WE BOXIN.
+
+    # Notice there is no CONVERGE
+    # So when the main path continues
+    # FIGHT will still be its own path
+    # but it can never converge again
+
+    ################################
+    ##### FRIENDSHIP PATH
+    ################################
+
+    Bob pissed M FRIENDSHIP
+    Okay then, FRIEND!
+
+    Bob pissed M FRIENDSHIP
+    TIME FOR SHOTS.
+
+    CONVERGE FRIENDSHIP
+
+    ################################
+    ##### IGNORE PATH
+    ################################
+
+    Bob pissed M IGNORE
+    ...
+
+    Bob pissed M IGNORE
+    ...hm?
+
+    CONVERGE IGNORE
+
+Bob neutral M
+Meh, you are alright...
+
+# Notice that the original path
+# can progress because two other
+# labels are converging into it
+
+    ################################
+    ##### FIGHT PATH
+    ################################
+
+    Bob pissed M FIGHT
+    WE ARE NOT ALRIGHT.
+
+    # You can see we are continuing
+    # the FIGHT path
