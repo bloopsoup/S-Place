@@ -1,0 +1,30 @@
+################################
+##### MAIN PATH
+################################
+
+Bob angry C
+I am angry right now. Are you?
+Yes -> FRIENDSHIP
+No -> FIGHT
+Maybe -> IGNORE
+
+    ################################
+    ##### FIGHT PATH
+    ################################
+
+    Bob pissed M FIGHT
+    Okay then, FIGHT!
+
+    ################################
+    ##### ??? PATH
+    ################################
+
+    Bob confused M NOTFIGHT
+    Uh, is this here?
+
+    ################################
+    ##### IGNORE PATH
+    ################################
+
+    Bob pissed M IGNORE
+    ...

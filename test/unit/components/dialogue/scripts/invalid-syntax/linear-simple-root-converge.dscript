@@ -1,0 +1,11 @@
+Bob angry M
+I am angry right now.
+
+Richard angry M
+I am angry right now as well.
+
+# Cannot CONVERGE the main path
+CONVERGE ''
+
+Bob angry M
+I am converged angry right now.

@@ -1,0 +1,48 @@
+################################
+##### MAIN PATH
+################################
+
+Bob angry M
+I am angry right now.
+
+Bob angry C
+I am angry right now. Are you?
+Yes -> FRIENDSHIP
+No -> FIGHT
+END
+
+    ################################
+    ##### FIGHT PATH
+    ################################
+
+    Bob pissed M FIGHT
+    Okay then, FIGHT!
+
+    Bob pissed M FIGHT
+    TIME TO BOX.
+
+    YOU scared C FIGHT
+    Pick an attack.
+    Punch -> LOSE
+    Kick -> WIN
+    END
+
+    # This leads to a dangling choice
+    # which is not allowed
+    
+    CONVERGE FIGHT
+
+    ################################
+    ##### FRIENDSHIP PATH
+    ################################
+
+    Bob pissed M FRIENDSHIP
+    Okay then, FRIEND!
+
+    Bob pissed M FRIENDSHIP
+    TIME FOR SHOTS.
+
+    CONVERGE FRIENDSHIP
+
+Bob neutral M
+Meh, you are alright...

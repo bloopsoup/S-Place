@@ -1,0 +1,51 @@
+################################
+##### MAIN PATH
+################################
+
+Bob angry C
+I am angry right now. Are you?
+Yes -> FRIENDSHIP
+No -> FIGHT
+Maybe -> IGNORE
+END
+
+    ################################
+    ##### FIGHT PATH
+    ################################
+
+    Bob pissed M FIGHT
+    Okay then, FIGHT!
+
+    Bob pissed M FIGHT
+    TIME TO BOX.
+
+    ################################
+    ##### FRIENDSHIP PATH
+    ################################
+
+    Bob pissed M FRIENDSHIP
+    Okay then, FRIEND!
+
+    Bob pissed M FRIENDSHIP
+    TIME FOR SHOTS.
+
+    ################################
+    ##### IGNORE PATH
+    ################################
+
+    Bob pissed M IGNORE
+    ...
+
+    Bob pissed M IGNORE
+    ...hm?
+
+##### ILLEGAL ADDITION
+# No child branch has converged into
+# the original branch, so you can't
+# add another node
+
+Bob neutral M
+Meh, you are alright...
+
+Bob neutral M
+No harm your way.
