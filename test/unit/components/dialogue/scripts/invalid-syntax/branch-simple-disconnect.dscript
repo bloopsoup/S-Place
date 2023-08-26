@@ -7,6 +7,7 @@ I am angry right now. Are you?
 Yes -> FRIENDSHIP
 No -> FIGHT
 Maybe -> IGNORE
+END
 
     ################################
     ##### FIGHT PATH

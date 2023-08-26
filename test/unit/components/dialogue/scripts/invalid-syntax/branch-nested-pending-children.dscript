@@ -1,0 +1,77 @@
+################################
+##### MAIN PATH
+################################
+
+Bob angry M
+I am angry right now.
+
+Bob angry C
+I am angry right now. Are you?
+Yes -> FRIENDSHIP
+No -> FIGHT
+END
+
+    ################################
+    ##### FIGHT PATH
+    ################################
+
+    Bob pissed M FIGHT
+    Okay then, FIGHT!
+
+    Bob pissed M FIGHT
+    TIME TO BOX.
+
+    YOU scared C FIGHT
+    Pick an attack.
+    Punch -> LOSE
+    Kick -> WIN
+    END
+
+        ################################
+        ##### LOSE PATH
+        ################################
+
+        Bob happy M LOSE
+        Har har! Bad move.
+
+        YOU dead M LOSE
+        I am dead.
+
+        CONVERGE LOSE
+
+        ################################
+        ##### WIN PATH
+        ################################
+
+        Bob sad M WIN
+        Oh no! You found the right move...
+
+        YOU happy M WIN
+        I am not dead.
+
+        CONVERGE WIN
+
+    ##### ILLEGAL ADDITION
+    # Because WIN and LOSE are converging
+    # into you, you must tie them up before
+    # converging yourself
+    
+    # This can be done by including an
+    # additional message node before converging
+
+    CONVERGE FIGHT
+
+    ################################
+    ##### FRIENDSHIP PATH
+    ################################
+
+    Bob pissed M FRIENDSHIP
+    Okay then, FRIEND!
+
+    Bob pissed M FRIENDSHIP
+    TIME FOR SHOTS.
+
+    CONVERGE FRIENDSHIP
+
+Bob neutral M
+Meh, you are alright...

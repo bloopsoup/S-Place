@@ -34,20 +34,18 @@ export function assertNodeArrayEqual(a, b) {
 
 /** Reads the requested DScript file as a raw string.
  * @param {string} name - The name of the DScript file.
- * @param {boolean} valid - Whether to read in a valid DScript file or an invalid one.
+ * @param {string} category - The category of the requested script.
  * @returns {string} The resulting string. */
-export function readRaw(name, valid) {
-    const folder = valid ? 'valid' : 'invalid';
-    return readFileSync(path.join(__dirname, `scripts/${folder}/${name}.dscript`)).toString();
+export function readRaw(name, category) {
+    return readFileSync(path.join(__dirname, `scripts/${category}/${name}.dscript`)).toString();
 }
 
 /** Reads the requested DScript file as a raw string and inserts it into the template.
  * @param {string} name - The name of the DScript file.
- * @param {boolean} valid - Whether to read in a valid DScript file or an invalid one.
+ * @param {string} category - The category of the requested script.
  * @returns {string} The resulting string. */
-export function readTemplatedRaw(name, valid) {
-    const folder = valid ? 'valid' : 'invalid';
-    const script = readFileSync(path.join(__dirname, `scripts/${folder}/${name}.dscript`)).toString();
+export function readTemplatedRaw(name, category) {
+    const script = readFileSync(path.join(__dirname, `scripts/${category}/${name}.dscript`)).toString();
     const template = readFileSync(path.join(__dirname, `scripts/template`)).toString();
     return script.replace("[REPLACE]", template);
 }
