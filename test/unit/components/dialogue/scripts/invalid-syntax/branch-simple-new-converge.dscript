@@ -1,0 +1,47 @@
+################################
+##### MAIN PATH
+################################
+
+Bob angry C
+I am angry right now. Are you?
+Yes -> FRIENDSHIP
+No -> FIGHT
+Maybe -> IGNORE
+END
+
+    ################################
+    ##### FIGHT PATH
+    ################################
+
+    Bob pissed M FIGHT
+    Okay then, FIGHT!
+
+    Bob pissed M FIGHT
+    TIME TO BOX.
+
+    CONVERGE FIGHT
+
+    ################################
+    ##### FRIENDSHIP PATH
+    ################################
+
+    # Haven't even started this path
+    # and now you want to converge?
+    # BAD.
+
+    CONVERGE FRIENDSHIP
+
+    ################################
+    ##### IGNORE PATH
+    ################################
+
+    Bob pissed M IGNORE
+    ...
+
+    Bob pissed M IGNORE
+    ...hm?
+
+    CONVERGE IGNORE
+
+Bob neutral M
+Meh, you are alright...

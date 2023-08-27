@@ -1,0 +1,76 @@
+################################
+##### MAIN PATH
+################################
+
+Bob angry M
+I am angry right now.
+
+Bob angry C
+I am angry right now. Are you?
+Yes -> FRIENDSHIP
+No -> FIGHT
+END
+
+    ################################
+    ##### FIGHT PATH
+    ################################
+
+    Bob pissed M FIGHT
+    Okay then, FIGHT!
+
+    Bob pissed M FIGHT
+    TIME TO BOX.
+
+    # Since FIGHT is already defined
+    # cannot redeclare it in a future
+    # choice node
+
+    YOU scared C FIGHT
+    Pick an attack.
+    Punch -> LOSE
+    Kick -> FIGHT
+    END
+
+        ################################
+        ##### LOSE PATH
+        ################################
+
+        Bob happy M LOSE
+        Har har! Bad move.
+
+        YOU dead M LOSE
+        I am dead.
+
+        CONVERGE LOSE
+
+        ################################
+        ##### FIGHT? PATH
+        ################################
+
+        Bob sad M FIGHT
+        Oh no! You found the right move...
+
+        YOU happy M FIGHT
+        I am not dead.
+
+        CONVERGE FIGHT
+
+    Bob happy M FIGHT
+    Welp, good effort.
+
+    CONVERGE FIGHT
+
+    ################################
+    ##### FRIENDSHIP PATH
+    ################################
+
+    Bob pissed M FRIENDSHIP
+    Okay then, FRIEND!
+
+    Bob pissed M FRIENDSHIP
+    TIME FOR SHOTS.
+
+    CONVERGE FRIENDSHIP
+
+Bob neutral M
+Meh, you are alright...
