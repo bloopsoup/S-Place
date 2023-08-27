@@ -408,6 +408,14 @@ describe('DScriptReader read', () => {
             assertScriptOutputEqual('branch-simple-disconnect', reference, 'invalid-syntax');
         });
 
+        it('should handle a script that has two choice nodes of the same label in a row', () => {
+            const reference = [
+                { status: "GOOD", convergingLabel: null, node: new DialogueNode('Bob', 'angry', 'I am angry right now. Are you?', true, ''), choices: { FIGHT: 'No', FRIENDSHIP: 'Yes', IGNORE: 'Maybe' } },
+                { status: "GOOD", convergingLabel: null, node: new DialogueNode('Bob', 'angry', 'Choice electric boogaloo.', true, ''), choices: { WORLD: 'No', HELLO: 'Yes', OKAY: 'Maybe' } }
+            ];
+            assertScriptOutputEqual('branch-simple-double-choice', reference, 'invalid-syntax');
+        });
+
         it('should handle a script with a path attempting to advance when it is converging', () => {
             const reference = [
                 { status: "GOOD", convergingLabel: null, node: new DialogueNode('Bob', 'angry', 'I am angry right now. Are you?', true, ''), choices: { FIGHT: 'No', FRIENDSHIP: 'Yes', IGNORE: 'Maybe' } },

@@ -88,3 +88,12 @@ export function assertScriptInvalid(name) {
 export function assertTemplatedScriptInvalid(name) {
     assert.strictEqual(new DScriptReader(readTemplatedRaw(name, 'invalid')).read(), null, 'Expected null');
 }
+
+/** Asserts that the provided script is invalid when attempting to parse it into a tree.
+ *  @param {string} name - The name of the DScript file.
+ *  @throws {AssertionError} If the result of parsing is NOT null. */
+export function assertTreeInvalid(name) {
+    const chunks = new DScriptReader(readRaw(name, 'invalid-syntax')).read();
+    assert.ok(chunks);
+    assert.strictEqual(new DScriptParser(chunks).parse(), null, 'Expected null');
+}

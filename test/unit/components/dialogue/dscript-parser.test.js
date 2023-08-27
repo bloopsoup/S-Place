@@ -1,6 +1,6 @@
 import { describe, it } from 'node:test';
 import { DialogueNode } from './index.js';
-import { assertTreeEqual } from './helpers.js';
+import { assertTreeEqual, assertTreeInvalid } from './helpers.js';
 
 describe('DScriptParser parse', () => {
     describe('valid cases', () => {
@@ -519,5 +519,21 @@ describe('DScriptParser parse', () => {
 
             assertTreeEqual('branch-nested-converge-no-order', root, 'valid');
         });
+    });
+
+    describe('invalid syntax cases', () => {
+        it('should handle a script that references an undefined label', () => assertTreeInvalid('linear-simple-disconnect'));
+        it('should handle a script that converges on an undefined label', () => assertTreeInvalid('linear-simple-disconnect-converge'));
+        it('should handle a script that tries to converge on its root', () => assertTreeInvalid('linear-simple-root-converge'));
+        it('should handle a script that tries to converge twice', () => assertTreeInvalid('branch-simple-twice-converged'));
+        it('should handle a script that tries to converge into a runaway parent', () => assertTreeInvalid('branch-simple-runaway-parent'));
+        it('should handle a script that has a parent path attempt to advance with no converging children', () => assertTreeInvalid('branch-simple-not-converged'));
+        it('should handle a script that tries to converge on a newly declared path', () => assertTreeInvalid('branch-simple-new-converge'));
+        it('should handle a script that references an undefined label (has a branch)', () => assertTreeInvalid('branch-simple-disconnect'));
+        it('should handle a script that has two choice nodes of the same label in a row', () => assertTreeInvalid('branch-simple-double-choice'));
+        it('should handle a script with a path attempting to advance when it is converging', () => assertTreeInvalid('branch-simple-already-converged'));
+        it('should handle a script where a path converges leaving a dangling choice', () => assertTreeInvalid('branch-nested-choice-converge'));
+        it('should handle a script where a path attempts to converge with pending children', () => assertTreeInvalid('branch-nested-pending-children'));
+        it('should handle a script where an already defined label is redefined', () => assertTreeInvalid('branch-nested-reuse-label'));
     });
 });

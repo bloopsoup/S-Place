@@ -1,0 +1,16 @@
+################################
+##### MAIN PATH
+################################
+
+Bob angry C
+I am angry right now. Are you?
+Yes -> FRIENDSHIP
+No -> FIGHT
+Maybe -> IGNORE
+END
+
+Bob angry C
+Choice electric boogaloo.
+Yes -> HELLO
+No -> WORLD
+Maybe -> OKAY
