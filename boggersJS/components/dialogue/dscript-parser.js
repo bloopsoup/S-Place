@@ -10,7 +10,7 @@ class DScriptParser {
      *  @property {string} message - The incoming message for the start of the label.
      *  @property {boolean} isConverging - Whether the label is converging into its parent label.
      *  @property {boolean} isConverged - Whether the label has been converged on by its children.
-     *  @property {string} parentLabel - The parent label.
+     *  @property {string | null} parentLabel - The parent label. It is null for the root label.
      *  @property {Array<string>} convergingChildren - The label's children that wants to 
      *      converge back into the parent label. */
 
@@ -29,7 +29,7 @@ class DScriptParser {
         this.#chunks = chunks;
         this.#root = new DialogueNode('', '', '', false, this.#defaultLabelName);
         this.#activeLabels = {};
-        this.#activeLabels[this.#defaultLabelName] = { head: this.#root, message: '', isConverging: false, isConverged: false, parentLabel: '', convergingChildren: [] };
+        this.#activeLabels[this.#defaultLabelName] = { head: this.#root, message: '', isConverging: false, isConverged: false, parentLabel: null, convergingChildren: [] };
     }
 
     /** Attempts to add a node to the dialogue tree.
@@ -103,8 +103,7 @@ class DScriptParser {
         // - TODO: HANDLE PARENT LABEL BEING CONVERGED AND THEN STARTING A NEW CHOICE NODE
         // - Can't converge if other children are converging on you. If you want to converge,
         //   add a message node.
-        if (head === null || head.isChoice || isConverging || parentLabel === '' || this.#activeLabels[parentLabel]['isConverged'] || convergingChildren.length > 0) return false;
-
+        if (head === null || head.isChoice || isConverging || parentLabel === null || this.#activeLabels[parentLabel]['isConverged'] || convergingChildren.length > 0) return false;
         this.#activeLabels[label]['isConverging'] = true;
         this.#activeLabels[parentLabel]['convergingChildren'].push(label);
         return true;

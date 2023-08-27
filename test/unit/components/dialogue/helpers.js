@@ -1,7 +1,7 @@
 import { strict as assert } from 'node:assert';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
-import { DialogueNode, DScriptReader } from './index.js';
+import { DialogueNode, DScriptReader, DScriptParser } from './index.js';
 
 /** The path leading to the directory containing this script.
  *  @type {string} */
@@ -50,7 +50,7 @@ export function assertNodeArrayEqual(a, b) {
     for (let i = 0; i < a.length; i++) assertNodeEqual(a[i], b[i]);
 }
 
-/** Asserts that the provided script has the correct output.
+/** Asserts that the provided script has the correct output when read as chunks.
  *  @param {string} name - The name of the DScript file.
  *  @param {Array<object>} reference - The expected output when reading the script.
  *  @param {string} category - The category of the requested script.
@@ -60,6 +60,19 @@ export function assertScriptOutputEqual(name, reference, category) {
     assert.ok(chunks);
     assert.deepStrictEqual(chunks, reference);
         assertNodeArrayEqual(chunks.filter(chunk => chunk.node).map(chunk => chunk.node), reference.filter(chunk => chunk.node).map(chunk => chunk.node));
+}
+
+/** Asserts that the provided script has the correct output when parsed into a tree.
+ *  @param {string} name - The name of the DScript file.
+ *  @param {DialogueNode} reference - The expected output when parsing the script.
+ *  @param {string} category - The category of the requested script.
+ *  @throws {AssertionError} If the result does not match. */
+export function assertTreeEqual(name, reference, category) {
+    const chunks = new DScriptReader(readRaw(name, category)).read();
+    assert.ok(chunks);
+    const root = new DScriptParser(chunks).parse();
+    assert.ok(root);
+    assertNodeEqual(root, reference);
 }
 
 /** Asserts that the provided script is invalid.
