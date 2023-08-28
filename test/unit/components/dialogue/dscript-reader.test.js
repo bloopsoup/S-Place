@@ -494,5 +494,29 @@ describe('DScriptReader read', () => {
             ];
             assertScriptOutputEqual('branch-nested-reuse-label', reference, 'invalid-syntax');
         });
+
+        it('should handle a script with a branch that converges repeatedly with a long-running path', () => {
+            const reference = [
+                { status: "GOOD", convergingLabel: null, node: new DialogueNode('Bob', 'angry', 'I am angry right now. Are you?', true, ''), choices: { FIGHT: 'No', FRIENDSHIP: 'Yes', IGNORE: 'Maybe' } },
+                { status: "GOOD", convergingLabel: null, node: new DialogueNode('Bob', 'pissed', 'Okay then, FIGHT!', false, 'FIGHT'), choices: null },
+                { status: "GOOD", convergingLabel: null, node: new DialogueNode('Bob', 'pissed', 'TIME TO BOX.', false, 'FIGHT'), choices: null },
+                { status: "GOOD", convergingLabel: 'FIGHT', node: null, choices: null },
+                { status: "GOOD", convergingLabel: null, node: new DialogueNode('Bob', 'pissed', 'Okay then, FRIEND!', false, 'FRIENDSHIP'), choices: null },
+                { status: "GOOD", convergingLabel: null, node: new DialogueNode('Bob', 'pissed', 'TIME FOR SHOTS.', false, 'FRIENDSHIP'), choices: null },
+                { status: "GOOD", convergingLabel: 'FRIENDSHIP', node: null, choices: null },
+                { status: "GOOD", convergingLabel: null, node: new DialogueNode('Bob', 'pissed', '...', false, 'IGNORE'), choices: null },
+                { status: "GOOD", convergingLabel: null, node: new DialogueNode('Bob', 'pissed', '...hm?', false, 'IGNORE'), choices: null },
+                { status: "GOOD", convergingLabel: null, node: new DialogueNode('Bob', 'angry', 'Meh, you are alright... BUT I WILL ASK AGAIN!', true, ''), choices: { FIGHT: 'No', FRIENDSHIP: 'Yes' } },
+                { status: "GOOD", convergingLabel: null, node: new DialogueNode('Bob', 'pissed', 'Okay then, FIGHT!', false, 'FIGHT'), choices: null },
+                { status: "GOOD", convergingLabel: null, node: new DialogueNode('Bob', 'pissed', 'TIME TO BOX.', false, 'FIGHT'), choices: null },
+                { status: "GOOD", convergingLabel: 'FIGHT', node: null, choices: null },
+                { status: "GOOD", convergingLabel: null, node: new DialogueNode('Bob', 'pissed', 'Okay then, FRIEND!', false, 'FRIENDSHIP'), choices: null },
+                { status: "GOOD", convergingLabel: null, node: new DialogueNode('Bob', 'pissed', 'TIME FOR SHOTS.', false, 'FRIENDSHIP'), choices: null },
+                { status: "GOOD", convergingLabel: 'FRIENDSHIP', node: null, choices: null },
+                { status: "GOOD", convergingLabel: 'IGNORE', node: null, choices: null },
+                { status: "GOOD", convergingLabel: null, node: new DialogueNode('Bob', 'neutral', 'Meh, you are alright...', false, ''), choices: null }
+            ];
+            assertScriptOutputEqual('branch-simple-returning-parent', reference, 'invalid-syntax');
+        });
     });
 });

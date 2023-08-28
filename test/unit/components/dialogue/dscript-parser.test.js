@@ -535,5 +535,6 @@ describe('DScriptParser parse', () => {
         it('should handle a script where a path converges leaving a dangling choice', () => assertTreeInvalid('branch-nested-choice-converge'));
         it('should handle a script where a path attempts to converge with pending children', () => assertTreeInvalid('branch-nested-pending-children'));
         it('should handle a script where an already defined label is redefined', () => assertTreeInvalid('branch-nested-reuse-label'));
+        it('should handle a script with a branch that converges repeatedly with a long-running path', () => assertTreeInvalid('branch-simple-returning-parent'));
     });
 });
