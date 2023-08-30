@@ -1,7 +1,7 @@
 import { strict as assert } from 'node:assert';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
-import { DialogueNode, DScriptReader, DScriptParser } from './index.js';
+import { DialogueNode, DScriptChunk, DScriptReader, DScriptParser } from './index.js';
 
 /** The path leading to the directory containing this script.
  *  @type {string} */
@@ -11,7 +11,7 @@ const __dirname = new URL('.', import.meta.url).pathname.substring(1);
  *  @param {string} name - The name of the DScript file.
  *  @param {string} category - The category of the requested script.
  *  @returns {string} The resulting string. */
-export function readRaw(name, category) {
+function readRaw(name, category) {
     return readFileSync(path.join(__dirname, `scripts/${category}/${name}.dscript`)).toString();
 }
 
@@ -19,10 +19,31 @@ export function readRaw(name, category) {
  *  @param {string} name - The name of the DScript file.
  *  @param {string} category - The category of the requested script.
  *  @returns {string} The resulting string. */
-export function readTemplatedRaw(name, category) {
+function readTemplatedRaw(name, category) {
     const script = readFileSync(path.join(__dirname, `scripts/${category}/${name}.dscript`)).toString();
     const template = readFileSync(path.join(__dirname, `scripts/template`)).toString();
     return script.replace("[REPLACE]", template);
+}
+
+/** Asserts that the chunks match.
+ *  @param {DScriptChunk} a - The first chunk.
+ *  @param {DScriptChunk} b - The second chunk. 
+ *  @throws {AssertionError} If the chunks are not equal. */
+function assertChunkEqual(a, b) {
+    assert.deepStrictEqual(a.choices, b.choices);
+    if (a.convergingLabel !== b.convergingLabel) assert.fail('Chunks do not match; mismatched converging labels');
+    if (a.status !== b.status) assert.fail('Chunks do not match; mismatched status messages');
+    if (a.node === null || b.node === null) { if (a.node !== b.node) assert.fail('Chunks do not match; one node is null and the other is not'); }
+    else assertNodeEqual(a.node, b.node);
+}
+
+/** Asserts that the chunk arrays match.
+ *  @param {Array<DScriptChunk>} a - The first array. 
+ *  @param {Array<DScriptChunk>} b - The second array.
+ *  @throws {AssertionError} If the arrays are not equal. */
+function assertChunkArrayEqual(a, b) {
+    if (a.length !== b.length) assert.fail('Chunk arrays have different lengths');
+    for (let i = 0; i < a.length; i++) assertChunkEqual(a[i], b[i]);
 }
 
 /** Recursively asserts that the DialogueNodes match.
@@ -40,26 +61,15 @@ export function assertNodeEqual(a, b) {
     for (let i = 0; i < a.next.length; i++) assertNodeEqual(a.next[i], b.next[i]);
 }
 
-/** Recursively asserts that each DialogueNode in the list match
- *  with the corresponding DialogueNode in the other list.
- *  @param {Array<DialogueNode>} a - The first array. 
- *  @param {Array<DialogueNode>} b - The second array.
- *  @throws {AssertionError} If the arrays are not equal. */
-export function assertNodeArrayEqual(a, b) {
-    if (a.length !== b.length) assert.fail('DialogueNode arrays have different lengths');
-    for (let i = 0; i < a.length; i++) assertNodeEqual(a[i], b[i]);
-}
-
 /** Asserts that the provided script has the correct output when read as chunks.
  *  @param {string} name - The name of the DScript file.
- *  @param {Array<object>} reference - The expected output when reading the script.
+ *  @param {Array<DScriptChunk>} reference - The expected output when reading the script.
  *  @param {string} category - The category of the requested script.
  *  @throws {AssertionError} If the result does not match. */
 export function assertScriptOutputEqual(name, reference, category) {
     const chunks = new DScriptReader(readRaw(name, category)).read();
     assert.ok(chunks);
-    assert.deepStrictEqual(chunks, reference);
-        assertNodeArrayEqual(chunks.filter(chunk => chunk.node).map(chunk => chunk.node), reference.filter(chunk => chunk.node).map(chunk => chunk.node));
+    assertChunkArrayEqual(chunks, reference);
 }
 
 /** Asserts that the provided script has the correct output when parsed into a tree.

@@ -1,1 +1,1 @@
-export { Dialogue, DialogueNode, DScriptParser, DScriptReader } from '../index.js';
+export { Dialogue, DialogueNode, DScriptChunk, DScriptParser, DScriptReader } from '../index.js';

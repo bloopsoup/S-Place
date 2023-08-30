@@ -1,21 +1,74 @@
 import DialogueNode from './dialogue-node.js';
+import DScriptChunk from './dscript-chunk.js';
+
+/** Internal object to represent active labels during parsing.
+ *  @memberof Components.Dialogue */
+class ActiveLabel {
+    /** @type {DialogueNode | null} */
+    #head
+    /** @type {string} */
+    #message
+    /** @type {boolean} */
+    #isConverging
+    /** @type {string | null} */
+    #parentLabel
+    /** @type {Array<string>} */
+    #convergingChildren
+
+    /** Create the active label.
+     *  @param {DialogueNode | null} head - The head node of the label.
+     *  @param {string} message - The incoming message for the start of the label.
+     *  @param {string | null} parentLabel - The parent label. It is null for the root label. */
+    constructor(head, message, parentLabel) {
+        this.#head = head;
+        this.#message = message;
+        this.#isConverging = false;
+        this.#parentLabel = parentLabel;
+        this.#convergingChildren = [];
+    }
+
+    /** Gets the head node.
+     *  @returns {DialogueNode | null} The head node. */
+    get head() { return this.#head; }
+
+    /** Gets the incoming message. 
+     *  @returns {string} The incoming message. */
+    get message() { return this.#message; }
+
+    /** Gets whether the label is converging.
+     *  @returns {boolean} - The result. */
+    get isConverging() { return this.#isConverging; }
+
+    /** Gets the name of the parent label.
+     *  @returns {string | null} - The name of the parent label. */
+    get parentLabel() { return this.#parentLabel; }
+
+    /** Gets the list of converging children.
+     *  @returns {Array<string>} The list of converging children. */
+    get convergingChildren() { return this.#convergingChildren; }
+
+    /** Sets the head node.
+     *  @param {DialogueNode} head - The new head. */
+    set head(head) { this.#head = head; }
+
+    /** Sets the converging status. 
+     *  @param {boolean} isConverging - The new status. */
+    set isConverging(isConverging) { this.#isConverging = isConverging; }
+
+    /** Clears the name of the parent for this label. */
+    clearParent() { this.#parentLabel = null; }
+
+    /** Clears the converging children for this label. */
+    clearChildren() { this.#convergingChildren = []; }
+}
 
 /** A parser for DScript files. Responsible for creating the dialogue tree from
  *  the chunks provided by the DScriptReader.
  *  @memberof Components.Dialogue */
 class DScriptParser {
-    /** Internal object to represent active labels during parsing.
-     *  @typedef {Object} ActiveLabel
-     *  @property {DialogueNode | null} head - The head node of the label.
-     *  @property {string} message - The incoming message for the start of the label.
-     *  @property {boolean} isConverging - Whether the label is converging into its parent label.
-     *  @property {string | null} parentLabel - The parent label. It is null for the root label.
-     *  @property {Array<string>} convergingChildren - The label's children that wants to 
-     *      converge back into the parent label. */
-
     /** @type {string} */
     #defaultLabelName = '';
-    /** @type {Array<import('./dscript-reader.js').DScriptChunk>} */
+    /** @type {Array<DScriptChunk>} */
     #chunks;
     /** @type {DialogueNode} */
     #root;
@@ -23,12 +76,12 @@ class DScriptParser {
     #activeLabels
 
     /** Create the DScriptParser.
-     *  @param {Array<import('./dscript-reader.js').DScriptChunk>} chunks - The chunks given by the reader. */
+     *  @param {Array<DScriptChunk>} chunks - The chunks given by the reader. */
     constructor(chunks) {
         this.#chunks = chunks;
         this.#root = new DialogueNode('', '', '', false, this.#defaultLabelName);
         this.#activeLabels = {};
-        this.#activeLabels[this.#defaultLabelName] = { head: this.#root, message: '', isConverging: false, parentLabel: null, convergingChildren: [] };
+        this.#activeLabels[this.#defaultLabelName] = new ActiveLabel(this.#root, '', null);
     }
 
     /** Checks whether the operation status message is blank which indicates
@@ -50,8 +103,8 @@ class DScriptParser {
         // The label was just created following the addition of a choice node
         if (head === null) {
             node.choiceMessage = message;
-            this.#activeLabels[parentLabel]['head'].addNeighbor(node);
-            this.#activeLabels[node.label]['head'] = node;
+            this.#activeLabels[parentLabel].head.addNeighbor(node);
+            this.#activeLabels[node.label].head = node;
             return '';
         }
 
@@ -59,21 +112,21 @@ class DScriptParser {
         if (head.isChoice) {
             if (convergingChildren.length === 0) return `ERROR: ${node.label} HAS NO CONVERGING CHILDREN; CANNOT ADD ANOTHER NODE`;
             convergingChildren.forEach(child => {
-                this.#activeLabels[child]['head'].addNeighbor(node);
+                this.#activeLabels[child].head.addNeighbor(node);
                 delete this.#activeLabels[child];
             });
             for (const child in this.#activeLabels) {
-                if (this.#activeLabels[child]['parentLabel'] !== node.label) continue;
-                this.#activeLabels[child]['parentLabel'] = null;
+                if (this.#activeLabels[child].parentLabel !== node.label) continue;
+                this.#activeLabels[child].clearParent();
             }
-            this.#activeLabels[node.label]['head'] = node;
-            this.#activeLabels[node.label]['convergingChildren'] = [];
+            this.#activeLabels[node.label].head = node;
+            this.#activeLabels[node.label].clearChildren();
             return '';
         }
 
         // The normal case
-        this.#activeLabels[node.label]['head'].addNeighbor(node);
-        this.#activeLabels[node.label]['head'] = node;
+        this.#activeLabels[node.label].head.addNeighbor(node);
+        this.#activeLabels[node.label].head = node;
 
         return '';
     }
@@ -87,7 +140,7 @@ class DScriptParser {
         if (!this.#isSuccess(this.#addNode(node))) return `ERROR: COULDN'T ADD INITIAL NODE FROM CHOICE NODE`;
         for (const label in choices) {
             if (label in this.#activeLabels) return `ERROR: ${label} ALREADY DEFINED`;
-            const newActiveLabel = { head: null, message: choices[label], isConverging: false, parentLabel: node.label, convergingChildren: [] };
+            const newActiveLabel = new ActiveLabel(null, choices[label], node.label);
             this.#activeLabels[label] = newActiveLabel;
         }
         return '';
@@ -99,15 +152,15 @@ class DScriptParser {
      *  @returns {string} The status message of the operation. */
     #convergeNodes(label) {
         if (!(label in this.#activeLabels)) return `ERROR: UNDEFINED LABEL ${label}`;
-        const { head, isConverging, parentLabel, convergingChildren } = this.#activeLabels[label];
+        const { head, isConverging, parentLabel } = this.#activeLabels[label];
 
         if (isConverging) return `ERROR: CANNOT CONVERGE ${label} WHEN ${label} IS ALREADY CONVERGING`;
         if (head == null) return `ERROR: CANNOT CONVERGE IF ${label} HAS NO NODES`;
         if (head.isChoice) return `ERROR: CANNOT CONVERGE AS ${label} HEAD IS A CHOICE NODE`;
         if (parentLabel == null) return `ERROR: CANNOT CONVERGE AS THE ROOT`;
 
-        this.#activeLabels[label]['isConverging'] = true;
-        this.#activeLabels[parentLabel]['convergingChildren'].push(label);
+        this.#activeLabels[label].isConverging = true;
+        this.#activeLabels[parentLabel].convergingChildren.push(label);
         return '';
     }
 

@@ -1,12 +1,5 @@
 import DialogueNode from './dialogue-node.js';
-
-/** A DScript chunk.
- *  @typedef {Object} DScriptChunk
- *  @property {string} status - The status message of the attempted chunk read.
- *  @property {string | null} convergingLabel - The converging label if available.
- *  @property {DialogueNode | null} node - The resulting node if available.
- *  @property {Object<string, string> | null} choices - The resulting choices for a choice
- *      node if available. */
+import DScriptChunk from './dscript-chunk.js';
 
 /** A reader for DScript files. 
  *  @memberof Components.Dialogue */
@@ -27,7 +20,7 @@ class DScriptReader {
     /** Create the chunk that only contains a message.
      *  @param {string} status - The status messsage.
      *  @returns {DScriptChunk} The chunk. */
-    #createStatus(status) { return { status, convergingLabel: null, node: null, choices: null }; }
+    #createStatus(status) { return new DScriptChunk(status); }
 
     /** Attempts to read a header from the provided lines. It will keep shifting lines until 
      *  it sees a header or lines becomes empty.
@@ -75,7 +68,7 @@ class DScriptReader {
         const headerDetails = this.#readHeader();
         if (headerDetails === null) return this.#createStatus('ERROR: NO HEADER FOUND');
         if (headerDetails.length === 2) {
-            if (headerDetails[0] === 'CONVERGE') return { status: "GOOD", convergingLabel: headerDetails[1], node: null, choices: null };
+            if (headerDetails[0] === 'CONVERGE') return new DScriptChunk("GOOD", headerDetails[1]);
             return this.#createStatus('ERROR: NO CONVERGE KEYWORD FOUND');
         }
         
@@ -93,7 +86,7 @@ class DScriptReader {
             if (choices === null) return this.#createStatus('ERROR: NO CHOICES FOUND');
         }
         
-        return { status: "GOOD", convergingLabel: null, node: new DialogueNode(name, emotion, message, type === 'C', label), choices };
+        return new DScriptChunk("GOOD", null, new DialogueNode(name, emotion, message, type === 'C', label), choices);
     }
 
     /** Reads the whole script as a collection of chunks.
