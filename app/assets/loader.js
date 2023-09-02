@@ -28,7 +28,7 @@ export const levels = {
 /** All loaded UI sprites.
  *  @type {Object<string, CallableFunction>} */
 export const ui = {
-    'text-input':       () => new Sprite('text-input', new Vector2(600, 75), [2])
+    'text-input':       () => new Sprite('text-input', new Vector2(600, 80), [2])
 };
 
 /** All loaded weapon sprites.
