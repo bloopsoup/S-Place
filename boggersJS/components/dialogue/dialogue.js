@@ -21,7 +21,7 @@ class Dialogue {
         this.#root = root;
         this.#current = root;
         this.#text = '';
-        this.#runner = new TickRunner(ticks, () => this.#addNextLetter);
+        this.#runner = new TickRunner(ticks, () => this.#addNextLetter());
     }
 
     /** Gets the current header content.

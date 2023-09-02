@@ -88,7 +88,7 @@ class DScriptParser {
      *  a successful operation.
      *  @param {string} status - The status message.
      *  @returns {boolean} The result. */
-    #isSuccess(status) { console.log(status); return status.length === 0; }
+    #isSuccess(status) { return status.length === 0; }
 
     /** Attempts to add a node to the dialogue tree.
      *  @param {DialogueNode} node - The node to add.
