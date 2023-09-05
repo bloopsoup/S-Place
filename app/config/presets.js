@@ -1,5 +1,5 @@
 import { townCollide } from './maps.js';
-import { weapons } from '../assets/loader.js';
+import loader from './paths.js';
 import { Vector2 } from '../../boggersJS/common/index.js';
 import { Projectile } from '../../boggersJS/game-objects/index.js';
 
@@ -8,5 +8,5 @@ import { Projectile } from '../../boggersJS/game-objects/index.js';
  *  @param {Vector2} direction - The direction of the bullet. */
 export function createProjectile(pos, direction) {
     direction.mulScalar(10);
-    return new Projectile(weapons['bullet'](), townCollide, pos, direction, 10);
+    return new Projectile(loader.getSprite('weapons', 'bullet'), townCollide, pos, direction, 10);
 }

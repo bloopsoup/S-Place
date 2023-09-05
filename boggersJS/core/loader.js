@@ -3,7 +3,7 @@ import { Sprite } from "../components/index.js";
 /** Handles loading in assets and state-persistent data.
  *  @memberof Core */
 class Loader {
-    /** @type {Object<string, Object<string, Sprite>>} */
+    /** @type {Object<string, Object<string, CallableFunction>>} */
     #sprites
     
     /** Create the loader.
@@ -31,7 +31,7 @@ class Loader {
      *  @returns {string | null} The entry type or null if there is no
      *      corresponding entry type to the path's extension. */
     #getEntryType(path) { 
-        const extension = path.split('.')[1];
+        const extension = path.split('.')[path.split('.').length - 1];
         switch (extension) {
             case 'png':
             case 'jpeg':
@@ -56,18 +56,18 @@ class Loader {
      *  @param {Object<string, Object>} data - The metadata of a file. */
     #loadSprite(data) {
         const [category, filename] = this.#getEntryLocation(data['path']);
-        const element = document.createElement('img');
-        element.src = data['path'];
+        const image = document.createElement('img');
+        image.src = data['path'];
 
         if (!(category in this.#sprites)) this.#sprites[category] = {};
-        this.#sprites[category][filename] = new Sprite(filename, data['size'], data['format']);
+        this.#sprites[category][filename] = () => new Sprite(image, data['size'], data['format']);
     }
 
     /** Gets a loaded sprite.
      *  @param {string} category - The category of the element. 
      *  @param {string} filename - The filename of the element.
      *  @returns {Sprite} The retrieved element. */
-    getSprite(category, filename) { return this.#sprites[category][filename]; }
+    getSprite(category, filename) { return this.#sprites[category][filename](); }
 }
 
 export default Loader;

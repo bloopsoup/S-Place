@@ -4,10 +4,6 @@
     box-sizing: border-box;
 }
 
-.game-asset {
-    display: none;
-}
-
 #canvas {
     border: 5px solid black;
     position: absolute;

@@ -7,7 +7,7 @@ import TickRunner from './tick-runner.js';
  *  2) GRID MODE: Freestyle -- anything goes. 
  *  @memberof Components */
 class Sprite {
-    /** @type {HTMLElement | null} */
+    /** @type {HTMLImageElement} */
     #image
     /** @type {Vector2} */
     #dimensions
@@ -19,7 +19,7 @@ class Sprite {
     #runner
 
     /** Create the Sprite.
-     *  @param {string} name - The ID pointing to the HTMLElement containing the spritesheet. 
+     *  @param {HTMLImageElement} image - The HTML image element.
      *  @param {Vector2} dimensions - The dimensions of each frame in the spritesheet.
      *  @param {Array<number>} gridFormat - A list where index i is the ith row and the number is the frames present in that row.
      *  @param {number} ticks - The number of ticks per frame.
@@ -27,8 +27,8 @@ class Sprite {
      *  // Create a Sprite by loading an image element called 'test' where each frame is 80x80px.
      *  // [1, 4, 2] means: 1st row has 1 frame, 2nd row has 4 frames, 3rd row has 2 frames.
      *  const sprite = new Sprite('test', new Vector2(80, 80), [1, 4, 2]); */
-    constructor(name, dimensions, gridFormat, ticks = 8) {
-        this.#image = document.getElementById(name);
+    constructor(image, dimensions, gridFormat, ticks = 8) {
+        this.#image = image;
         this.#dimensions = dimensions;
         this.#gridFormat = gridFormat;
         this.#frame = new Vector2(0, 0);
