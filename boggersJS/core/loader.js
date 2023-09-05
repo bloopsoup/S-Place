@@ -1,34 +1,17 @@
+import { Sprite } from "../components/index.js";
+
 /** Handles loading in assets and state-persistent data.
  *  @memberof Core */
 class Loader {
-    /** @type {Object<string, Object<string, HTMLElement>>} */
-    #elements
+    /** @type {Object<string, Object<string, Sprite>>} */
+    #sprites
     
     /** Create the loader.
-     *  @param {Object<string, Array<string>>} paths - An object that
-     *      maps folder paths to lists of filenames contained in those
-     *      folders. */
+     *  @param {Object<string, Array<Object>>} paths - An object that
+     *      maps folder paths to lists of contained file metadata. */
     constructor(paths) {
-        this.#elements = {};
-        for (const path in paths) paths[path].forEach(filename => this.#loadElement(`${path}${filename}`));
-    }
-
-    /** Gets the element type from a given path.
-     *  @param {string} path - The full path. 
-     *  @returns {string | null} The element type or null if there is no
-     *      corresponding element type to the path's extension. */
-    #getElementType(path) { 
-        const extension = path.split('.')[path.split('.').length - 1];
-        switch (extension) {
-            case 'png':
-            case 'jpeg':
-                return 'img';
-            case 'mp3':
-            case 'ogg':
-                return 'audio';
-            default:
-                return null
-        }
+        this.#sprites = {};
+        for (const path in paths) paths[path].forEach(data => { data['path'] = path + data['filename']; this.#loadEntry(data); });
     }
 
     /** Gets the entry location from a given path. This info
@@ -39,30 +22,52 @@ class Loader {
     #getEntryLocation(path) {
         const pathParts = path.split('/');
         const category = pathParts[pathParts.length - 2];
-        const filename = pathParts[pathParts.length - 1];
+        const filename = pathParts[pathParts.length - 1].split('.')[0];
         return [category, filename];
     }
 
-    /** Adds an entry to the loader.
-     *  @param {HTMLImageElement | HTMLAudioElement} element - The element
-     *      of the entry being added. Note that its SRC attribute will be
-     *      used to determine the entry's location. */
-    #addEntry(element) {
-        const [category, filename] = this.#getEntryLocation(element.src);
-        if (!(category in this.#elements)) this.#elements[category] = {};
-        this.#elements[category][filename] = element;
+    /** Gets the entry type from a given path.
+     *  @param {string} path - The full path. 
+     *  @returns {string | null} The entry type or null if there is no
+     *      corresponding entry type to the path's extension. */
+    #getEntryType(path) { 
+        const extension = path.split('.')[1];
+        switch (extension) {
+            case 'png':
+            case 'jpeg':
+                return 'img';
+            case 'mp3':
+            case 'ogg':
+                return 'audio';
+            default:
+                return null;
+        }
     }
 
-    /** Loads an asset element from the path and adds it as an entry.
-     *  @param {string} path - The full path. */
-    #loadElement(path) {
-        const elementType = this.#getElementType(path);
+    /** Loads an asset element from the file metadata.
+     *  @param {Object<string, Object>} data - The metadata of a file. */
+    #loadEntry(data) {
+        const elementType = this.#getEntryType(data['path']);
         if (elementType === null) return;
-
-        const element = document.createElement(elementType);
-        element.src = path;
-        this.#addEntry(element);
+        if (elementType === 'img') this.#loadSprite(data);
     }
+
+    /** Loads a sprite into the loader. 
+     *  @param {Object<string, Object>} data - The metadata of a file. */
+    #loadSprite(data) {
+        const [category, filename] = this.#getEntryLocation(data['path']);
+        const element = document.createElement('img');
+        element.src = data['path'];
+
+        if (!(category in this.#sprites)) this.#sprites[category] = {};
+        this.#sprites[category][filename] = new Sprite(filename, data['size'], data['format']);
+    }
+
+    /** Gets a loaded sprite.
+     *  @param {string} category - The category of the element. 
+     *  @param {string} filename - The filename of the element.
+     *  @returns {Sprite} The retrieved element. */
+    getSprite(category, filename) { return this.#sprites[category][filename]; }
 }
 
 export default Loader;
