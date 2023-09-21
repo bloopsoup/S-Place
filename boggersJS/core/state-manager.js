@@ -1,4 +1,5 @@
-import { InputTracker, State } from '../common/index.js';
+import State from './state.js';
+import { InputTracker } from '../common/index.js';
 
 /** Runs one state at a time, switching out states when prompted. 
  *  @memberof Core */

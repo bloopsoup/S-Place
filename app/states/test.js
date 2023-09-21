@@ -2,7 +2,8 @@ import { createProjectile } from '../config/presets.js';
 import { townCollide } from '../config/maps.js';
 import loader from '../config/paths.js';
 
-import { State, Vector2 } from '../../boggersJS/common/index.js';
+import { State } from '../../boggersJS/core/index.js';
+import { Vector2 } from '../../boggersJS/common/index.js';
 import { Shooter, Gun, Player, Pool, playerMouseFacing, gunStandard, Controller, ContinuousBackground, Static, TextInput, Text } from '../../boggersJS/game-objects/index.js';
 import { Camera } from '../../boggersJS/state-objects/index.js';
 

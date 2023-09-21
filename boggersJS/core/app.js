@@ -1,4 +1,4 @@
-import { State } from '../common/index.js';
+import State from './state.js';
 import StateManager from './state-manager.js';
 import InputHandler from './input-handler.js';
 
