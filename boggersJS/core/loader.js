@@ -3,6 +3,8 @@ import { Sprite } from "../components/index.js";
 /** Handles loading in assets and state-persistent data.
  *  @memberof Core */
 class Loader {
+    /** @type {Object<string, Array<Object>>} */
+    #paths
     /** @type {Object<string, Object<string, CallableFunction>>} */
     #sprites
     
@@ -10,8 +12,8 @@ class Loader {
      *  @param {Object<string, Array<Object>>} paths - An object that
      *      maps folder paths to lists of contained file metadata. */
     constructor(paths) {
+        this.#paths = paths;
         this.#sprites = {};
-        for (const path in paths) paths[path].forEach(data => { data['path'] = path + data['filename']; this.#loadEntry(data); });
     }
 
     /** Gets the entry location from a given path. This info
@@ -39,6 +41,8 @@ class Loader {
             case 'mp3':
             case 'ogg':
                 return 'audio';
+            case 'ttf':
+                return 'font';
             default:
                 return null;
         }
@@ -46,10 +50,11 @@ class Loader {
 
     /** Loads an asset element from the file metadata.
      *  @param {Object<string, Object>} data - The metadata of a file. */
-    #loadEntry(data) {
+    async #loadEntry(data) {
         const elementType = this.#getEntryType(data['path']);
         if (elementType === null) return;
         if (elementType === 'img') this.#loadSprite(data);
+        if (elementType === 'font') await this.#loadFont(data);
     }
 
     /** Loads a sprite into the loader. 
@@ -61,6 +66,26 @@ class Loader {
 
         if (!(category in this.#sprites)) this.#sprites[category] = {};
         this.#sprites[category][filename] = () => new Sprite(image, data['size'], data['format']);
+    }
+
+    /** Loads a font into the loader. 
+     *  @param {Object<string, Object>} data - The metadata of a file. */
+    async #loadFont(data) {
+        const font = new FontFace(data['fontname'], `url(${data['path']})`);
+        await font.load();
+    }
+
+    /** Initializes the loader by loading in all assets. Because some assets 
+     *  (like fonts) can only be loaded asynchronously, a separate initialization 
+     *  step must be used. MUST BE CALLED FIRST. */
+    async init() {
+        for (const path in this.#paths) {
+            for (const name in this.#paths[path]) {
+                const data = this.#paths[path][name];
+                data['path'] = path + data['filename'];
+                await this.#loadEntry(data); 
+            }
+        }
     }
 
     /** Gets a loaded sprite.

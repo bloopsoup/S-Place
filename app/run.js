@@ -3,7 +3,7 @@ import { Vector2 } from '../boggersJS/common/index.js';
 import { App, Loader, Settings, InputHandler, StateManager } from '../boggersJS/core/index.js';
 
 /** The function that starts the game. */
-function run() {
+async function run() {
     /* Edit your game settings and asset paths here. */
     const settings = new Settings(new Vector2(1280, 720));
     const loader = new Loader({
@@ -25,6 +25,11 @@ function run() {
         "app/assets/images/weapons/": [
             { filename: 'bullet.png', size: new Vector2(10, 10), format: [1] },
             { filename: 'smg.png', size: new Vector2(100, 36), format: [1, 1, 2, 2, 1, 1], ticks: 10 }
+        ],
+        "app/assets/fonts/": [
+            { filename: 'PixeloidMono.ttf', fontname: "pixel-mono" },
+            { filename: 'PixeloidSans.ttf', fontname: "pixel-sans" },
+            { filename: 'PixeloidSansBold.ttf', fontname: "pixel-bold" }
         ]
     });
 
@@ -35,6 +40,7 @@ function run() {
     };
 
     /** Do not touch the code below. Core game components will be initialized. */
+    await loader.init();
     const canvas = document.getElementById('canvas');
     canvas.width = settings.canvasDimensions.x, canvas.height = settings.canvasDimensions.y;
     const stateManager = new StateManager(start, states, settings, loader);
