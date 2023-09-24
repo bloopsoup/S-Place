@@ -1,4 +1,6 @@
 import State from './state.js';
+import Settings from './settings.js';
+import Loader from './loader.js';
 import { InputTracker } from '../common/index.js';
 
 /** Runs one state at a time, switching out states when prompted. 
@@ -15,10 +17,15 @@ class StateManager {
 
     /** Create the StateManager.
      *  @param {string} start - The name of the starting state.
-     *  @param {Object<string, State>} states - The states that the manager can transition to. */
-    constructor(start, states) {
+     *  @param {Object<string, function(new:State, Settings, Loader)>} stateConstructors - The state constructors.
+     *  @param {Settings} settings - The global state settings. 
+     *  @param {Loader} loader - The asset loader. */
+    constructor(start, stateConstructors, settings, loader) {
+        this.#states = {};
+        for (const stateName in stateConstructors) this.#states[stateName] = new stateConstructors[stateName](settings, loader);
+
         this.#isQuitting = false;
-        this.#currentStateName = start, this.#states = states;
+        this.#currentStateName = start;
         this.#currentState = this.#states[this.#currentStateName];
         this.#currentState.startup();
     }

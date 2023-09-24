@@ -1,4 +1,3 @@
-import State from './state.js';
 import StateManager from './state-manager.js';
 import InputHandler from './input-handler.js';
 
@@ -25,14 +24,14 @@ class App {
 
     /** Creates the application.
      *  @param {HTMLCanvasElement} canvas - The display canvas.
-     *  @param {string} start - The name of the starting state.
-     *  @param {Object<string, State>} states - The states of the application.
+     *  @param {StateManager} stateManager - The state manager.
+     *  @param {InputHandler} inputHandler - The input handler.
      *  @param {number} gameFps - How often the game logic should update. */
-    constructor(canvas, start, states, gameFps = 120) {
+    constructor(canvas, stateManager, inputHandler, gameFps = 120) {
         this.#canvas = canvas;
         this.#context = canvas.getContext('2d');
-        this.#stateManager = new StateManager(start, states);
-        this.#inputHandler = new InputHandler(canvas);
+        this.#stateManager = stateManager;
+        this.#inputHandler = inputHandler;
 
         this.#dt = 1 / gameFps;
         this.#maxDt = 10 * this.#dt;

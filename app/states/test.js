@@ -1,26 +1,22 @@
-import { createProjectile } from '../config/presets.js';
 import { townCollide } from '../config/maps.js';
-import loader from '../config/paths.js';
-
 import { State } from '../../boggersJS/core/index.js';
 import { Vector2 } from '../../boggersJS/common/index.js';
-import { Shooter, Gun, Player, Pool, playerMouseFacing, gunStandard, Controller, ContinuousBackground, Static, TextInput, Text } from '../../boggersJS/game-objects/index.js';
+import { Shooter, Gun, Player, Projectile, Pool, playerMouseFacing, gunStandard, Controller, ContinuousBackground, Static, TextInput, Text } from '../../boggersJS/game-objects/index.js';
 import { Camera } from '../../boggersJS/state-objects/index.js';
 
-export default class Test extends State {
-    /** A test state for testing displays and features. */
+/** A test state for testing displays and features. */
+class Test extends State {
+    constructor(settings, loader) {
+        super(settings, loader);
 
-    constructor(canvasDimensions) {
-        super(canvasDimensions);
-
-        this.gun = new Gun(loader.getSprite('weapons', 'smg'), new Vector2(100, 200), 5, createProjectile);
+        this.gun = new Gun(loader.getSprite('weapons', 'smg'), new Vector2(100, 200), 5, this.createProjectile);
         this.player = new Player(loader.getSprite('characters', 'xoki'), townCollide, new Vector2(20, 20), new Vector2(5, 5), new Vector2(0.6, 0.4), new Vector2(0.35, 0.25), -8, 10);
         this.shooter = new Shooter(this.player, this.gun, new Vector2(10, 35));
 
         this.controller = new Controller('StandingRight', playerMouseFacing, this.player);
         this.gunController = new Controller('IdleRight', gunStandard, this.gun);
 
-        this.camera = new Camera(this.canvasDimensions, this.player.movable);
+        this.camera = new Camera(this.settings.canvasDimensions, this.player.movable);
         this.input = new TextInput(loader.getSprite('ui', 'text-input'), new Vector2(10, 300), '50px Arial', text => console.log(text));
         this.text = new Text(new Vector2(10, 100), '50px Arial', 'BRUH');
  
@@ -41,6 +37,11 @@ export default class Test extends State {
         this.pool.addController(this.gunController);
     }
 
+    createProjectile = (pos, direction) => {
+        direction.mulScalar(10);
+        return new Projectile(this.loader.getSprite('weapons', 'bullet'), townCollide, pos, direction, 10);
+    }
+
     startup() {}
     cleanup() {}
 
@@ -58,3 +59,5 @@ export default class Test extends State {
         context.restore();
     }
 }
+
+export default Test;

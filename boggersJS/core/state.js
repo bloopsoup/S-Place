@@ -1,11 +1,15 @@
-import { Vector2, InputTracker } from '../common/index.js';
+import Settings from './settings.js';
+import Loader from './loader.js';
+import { InputTracker } from '../common/index.js';
 
 /** A state abstract class that is managed by a StateManager. Actual game states 
  *  should be implemented outside of the engine. 
  *  @memberof Common */
 class State {
-    /** @type {Vector2} */
-    #canvasDimensions
+    /** @type {Settings} */
+    #settings
+    /** @type {Loader} */
+    #loader
     /** @type {boolean} */
     #isDone
     /** @type {boolean} */
@@ -16,16 +20,22 @@ class State {
     #previous
 
     /** Create a new state object. 
-     *  @param {Vector2} canvasDimensions - The canvas dimensions. */
-    constructor(canvasDimensions) {
-        this.#canvasDimensions = canvasDimensions; 
+     *  @param {Settings} settings - The settings shared by all states.
+     *  @param {Loader} loader - The asset loader used by all states to load images, sounds, etc. */
+    constructor(settings, loader) {
+        this.#settings = settings;
+        this.#loader = loader;
         this.#isDone = false, this.#isQuitting = false;
         this.#next = "", this.#previous = "";
     }
 
-    /** Gets the canvas dimensions that the state operates in.
-     *  @return {Vector2} The canvas dimensions. */
-    get canvasDimensions() { return this.#canvasDimensions; }
+    /** Gets the global state settings.
+     *  @returns {Settings} The settings. */
+    get settings() { return this.#settings; }
+
+    /** Gets the asset loader.
+     *  @returns {Loader} The loader. */
+    get loader() { return this.#loader; }
 
     /** Check if the state is done running.
      *  @return {boolean} The result. */
