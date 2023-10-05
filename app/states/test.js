@@ -17,7 +17,7 @@ class Test extends State {
         this.gunController = new Controller('IdleRight', gunStandard, this.gun);
 
         this.camera = new Camera(this.settings.canvasDimensions, this.player.movable);
-        this.input = new TextInput(loader.getSprite('ui', 'text-input'), new Vector2(10, 300), '50px Arial', text => console.log(text));
+        this.input = new TextInput(loader.getSprite('ui', 'text-input'), new Vector2(10, 300), '30px Arial', text => console.log(text));
         this.text = new Text(new Vector2(10, 100), '50px Arial', 'BRUH');
  
         this.pool = new Pool(['bg-back', 'bg-mid', 'bg-front', 'buildings', 'players', 'bullets', 'tiles'], []);
