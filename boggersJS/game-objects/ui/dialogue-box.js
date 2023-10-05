@@ -30,13 +30,13 @@ class DialogueBox extends GameObject {
      *  @param {InputTracker} inputs */
     update(inputs) {
         if (inputs.has('MouseHold') && this.collider.pointOverlaps(this.movable, inputs.get('MouseHold').pos)) {
+            inputs.consumeInput('MouseHold');
             this.#dialogue.advance();
             this.#label.clear();
         }
 
         this.#dialogue.updateText();
-        // TODO: instead of using ADD, implement a setter for the label's message
-        if (this.#dialogue.messageContent !== null) this.#label.add(this.#dialogue.messageContent[this.#dialogue.messageContent.length - 1]);
+        if (this.#dialogue.messageContent !== null) this.#label.text = this.#dialogue.messageContent;
     }
 
     /** Draw the object.

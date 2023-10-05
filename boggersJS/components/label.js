@@ -10,7 +10,7 @@ class Label {
     /** @type {Vector2} */
     #padding
     /** @type {Array<Array<string>>} */
-    #text
+    #lines
 
     /** Create the label.
      *  @param {string} text - The initial text of the label.
@@ -29,18 +29,21 @@ class Label {
         this.#textContext.font = font;
 
         this.#padding = padding;
-        this.#text = [['']];
+        this.#lines = [['']];
         this.text = text;
     }
 
-    /** Gets the label's first line of text.
+    /** Gets the label's text as one string.
      *  @return {string} The text. */
-    get text() { return this.#getLine(0); }
+    get text() { return this.#lines.map(line => line.join('')).join(''); }
 
     /** Sets the label's text. This also formats the text being displayed.
      *  @param {string} text - The new text. */
     set text(text) {
-        this.#text = [['']];
+        const oldText = this.text;
+        if (oldText === text) return;
+        if (oldText === text.slice(0, -1)) { this.add(text[text.length-1]); return; }
+        this.#lines = [['']];
         for (let i = 0; i < text.length; i++) this.add(text[i]); 
     }
 
@@ -54,11 +57,11 @@ class Label {
     /** Gets the label's ith line of text as a complete string.
      *  @param {number} i - The ith line of text to get.
      *  @return {string} The string. */
-    #getLine(i) { return this.#text[i].join(''); }
+    #getLineText(i) { return this.#lines[i].join(''); }
 
     /** Determines whether the label is empty.
      *  @returns {boolean} The result. */
-    #isEmpty() { return this.#text.length === 1 && this.#text[0].length === 1 && this.#text[0][0].length === 0; }
+    #isEmpty() { return this.#lines.length === 1 && this.#lines[0].length === 1 && this.#lines[0][0].length === 0; }
 
     /** Sets the canvas dimensions to the default dimensions which encompasses the provided text
      *  with the given font.
@@ -75,7 +78,7 @@ class Label {
      *  @param {string} char - The character that will be added. 
      *  @returns {boolean} The result. */
     #willOverflowHorizontal(char) {
-        const metric = this.#textContext.measureText(this.#getLine(this.#text.length-1) + char);
+        const metric = this.#textContext.measureText(this.#getLineText(this.#lines.length-1) + char);
         const textLength = metric.width + this.#padding.x;
         return textLength >= this.#textCanvas.width - this.#padding.x;
     }
@@ -83,7 +86,7 @@ class Label {
     /** Determines whether adding a new line will make the text go past its vertical boundaries.
      *  @returns {boolean} The result. */
     #willOverflowVertical() {
-        const textHeight = (this.#text.length + 1) * (this.#lineHeight + this.#padding.y);
+        const textHeight = (this.#lines.length + 1) * (this.#lineHeight + this.#padding.y);
         return textHeight >= this.#textCanvas.height - this.#padding.y;
     }
 
@@ -92,7 +95,7 @@ class Label {
      *  @param {string} char - The character being considered. 
      *  @returns {boolean} The result. */
     #isStartingNewWord(char) {
-        const lastLine = this.#text[this.#text.length-1];
+        const lastLine = this.#lines[this.#lines.length-1];
         const lastWord = lastLine[lastLine.length-1];
         const lastLetter = lastWord.length > 0 ? lastWord[lastWord.length-1] : '';
         return (new RegExp('\\S')).test(char) && (new RegExp('\\s')).test(lastLetter);
@@ -101,20 +104,20 @@ class Label {
     /** Moves the last word on the last line into the previous line if it's the only word
      *  present and the previous line has adequate space. */
     #trimWord() {
-        if (this.#text.length === 1 || this.#text[this.#text.length-1].length > 1) return;
-        if (this.#willOverflowHorizontal(this.#getLine(this.#text.length-2))) return;
-        const word = this.#text.pop()[0];
-        this.#text[this.#text.length-1].push(word);
+        if (this.#lines.length === 1 || this.#lines[this.#lines.length-1].length > 1) return;
+        if (this.#willOverflowHorizontal(this.#getLineText(this.#lines.length-2))) return;
+        const word = this.#lines.pop()[0];
+        this.#lines[this.#lines.length-1].push(word);
     }
 
     /** Removes the last word (and last line if needed) so that the new last word of the text
      *  is non-empty. Does nothing if the label is empty. */
     #trim() {
         if (this.#isEmpty()) return;
-        const lastLine = this.#text[this.#text.length-1];
+        const lastLine = this.#lines[this.#lines.length-1];
         const lastWord = lastLine[lastLine.length-1];
         if (lastWord.length === 0) lastLine.pop();
-        if (lastLine.length === 0) this.#text.pop();
+        if (lastLine.length === 0) this.#lines.pop();
     }
 
     /** Renders the text onto the internal canvas. This is to avoid rendering text
@@ -122,29 +125,29 @@ class Label {
     #preRender() {
         this.#textContext.clearRect(0, 0, this.#textCanvas.width, this.#textCanvas.height);
         const fontAscent = Math.abs(this.#textContext.measureText('M').actualBoundingBoxAscent);
-        for (let i = 0; i < this.#text.length; i++) {
-            this.#textContext.fillText(this.#getLine(i), this.#padding.x, fontAscent + ((i + 1) * this.#padding.y) + (i * this.#lineHeight));
+        for (let i = 0; i < this.#lines.length; i++) {
+            this.#textContext.fillText(this.#getLineText(i), this.#padding.x, fontAscent + ((i + 1) * this.#padding.y) + (i * this.#lineHeight));
         }
     }
 
     /** Adds a character to the label's text.
      *  @param {string} char - The character to add to the label. */
     add(char) {
-        const lastLine = this.#text[this.#text.length-1]; 
+        const lastLine = this.#lines[this.#lines.length-1]; 
         if (!this.#willOverflowHorizontal(char)) {
             if (this.#isStartingNewWord(char)) lastLine.push('');
             lastLine[lastLine.length-1] += char;
         } else if (!this.#willOverflowVertical()) {
             if (this.#isStartingNewWord(char)) lastLine.push('');
-            if (lastLine.length > 1 && (new RegExp('\\S')).test(char)) this.#text.push([lastLine.pop() + char]);
-            else if (lastLine[lastLine.length-1].length > 0) this.#text.push([char]);
+            if (lastLine.length > 1 && (new RegExp('\\S')).test(char)) this.#lines.push([lastLine.pop() + char]);
+            else if (lastLine[lastLine.length-1].length > 0) this.#lines.push([char]);
         }
         this.#preRender();
     }
 
     /** Removes the last character from the label's text. */
     back() {
-        const lastLine = this.#text[this.#text.length-1];
+        const lastLine = this.#lines[this.#lines.length-1];
         lastLine[lastLine.length-1] = lastLine[lastLine.length-1].slice(0, -1);
         this.#trimWord();
         this.#trim();
@@ -153,7 +156,7 @@ class Label {
 
     /** Clears the label's text. */
     clear() { 
-        this.#text = [['']];
+        this.#lines = [['']];
         this.#preRender();
     }
 

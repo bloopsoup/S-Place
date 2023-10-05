@@ -73,6 +73,7 @@ class Loader {
     async #loadFont(data) {
         const font = new FontFace(data['fontname'], `url(${data['path']})`);
         await font.load();
+        document.fonts.add(font);
     }
 
     /** Initializes the loader by loading in all assets. Because some assets 

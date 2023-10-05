@@ -20,7 +20,8 @@ async function run() {
             { filename: 'town-bld.png', size: new Vector2(4000, 800), format: [1] }
         ],
         "app/assets/images/ui/": [
-            { filename: 'text-input.png', size: new Vector2(600, 80), format: [2] }
+            { filename: 'text-input.png', size: new Vector2(600, 80), format: [2] },
+            { filename: 'dialogue-box.png', size: new Vector2(720, 240), format: [1] }
         ],
         "app/assets/images/weapons/": [
             { filename: 'bullet.png', size: new Vector2(10, 10), format: [1] },

@@ -1,8 +1,25 @@
 import { townCollide } from '../config/maps.js';
 import { State } from '../../boggersJS/core/index.js';
 import { Vector2 } from '../../boggersJS/common/index.js';
-import { Shooter, Gun, Player, Projectile, Pool, playerMouseFacing, gunStandard, Controller, ContinuousBackground, Static, TextInput, Text } from '../../boggersJS/game-objects/index.js';
+import { Shooter, Gun, Player, Projectile, Pool, playerMouseFacing, gunStandard, Controller, ContinuousBackground, Static, TextInput, Text, DialogueBox } from '../../boggersJS/game-objects/index.js';
 import { Camera } from '../../boggersJS/state-objects/index.js';
+
+const testScript = `
+Bob angry M
+I am angry right now.
+
+Alice angry M
+I am also angry right now.
+
+Richard angry M
+I am semi-angry right now.
+
+Fanagle happy M
+I am anti-angry right now.
+
+Eric happy M
+I am okay-angry right now.
+`;
 
 /** A test state for testing displays and features. */
 class Test extends State {
@@ -17,8 +34,9 @@ class Test extends State {
         this.gunController = new Controller('IdleRight', gunStandard, this.gun);
 
         this.camera = new Camera(this.settings.canvasDimensions, this.player.movable);
-        this.input = new TextInput(loader.getSprite('ui', 'text-input'), new Vector2(10, 300), '30px Arial', text => console.log(text));
-        this.text = new Text(new Vector2(10, 100), '50px Arial', 'BRUH');
+        this.input = new TextInput(loader.getSprite('ui', 'text-input'), new Vector2(10, 300), '30px Pixel-Bold', text => console.log(text));
+        this.text = new Text(new Vector2(10, 100), '50px Pixel-Bold', 'BRUH');
+        this.dbox = new DialogueBox(loader.getSprite('ui', 'dialogue-box'), new Vector2(720, 100), "40px Pixel-Bold", testScript);
  
         this.pool = new Pool(['bg-back', 'bg-mid', 'bg-front', 'buildings', 'players', 'bullets', 'tiles'], []);
 
@@ -30,6 +48,7 @@ class Test extends State {
 
         this.pool.addObjectToLayer('buildings', this.input);
         this.pool.addObjectToLayer('buildings', this.text);
+        this.pool.addObjectToLayer('buildings', this.dbox);
         this.pool.addObjectToLayer('buildings', new Static(loader.getSprite('levels', 'town-bld'), new Vector2(0, 0)));
         this.pool.addObjectToLayer('tiles', new Static(loader.getSprite('levels', 'town-grass'), new Vector2(0, 0)));
 
