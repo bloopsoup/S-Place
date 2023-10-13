@@ -6,5 +6,6 @@ export { default as Collider } from './collider.js';
 export { default as CollisionMap } from './collision-map.js'; 
 export { default as Health } from './health.js';
 export { default as Label } from './label.js';
+export { default as Layout } from './layout.js';
 export { default as Sprite } from './sprite.js';
 export { default as TickRunner } from './tick-runner.js';
