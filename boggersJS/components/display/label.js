@@ -1,7 +1,7 @@
-import { Vector2 } from '../common/index.js';
+import { Vector2 } from '../../common/index.js';
 
 /** The Label handles displaying text. It uses a separate Canvas internally to render text.
- *  @memberof Components */
+ *  @memberof Components.Display */
 class Label {
     /** @type {HTMLCanvasElement} */
     #textCanvas
@@ -32,6 +32,10 @@ class Label {
         this.#lines = [['']];
         this.text = text;
     }
+
+    /** Get the label's dimensions.
+     *  @return {Vector2} The label's dimensions. */
+    get dimensions() { return new Vector2(this.#textCanvas.width, this.#textCanvas.height); }
 
     /** Gets the label's text as one string.
      *  @return {string} The text. */

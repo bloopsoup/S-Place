@@ -1,11 +1,11 @@
 import Label from './label.js';
 import Sprite from './sprite.js';
-import { Vector2 } from '../common/index.js';
+import { Vector2 } from '../../common/index.js';
 
-/** An arrangement of Sprite and Label components. Use this class
- *  ONLY if you many labels and sprites to compose together as most
- *  game objects use only one label/sprite.
- *  @memberof Components */
+/** An arrangement of slots that can fit Sprite and Label components.
+ *  Provides auto-centering for placing sprites and auto-dimensions for
+ *  placing labels. Should ONLY be used for creating more complex UI objects.
+ *  @memberof Components.Display */
 class Layout {
     /** @type {Object<string, Label>} */
     #labels
