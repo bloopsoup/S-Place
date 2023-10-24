@@ -114,9 +114,18 @@ class Vector2 {
     }
 
     /** Make a copy and multiply it with a vector.
-     * @param {Vector2} other - The vector to multiply with the copy.
-     * @returns {Vector2} The result. */
+     *  @param {Vector2} other - The vector to multiply with the copy.
+     *  @returns {Vector2} The result. */
     mulCopy(other) { return new Vector2(this.#x * other.#x, this.#y * other.#y); }
+
+    /** Floor divide a vector's elements by a scalar. 
+     *  @param {number} scalar - The scalar. */
+    floorDivScalar(scalar) {
+        this.#x /= scalar;
+        this.#x = Math.floor(this.#x);
+        this.#y /= scalar;
+        this.#y = Math.floor(this.#y);
+    }
 
     /** Floor divide this vector by a vector element-wise. 
      *  @param {Vector2} other - The vector that this vector is floor divided by. */
@@ -137,10 +146,22 @@ class Vector2 {
      *  @returns {boolean} The result. */
     lessThan(other) { return this.#x < other.#x && this.#y < other.#y; }
 
+    /** Checks if at least one element of this vector is less than the corresponding 
+     *  element of the other vector.
+     *  @param {Vector2} other - The other vector that is being compared to.
+     *  @returns {boolean} The result. */
+    anyLessThan(other) { return this.#x < other.#x || this.#y < other.#y; }
+
     /** Checks element-wise if this vector is more than the other vector.
      *  @param {Vector2} other - The other vector that is being compared to.
      *  @returns {boolean} The result. */
     greaterThan(other) { return this.#x > other.#x && this.#y > other.#y; }
+
+    /** Checks if at least one element of this vector is greater than the corresponding 
+     *  element of the other vector.
+     *  @param {Vector2} other - The other vector that is being compared to.
+     *  @returns {boolean} The result. */
+    anyGreaterThan(other) { return this.#x > other.#x || this.#y > other.#y; }
 
     /** Checks element-wise if this vector is equal to the other vector.
      *  @param {Vector2} other - The other vector that is being compared to.
