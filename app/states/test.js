@@ -3,22 +3,20 @@ import { State } from '../../boggersJS/core/index.js';
 import { Vector2 } from '../../boggersJS/common/index.js';
 import { Shooter, Gun, Player, Projectile, Pool, playerMouseFacing, gunStandard, Controller, ContinuousBackground, Static, TextInput, Text, DialogueBox } from '../../boggersJS/game-objects/index.js';
 import { Camera } from '../../boggersJS/state-objects/index.js';
+import { Label, Layout, LayoutSlot } from '../../boggersJS/components/index.js';
 
 const testScript = `
+Bob neutral M
+Sometimes...
+
+Bob sad M
+I just want to stay in bed.
+
 Bob angry M
-I am angry right now.
+So stop trying to wake me up!
 
-Alice angry M
-I am also angry right now.
-
-Richard angry M
-I am semi-angry right now.
-
-Fanagle happy M
-I am anti-angry right now.
-
-Eric happy M
-I am okay-angry right now.
+Bob sad M
+Yeesh...
 `;
 
 /** A test state for testing displays and features. */
@@ -36,7 +34,21 @@ class Test extends State {
         this.camera = new Camera(this.settings.canvasDimensions, this.player.movable);
         this.input = new TextInput(loader.getSprite('ui', 'text-input'), new Vector2(10, 300), '30px Pixel-Bold', text => console.log(text));
         this.text = new Text(new Vector2(10, 100), '50px Pixel-Bold', 'BRUH');
-        this.dbox = new DialogueBox(loader.getSprite('ui', 'dialogue-box'), new Vector2(720, 100), "40px Pixel-Bold", testScript);
+
+        const layout = new Layout({
+            'name' : new LayoutSlot(new Vector2(0, 0), new Vector2(190, 55)),
+            'dialogue-text': new LayoutSlot(new Vector2(190, 0), new Vector2(530, 240)),
+            'portrait': new LayoutSlot(new Vector2(0, 55), new Vector2(190, 190))
+        });
+        this.dbox = new DialogueBox(
+            loader.getSprite('ui', 'dialogue-box'), 
+            { "Bob": loader.getSprite('characters', 'xoki-icon') },
+            new Label('', new Vector2(189, 55), new Vector2(10, 10), '40px Pixel-Bold'),
+            new Label('', new Vector2(520, 220), new Vector2(10, 10), '30px Pixel-Bold'),
+            layout,
+            new Vector2(1720, 250),
+            testScript
+        );
  
         this.pool = new Pool(['bg-back', 'bg-mid', 'bg-front', 'buildings', 'players', 'bullets', 'tiles'], []);
 

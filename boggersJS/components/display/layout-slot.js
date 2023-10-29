@@ -27,17 +27,17 @@ class LayoutSlot {
 
     /** Inserts a Label element into the slot.
      *  Does nothing if the label is too large.
-     *  @param {Label} label - The label. */
+     *  @param {Label | null} label - The label. */
     set label(label) { 
-        if (label.dimensions.anyGreaterThan(this.#dimensions)) return;
+        if (label !== null && label.dimensions.anyGreaterThan(this.#dimensions)) return;
         this.#label = label; 
     }
 
     /** Inserts a Sprite element into the slot.
      *  Does nothing if the sprite is too large.
-     *  @param {Sprite} sprite - The sprite. */
+     *  @param {Sprite | null} sprite - The sprite. */
     set sprite(sprite) {
-        if (sprite.dimensions.anyGreaterThan(this.#dimensions)) return;
+        if (sprite !== null && sprite.dimensions.anyGreaterThan(this.#dimensions)) return;
         this.#sprite = sprite; 
     }
 

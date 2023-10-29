@@ -14,10 +14,18 @@ class Layout {
      *  @param {Object<string, LayoutSlot>} slots - A mapping between names and layout slots. */
     constructor(slots) { this.#slots = slots; }
 
+    /** Removes a label from a layout slot.
+     *  @param {string} name - The name of the slot to remove from. */
+    removeLabel(name) { this.#slots[name].label = null; }
+
     /** Adds a label to a layout slot.
      *  @param {string} name - The name of the slot to add to. 
      *  @param {Label} label - The label to add. */
     addLabel(name, label) { this.#slots[name].label = label; }
+
+    /** Removes a sprite from a layout slot.
+     *  @param {string} name - The name of the slot to remove from. */
+    removeSprite(name) { this.#slots[name].sprite = null; }
 
     /** Adds a sprite to a layout slot.
      *  @param {string} name - The name of the slot to add to.

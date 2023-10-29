@@ -8,7 +8,8 @@ async function run() {
     const settings = new Settings(new Vector2(1280, 720));
     const loader = new Loader({
         "app/assets/images/characters/": [
-            { filename: 'xoki.png', size: new Vector2(80, 80), format: [20, 20, 5, 5, 1, 1, 1, 1] }
+            { filename: 'xoki.png', size: new Vector2(80, 80), format: [20, 20, 5, 5, 1, 1, 1, 1] },
+            { filename: 'xoki-icon.png', size: new Vector2(180, 180), format: [8] }
         ],
         "app/assets/images/decoration/": [
             { filename: 'bg-back-peaks.png', size: new Vector2(1280, 720), format: [1] },
