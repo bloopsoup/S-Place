@@ -34,6 +34,14 @@ class Vector2 {
      *  @param {number} y - The y value. */
     set y(y) { this.#y = y; }
 
+    /** Gets the max of the x and y values.
+     *  @returns {number} The max. */
+    max() { return Math.max(this.#x, this.#y); }
+
+    /** Gets the min of the x and y values.
+     *  @returns {number} The min. */
+    min() { return Math.min(this.#x, this.#y); }
+
     /** Sets both the x and y values.
      *  @param {number} x - The x value.
      *  @param {number} y - The y value. */
@@ -205,6 +213,10 @@ class Vector2 {
     /** Checks if either element in the vector is negative.
      *  @return {boolean} The result. */
     isNegative() { return this.#x < 0 || this.#y < 0; }
+
+    /** Gets the vector's magnitude.
+     *  @returns {number} The magnitude. */
+    magnitude() { return Math.sqrt(Math.pow(this.#x, 2) + Math.pow(this.#y, 2)); }
 
     /** Normalize this vector. */
     normalize() {

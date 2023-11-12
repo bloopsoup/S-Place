@@ -68,9 +68,9 @@ class Rectangle {
      *  @return {Array<Vector2>} The positions of all corners. */
     get corners() { return [this.topRightPos, this.topLeftPos, this.bottomLeftPos, this.bottomRightPos]; }
 
-    /** Replace the current position with a new position. 
+    /** Sets the position.
      *  @param {Vector2} pos - The new position. */
-    replacePos(pos) {
+    set pos(pos) {
         this.#pos.copyTo(this.#oldPos);
         pos.copyTo(this.#pos);
     }
@@ -85,27 +85,6 @@ class Rectangle {
     /** Gets the interpolated position.
      *  @param {number} alpha - Used for interpolation when rendering between two states. */
     interpolatePos(alpha) { return this.#oldPos.blend(this.#pos, alpha); }
-
-    /** Checks if a position is within this rectangle.
-     *  @param {Vector2} point - The point.
-     *  @return {boolean} The result. */
-    overlapsPoint(point) {
-        const buffer = this.#pos.copy();
-        buffer.add(this.#dimensions);
-        return point.greaterThan(this.#pos) && point.lessThan(buffer);
-    }
-
-    /** Checks whether the other rectangle overlaps with this rectangle. 
-     *  @param {Rectangle} other - The other rectangle.
-     *  @return {boolean} The result. */
-    overlapsRectangle(other) {
-        const buffer = this.#pos.copy();
-        buffer.add(this.#dimensions);
-        if (!other.pos.lessThan(buffer)) return false;
-        other.pos.copyTo(buffer);
-        buffer.add(other.dimensions);
-        return this.#pos.lessThan(buffer);
-    }
 }
 
 export default Rectangle;
