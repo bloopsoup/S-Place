@@ -6,6 +6,8 @@ class Rectangle {
     /** @type {Vector2} */
     #dimensions
     /** @type {Vector2} */
+    #halfDimensions
+    /** @type {Vector2} */
     #oldPos
     /** @type {Vector2} */
     #pos
@@ -15,6 +17,8 @@ class Rectangle {
      *  @param {Vector2} pos - The position of the rectangle. */
     constructor(dimensions, pos) {
         this.#dimensions = dimensions;
+        this.#halfDimensions = dimensions.copy();
+        this.#halfDimensions.mulScalar(0.5);
         this.#oldPos = pos;
         this.#pos = pos.copy();
     }
@@ -22,6 +26,10 @@ class Rectangle {
     /** Get the dimensions.
      *  @return {Vector2} The dimensions. */
     get dimensions() { return this.#dimensions; }
+
+    /** Get the half-dimensions.
+     *  @return {Vector2} The half-dimensions. */
+    get halfDimensions() { return this.#halfDimensions; }
 
     /** Get the old position. This is used with the current position
      *  to calculate direction, making it useful for tile-based collisions.
@@ -32,41 +40,21 @@ class Rectangle {
      *  @return {Vector2} The current position. */
     get pos() { return this.#pos; }
 
-    /** Get the position of the rectangle's top left corner.
-     *  @return {Vector2} The position of the top left corner. */
-    get topLeftPos() { return this.#pos; }
+    /** Get the old center of the rectangle.
+     *  @return {Vector2} The old center. */
+    get oldCenterPos() { return this.#oldPos.addCopy(this.#halfDimensions); }
 
-    /** Get the old position of the rectangle's top left corner.
-     *  @return {Vector2} The old position of the top left corner. */
-    get oldTopLeftPos() { return this.#oldPos; }
+    /** Get the center of the rectangle.
+     *  @return {Vector2} The center. */
+    get centerPos() { return this.#pos.addCopy(this.#halfDimensions); }
 
-    /** Get the position of the rectangle's top right corner.
-     *  @return {Vector2} The position of the top right corner. */
-    get topRightPos() { return this.#pos.addToXCopy(this.#dimensions.x); }
-
-    /** Get the old position of the rectangle's top right corner.
-     *  @return {Vector2} The old position of the top right corner. */
-    get oldTopRightPos() { return this.#oldPos.addToXCopy(this.#dimensions.x); }
-
-    /** Get the position of the rectangle's bottom left corner.
-     *  @return {Vector2} The position of the bottom left corner. */
-    get bottomLeftPos() { return this.#pos.addToYCopy(this.#dimensions.y); }
-
-    /** Get the old position of the rectangle's bottom left corner.
-     *  @return {Vector2} The old position of the bottom left corner. */
-    get oldBottomLeftPos() { return this.#oldPos.addToYCopy(this.#dimensions.y); }
+    /** Get the old position of the rectangle's bottom right corner.
+     *  @return {Vector2} The old position of the bottom right corner. */
+    get oldMaxPos() { return this.#oldPos.addCopy(this.#dimensions); }
 
     /** Get the position of the rectangle's bottom right corner.
      *  @return {Vector2} The position of the bottom right corner. */
-    get bottomRightPos() { return this.#pos.addCopy(this.#dimensions); }
-    
-    /** Get the old position of the rectangle's bottom right corner.
-     *  @return {Vector2} The old position of the bottom right corner. */
-    get oldBottomRightPos() { return this.#oldPos.addCopy(this.#dimensions); }
-
-    /** Get the positions of all corners. 
-     *  @return {Array<Vector2>} The positions of all corners. */
-    get corners() { return [this.topRightPos, this.topLeftPos, this.bottomLeftPos, this.bottomRightPos]; }
+    get maxPos() { return this.#pos.addCopy(this.#dimensions); }
 
     /** Sets the position.
      *  @param {Vector2} pos - The new position. */

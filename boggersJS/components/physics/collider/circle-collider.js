@@ -1,6 +1,7 @@
 import { Vector2 } from '../../../common/index.js';
 import Collider from './collider.js';
 import Rectangle from '../rectangle.js';
+import ColliderResult from './collider-result.js';
 
 /** A circle collider.
  *  @augments Collider
@@ -39,6 +40,12 @@ class CircleCollider extends Collider {
         this.centerPos.sub(point);
         return dist.magnitude() < this.#radius;
     }
+
+    /** Checks whether a ray collides with this circle.
+     * @param {Vector2} origin - The origin of the ray. 
+     * @param {Vector2} direction - The direction of the ray.
+     * @returns {ColliderResult | null} The result or null if no hit. */
+    collidesWithRay(origin, direction) { throw new Error('Implement!'); }
 }
 
 export default CircleCollider;

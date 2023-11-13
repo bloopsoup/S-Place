@@ -1,3 +1,4 @@
+import ColliderResult from './collider-result.js';
 import { Vector2 } from '../../../common/index.js';
 import Rectangle from '../rectangle.js';
 
@@ -20,6 +21,12 @@ class Collider {
      *  @param {Vector2} point - The point. 
      *  @returns {boolean} The result. */
     collidesWithPoint(point) { throw new Error('Implement!'); }
+
+    /** Checks whether a ray collides with this collider.
+     * @param {Vector2} origin - The origin of the ray. 
+     * @param {Vector2} direction - The direction of the ray.
+     * @returns {ColliderResult | null} The result or null if no hit. */
+    collidesWithRay(origin, direction) { throw new Error('Implement!'); }
 }
 
 export default Collider;

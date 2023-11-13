@@ -126,6 +126,25 @@ class Vector2 {
      *  @returns {Vector2} The result. */
     mulCopy(other) { return new Vector2(this.#x * other.#x, this.#y * other.#y); }
 
+    /** Divide a vector's elements by a scalar. 
+     *  @param {number} scalar - The scalar. */
+    divScalar(scalar) {
+        this.#x /= scalar;
+        this.#y /= scalar;
+    }
+
+    /** Divide this vector by a vector element-wise. 
+     *  @param {Vector2} other - The vector that this vector is divided by. */
+    div(other) {
+        this.#x /= other.#x;
+        this.#y /= other.#y;
+    }
+
+    /** Make a copy and divide it by a vector.
+     *  @param {Vector2} other - The vector that the copy is divided by.
+     *  @returns {Vector2} The result. */
+    divCopy(other) { return new Vector2(this.#x / other.#x, this.#y / other.#y); }
+
     /** Floor divide a vector's elements by a scalar. 
      *  @param {number} scalar - The scalar. */
     floorDivScalar(scalar) {
@@ -148,6 +167,10 @@ class Vector2 {
      *  @param {Vector2} other - The vector that the copy is floor divided by.
      *  @returns {Vector2} The result. */
     floorDivCopy(other) { return new Vector2(Math.floor(this.#x / other.#x), Math.floor(this.#y / other.#y)); }
+
+    /** Make a copy and take the absolute values.
+     *  @returns {Vector2} The result. */
+    absCopy() { return new Vector2(Math.abs(this.#x), Math.abs(this.#y)); }
 
     /** Checks element-wise if this vector is less than the other vector.
      *  @param {Vector2} other - The other vector that is being compared to.

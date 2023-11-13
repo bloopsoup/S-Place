@@ -1,28 +1,31 @@
 import { townCollide } from '../config/maps.js';
-import { State } from '../../boggersJS/core/index.js';
-import { Vector2 } from '../../boggersJS/common/index.js';
+import { State, Settings, Loader } from '../../boggersJS/core/index.js';
+import { Vector2, InputTracker } from '../../boggersJS/common/index.js';
 import { Shooter, Gun, Player, Projectile, Pool, playerMouseFacing, gunStandard, Controller, ContinuousBackground, Static, TextInput, Text, DialogueBox } from '../../boggersJS/game-objects/index.js';
 import { Camera } from '../../boggersJS/state-objects/index.js';
 import { Label, Layout, LayoutSlot } from '../../boggersJS/components/index.js';
 
-const testScript = `
-Bob neutral M
-Sometimes...
-
-Bob sad M
-I just want to stay in bed.
-
-Bob angry M
-So stop trying to wake me up!
-
-Bob sad M
-Yeesh...
-`;
-
-/** A test state for testing displays and features. */
+/** A state for testing displays and features. */
 class Test extends State {
+    /** Create a new state object. 
+     *  @param {Settings} settings - The settings shared by all states.
+     *  @param {Loader} loader - The asset loader used by all states to load images, sounds, etc. */
     constructor(settings, loader) {
         super(settings, loader);
+
+        this.testScript = `
+        Bob neutral M
+        Sometimes...
+        
+        Bob sad M
+        I just want to stay in bed.
+        
+        Bob angry M
+        So stop trying to wake me up!
+        
+        Bob sad M
+        Yeesh...
+        `;
 
         this.gun = new Gun(loader.getSprite('weapons', 'smg'), new Vector2(100, 200), 5, this.createProjectile);
         this.player = new Player(loader.getSprite('characters', 'xoki'), townCollide, new Vector2(20, 20), new Vector2(5, 5), new Vector2(0.6, 0.4), new Vector2(0.35, 0.25), -8, 10);
@@ -47,7 +50,7 @@ class Test extends State {
             new Label('', new Vector2(520, 220), new Vector2(10, 10), '30px Pixel-Bold'),
             layout,
             new Vector2(1720, 250),
-            testScript
+            this.testScript
         );
  
         this.pool = new Pool(['bg-back', 'bg-mid', 'bg-front', 'buildings', 'players', 'bullets', 'tiles'], []);
@@ -68,20 +71,30 @@ class Test extends State {
         this.pool.addController(this.gunController);
     }
 
+    /** Create a projectile.
+     *  @param {Vector2} pos - The position of the projectile.
+     *  @param {Vector2} direction - The direction of the projectile.
+     *  @returns {Projectile} The projectile. */
     createProjectile = (pos, direction) => {
         direction.mulScalar(10);
         return new Projectile(this.loader.getSprite('weapons', 'bullet'), townCollide, pos, direction, 10);
     }
 
+    // IGNORE
     startup() {}
     cleanup() {}
 
+    /** Processes the inputs given by the InputHandler and updates components. 
+     *  @param {InputTracker} inputs - The currently tracked inputs. */
     update(inputs) { 
         const offset = this.camera.getBoundedOffset();
         inputs.applyOffset(offset);
         this.pool.update(inputs);
     }
 
+    /** Draws state elements and game objects onto the canvas.
+     *  @param {CanvasRenderingContext2D} context - The context to draw on.
+     *  @param {number} alpha - Used for interpolation when rendering between two states. */
     draw(context, alpha) {
         context.save();
         const offset = this.camera.getInterpolatedBoundedOffset(alpha);

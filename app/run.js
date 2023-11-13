@@ -1,4 +1,5 @@
 import Test from './states/test.js';
+import TestColliders from './states/test-colliders.js';
 import { Vector2 } from '../boggersJS/common/index.js';
 import { App, Loader, Settings, InputHandler, StateManager } from '../boggersJS/core/index.js';
 
@@ -38,7 +39,8 @@ async function run() {
     /** Write your state class names along with a starting state here. */
     const start = 'test';
     const states = {
-        'test': Test
+        'test': Test,
+        'test-colliders': TestColliders
     };
 
     /** Do not touch the code below. Core game components will be initialized. */
