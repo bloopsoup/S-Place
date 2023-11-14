@@ -58,8 +58,12 @@ class Vector2 {
     }
 
     /** Add to the x value.
-     *  @param {number} x - The x value to add. */
-    addToX(x) { this.#x += x; }
+     *  @param {number} x - The x value to add.
+     *  @returns {Vector2} The vector itself for chaining. */
+    addToX(x) { 
+        this.#x += x;
+        return this;
+    }
 
     /** Make a copy and add to the x value.
      *  @param {number} x - The x value to add.
@@ -67,8 +71,12 @@ class Vector2 {
     addToXCopy(x) { return new Vector2(this.#x + x, this.#y); }
 
     /** Add to the y value.
-     *  @param {number} y - The y value to add. */
-    addToY(y) { this.#y += y; }
+     *  @param {number} y - The y value to add.
+     *  @returns {Vector2} The vector itself for chaining. */
+    addToY(y) { 
+        this.#y += y;
+        return this;
+    }
 
     /** Make a copy and add to the y value.
      *  @param {number} y - The y value to add.
@@ -77,17 +85,21 @@ class Vector2 {
 
     /** Add to both the x and y values.
      *  @param {number} x - The x value to add.
-     *  @param {number} y - The y value to add. */
+     *  @param {number} y - The y value to add.
+     *  @returns {Vector2} The vector itself for chaining. */
     addToBoth(x, y) {
         this.#x += x;
         this.#y += y;
+        return this;
     }
 
     /** Add a vector to this vector element-wise. 
-     *  @param {Vector2} other - The vector to add to this vector. */
+     *  @param {Vector2} other - The vector to add to this vector.
+     *  @returns {Vector2} The vector itself for chaining. */
     add(other) { 
         this.#x += other.#x; 
-        this.#y += other.#y; 
+        this.#y += other.#y;
+        return this;
     }
 
     /** Make a copy and add a vector to it.
@@ -96,10 +108,12 @@ class Vector2 {
     addCopy(other) { return new Vector2(this.#x + other.#x, this.#y + other.#y); }
 
     /** Subtract a vector from this vector element-wise. 
-     *  @param {Vector2} other - The vector to subtract from this vector. */
+     *  @param {Vector2} other - The vector to subtract from this vector.
+     *  @returns {Vector2} The vector itself for chaining. */
     sub(other) {
         this.#x -= other.#x;
         this.#y -= other.#y;
+        return this;
     }
 
     /** Make a copy and subtract a vector from it.
@@ -108,17 +122,21 @@ class Vector2 {
     subCopy(other) { return new Vector2(this.#x - other.#x, this.#y - other.#y); }
 
     /** Multiply a vector's elements by a scalar. 
-     *  @param {number} scalar - The scalar. */
+     *  @param {number} scalar - The scalar.
+     *  @returns {Vector2} The vector itself for chaining. */
     mulScalar(scalar) {
         this.#x *= scalar;
         this.#y *= scalar;
+        return this;
     }
 
     /** Multiply a vector to this vector element-wise. 
-     *  @param {Vector2} other - The vector to multiply to this vector. */
+     *  @param {Vector2} other - The vector to multiply to this vector.
+     *  @returns {Vector2} The vector itself for chaining. */
     mul(other) {
         this.#x *= other.#x;
         this.#y *= other.#y;
+        return this;
     }
 
     /** Make a copy and multiply it with a vector.
@@ -127,17 +145,21 @@ class Vector2 {
     mulCopy(other) { return new Vector2(this.#x * other.#x, this.#y * other.#y); }
 
     /** Divide a vector's elements by a scalar. 
-     *  @param {number} scalar - The scalar. */
+     *  @param {number} scalar - The scalar.
+     *  @returns {Vector2} The vector itself for chaining. */
     divScalar(scalar) {
         this.#x /= scalar;
         this.#y /= scalar;
+        return this;
     }
 
     /** Divide this vector by a vector element-wise. 
-     *  @param {Vector2} other - The vector that this vector is divided by. */
+     *  @param {Vector2} other - The vector that this vector is divided by.
+     *  @returns {Vector2} The vector itself for chaining. */
     div(other) {
         this.#x /= other.#x;
         this.#y /= other.#y;
+        return this;
     }
 
     /** Make a copy and divide it by a vector.
@@ -146,21 +168,25 @@ class Vector2 {
     divCopy(other) { return new Vector2(this.#x / other.#x, this.#y / other.#y); }
 
     /** Floor divide a vector's elements by a scalar. 
-     *  @param {number} scalar - The scalar. */
+     *  @param {number} scalar - The scalar.
+     *  @returns {Vector2} The vector itself for chaining. */
     floorDivScalar(scalar) {
         this.#x /= scalar;
         this.#x = Math.floor(this.#x);
         this.#y /= scalar;
         this.#y = Math.floor(this.#y);
+        return this;
     }
 
     /** Floor divide this vector by a vector element-wise. 
-     *  @param {Vector2} other - The vector that this vector is floor divided by. */
+     *  @param {Vector2} other - The vector that this vector is floor divided by.
+     *  @returns {Vector2} The vector itself for chaining. */
     floorDiv(other) {
         this.#x /= other.#x;
         this.#x = Math.floor(this.#x);
         this.#y /= other.#y;
         this.#y = Math.floor(this.#y);
+        return this;
     }
 
     /** Make a copy and floor divide it by a vector.
@@ -203,30 +229,36 @@ class Vector2 {
      *  and another vector's elements. The maximum/minimum is done per element.
      *  @param {Vector2} other - The other vector.
      *  @param {boolean} useMinA - Whether to take the minimum of the x values from both vectors.
-     *  @param {boolean} useMinB - Whether to take the minimum of the y values from both vectors. */
+     *  @param {boolean} useMinB - Whether to take the minimum of the y values from both vectors.
+     *  @returns {Vector2} The vector itself for chaining. */
     select(other, useMinA, useMinB) {
         const selectX = useMinA ? Math.min : Math.max;
         const selectY = useMinB ? Math.min : Math.max;
         this.#x = selectX(this.#x, other.#x);
         this.#y = selectY(this.#y, other.#y);
+        return this;
     }
 
     /** The same as select except the other vector is the zero vector.
      *  @param {boolean} useMinA - Whether to take the minimum of the x values from both vectors.
-     *  @param {boolean} useMinB - Whether to take the minimum of the y values from both vectors. */
+     *  @param {boolean} useMinB - Whether to take the minimum of the y values from both vectors.
+     *  @returns {Vector2} The vector itself for chaining. */
     selectWithZero(useMinA, useMinB) {
         const selectX = useMinA ? Math.min : Math.max;
         const selectY = useMinB ? Math.min : Math.max;
         this.#x = selectX(this.#x, 0);
         this.#y = selectY(this.#y, 0);
+        return this;
     }
 
     /** Sets this vector's elements to the other vector's elements if the
      *  current element is 0.
-     *  @param {Vector2} other - The other vector. */
+     *  @param {Vector2} other - The other vector.
+     *  @returns {Vector2} The vector itself for chaining. */
     selectIfZero(other) {
         this.#x = (this.#x === 0) ? other.#x : this.#x;
         this.#y = (this.#y === 0) ? other.#y : this.#y;
+        return this;
     }
 
     /** Checks if both elements in the vector are zero.
@@ -241,11 +273,13 @@ class Vector2 {
      *  @returns {number} The magnitude. */
     magnitude() { return Math.sqrt(Math.pow(this.#x, 2) + Math.pow(this.#y, 2)); }
 
-    /** Normalize this vector. */
+    /** Normalize this vector.
+     *  @returns {Vector2} The vector itself for chaining. */
     normalize() {
         const norm = Math.sqrt(Math.pow(this.#x, 2) + Math.pow(this.#y, 2));
         this.#x /= norm;
         this.#y /= norm;
+        return this;
     }
 
     /** Returns the angle represented by the vector.

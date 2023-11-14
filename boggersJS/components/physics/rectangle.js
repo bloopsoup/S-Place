@@ -17,8 +17,7 @@ class Rectangle {
      *  @param {Vector2} pos - The position of the rectangle. */
     constructor(dimensions, pos) {
         this.#dimensions = dimensions;
-        this.#halfDimensions = dimensions.copy();
-        this.#halfDimensions.mulScalar(0.5);
+        this.#halfDimensions = dimensions.copy().mulScalar(0.5);
         this.#oldPos = pos;
         this.#pos = pos.copy();
     }

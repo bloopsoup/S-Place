@@ -41,10 +41,7 @@ class InputHandler {
      *  @param {Vector2} clientPos - The client position. */
     #toRealPos(clientPos) {
         const rect = this.#canvas.getBoundingClientRect();
-        const buffer = new Vector2(rect.left, rect.top);
-        clientPos.sub(buffer);
-        buffer.setBoth(this.#canvas.width / rect.width,  this.#canvas.height / rect.height);
-        clientPos.mul(buffer);
+        clientPos.sub(new Vector2(rect.left, rect.top)).mul(new Vector2(this.#canvas.width / rect.width,  this.#canvas.height / rect.height));
     }
 
     /** Add an input to the handler's currently tracked inputs. This function is used

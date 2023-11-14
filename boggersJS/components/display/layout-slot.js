@@ -46,25 +46,15 @@ class LayoutSlot {
      *      Usually smaller than the slot's dimensions.
      *  @returns {Vector2} The center offset. */
     #findCenterOffset(elementDimensions) {
-        const centerOffset = this.#dimensions.subCopy(elementDimensions);
-        centerOffset.floorDivScalar(2);
-        return centerOffset
+        return this.#dimensions.subCopy(elementDimensions).floorDivScalar(2);
     }
 
     /** Draw the elements at the slot at a position.
      *  @param {CanvasRenderingContext2D} context - The context to draw on.
      *  @param {Vector2} pos - The position to draw the element. */
     draw(context, pos) {
-        if (this.#sprite != null) {
-            const newPos = pos.addCopy(this.#offset);
-            newPos.add(this.#findCenterOffset(this.#sprite.dimensions));
-            this.#sprite.draw(context, newPos);
-        }
-        if (this.#label != null) {
-            const newPos = pos.addCopy(this.#offset);
-            newPos.add(this.#findCenterOffset(this.#label.dimensions));
-            this.#label.draw(context, newPos);
-        }
+        if (this.#sprite != null) this.#sprite.draw(context, pos.addCopy(this.#offset).add(this.#findCenterOffset(this.#sprite.dimensions)));
+        if (this.#label != null) this.#label.draw(context, pos.addCopy(this.#offset).add(this.#findCenterOffset(this.#label.dimensions)));
     }
 }
 

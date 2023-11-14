@@ -30,9 +30,8 @@ class Grid {
         return this.#grid[Math.max(Math.min(pos.y, this.#grid.length - 1), 0)][Math.max(Math.min(pos.x, this.#grid[0].length - 1), 0)]; 
     }
 
-    /** Apply a function to each element in the grid. The function signature 
-     *  should be as follows: FUNC(pos: Vector2, element: any)
-     *  @param {CallableFunction} func - The function applied to each element in the grid. 
+    /** Apply a function to each element in the grid.
+     *  @param {function(Vector2, any): void} func - The function applied to each element in the grid. 
      *  @param {boolean} useRealPos - Whether to convert the grid position into a real position.
      *  @example <caption>Using the Grid's forEach function.</caption>
      *  // Create a 2 x 2 Grid.

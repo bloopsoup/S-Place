@@ -9,15 +9,15 @@ import ColliderResult from './collider-result.js';
 class CircleCollider extends Collider {
     /** @type {number} */
     #radius
-    /** @type {number} */
+    /** @type {Vector2} */
     #offset
 
     /** Create the circle collider.
      *  @param {Rectangle} aabb - The box that the collider area will reside in. */
     constructor(aabb) {
         super(aabb);
-        this.#radius = Math.floor(aabb.dimensions.min() / 2);
-        this.#offset = Math.floor(this.#radius * Math.SQRT2);
+        this.#radius = Math.floor(aabb.halfDimensions.min());
+        this.#offset = new Vector2(this.#radius, this.#radius);
     }
 
     /** Gets the radius. 
@@ -26,20 +26,16 @@ class CircleCollider extends Collider {
 
     /** Gets the old position of the center.
      *  @returns {Vector2} The old center position. */
-    get oldCenterPos() { return this.aabb.oldPos.addCopy(new Vector2(this.#offset, this.#offset)); }
+    get oldCenterPos() { return this.aabb.oldPos.addCopy(this.#offset); }
 
     /** Gets the position of the center.
      *  @returns {Vector2} The center position. */
-    get centerPos() { return this.aabb.pos.addCopy(new Vector2(this.#offset, this.#offset)); }
+    get centerPos() { return this.aabb.pos.addCopy(this.#offset); }
 
     /** Checks whether a point collides with this circle.
      *  @param {Vector2} point - The point. 
      *  @returns {boolean} The result. */
-    collidesWithPoint(point) { 
-        const dist = this.centerPos;
-        this.centerPos.sub(point);
-        return dist.magnitude() < this.#radius;
-    }
+    collidesWithPoint(point) { return this.centerPos.sub(point).magnitude() < this.#radius; }
 
     /** Checks whether a ray collides with this circle.
      * @param {Vector2} origin - The origin of the ray. 

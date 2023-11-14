@@ -12,36 +12,21 @@ class ColliderResolver {
      *  @param {RectangleCollider} a - The first.
      *  @param {RectangleCollider} b - The second.
      *  @returns {boolean} The result. */
-    static checkRectToRectCollides(a, b) {
-        const buffer = a.aabb.pos.copy();
-        buffer.add(a.aabb.dimensions);
-        if (!b.aabb.pos.lessThan(buffer)) return false;
-        b.aabb.pos.copyTo(buffer);
-        buffer.add(b.aabb.dimensions);
-        return a.aabb.pos.lessThan(buffer);
-    }
+    static checkRectToRectCollides(a, b) { return b.aabb.pos.lessThan(a.aabb.maxPos) && a.aabb.pos.lessThan(b.aabb.maxPos); }
 
     /** Checks for a collision between two circle colliders.
      *  @param {CircleCollider} a - The first.
      *  @param {CircleCollider} b - The second.
      *  @returns {boolean} The result. */
-    static checkCircleToCircleCollides(a, b) {
-        const buffer = a.centerPos;
-        a.centerPos.sub(b.centerPos);
-        return buffer.magnitude() < a.radius + b.radius;
-    }
+    static checkCircleToCircleCollides(a, b) { return a.centerPos.sub(b.centerPos).magnitude() < a.radius + b.radius; }
 
     /** Checks for a collision between a rectangle and a circle collider.
      *  @param {RectangleCollider} a - The first. 
      *  @param {CircleCollider} b - The second.
      *  @returns {boolean} The result. */
     static checkRectToCircleCollides(a, b) {
-        const buffer = a.aabb.pos.copy();
-        buffer.add(a.aabb.dimensions);
-        buffer.select(b.centerPos, true, true);
-        buffer.select(a.aabb.pos, false, false);
-        buffer.sub(b.centerPos);
-        return buffer.magnitude() < b.radius;
+        const distance = a.aabb.pos.addCopy(a.aabb.dimensions).select(b.centerPos, true, true).select(a.aabb.pos, false, false).sub(b.centerPos).magnitude();
+        return distance < b.radius;
     }
 
     /** Finds an MTV to resolve collision between two rectangle colliders.
@@ -50,12 +35,7 @@ class ColliderResolver {
      *  @returns {Vector2} The minimum translation vector to apply to A. */
     static findRectToRectMTV(a, b) {
         if (!this.checkRectToRectCollides(a, b)) return new Vector2(0, 0);
-
-        const buffer = a.aabb.pos.addCopy(a.aabb.dimensions);
-        buffer.select(b.aabb.pos.addCopy(b.aabb.dimensions), true, true);
-        const buffer2 = a.aabb.pos.copy();
-        buffer2.select(b.aabb.pos, false, false);
-        const overlap = buffer.subCopy(buffer2);
+        const overlap = a.aabb.maxPos.select(b.aabb.maxPos, true, true).sub(a.aabb.pos.copy().select(b.aabb.pos, false, false));
 
         if (overlap.x < overlap.y) return a.aabb.pos.x < b.aabb.pos.x ? new Vector2(-overlap.x, 0) : new Vector2(overlap.x, 0);
         else return a.aabb.pos.y < b.aabb.pos.y ? new Vector2(0, -overlap.y) : new Vector2(0, overlap.y);
@@ -68,14 +48,9 @@ class ColliderResolver {
     static findCircleToCircleMTV(a, b) {
         if (!this.checkCircleToCircleCollides(a, b)) return new Vector2(0, 0);
 
-        const buffer = a.centerPos;
-        a.centerPos.sub(b.centerPos);
-
-        const distance = buffer.magnitude();
-        buffer.normalize();
-        buffer.mulScalar(a.radius + b.radius - distance);
-
-        return buffer;
+        const mtv = a.centerPos.sub(b.centerPos);
+        const distance = mtv.magnitude();
+        return mtv.normalize().mulScalar(a.radius + b.radius - distance);
     }
 
     /** Finds an MTV to resolve collision between a rectangle and circle collider.
@@ -85,18 +60,11 @@ class ColliderResolver {
     static findRectToCircleMTV(a, b) {
         if (!this.checkRectToCircleCollides(a, b)) return new Vector2(0, 0);
 
-        const buffer = a.aabb.pos.copy();
-        buffer.add(a.aabb.dimensions);
-        buffer.select(b.centerPos, true, true);
-        buffer.select(a.aabb.pos, false, false);
-        buffer.sub(b.centerPos);
+        const mtv = a.aabb.pos.addCopy(a.aabb.dimensions).select(b.centerPos, true, true).select(a.aabb.pos, false, false).sub(b.centerPos);
+        const distance = mtv.magnitude();
 
-        const distance = buffer.magnitude();
-        buffer.normalize();
-        // If you want to apply it to the circle, negate this
-        buffer.mulScalar(distance - b.radius);
-        
-        return buffer;
+        // If you want to apply it to a circle, negate the scalar
+        return mtv.normalize().mulScalar(distance - b.radius);
     }
 }
 

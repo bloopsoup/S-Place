@@ -51,24 +51,19 @@ class Mover {
      *  if the direction is (1, 0), only the velocity's x will increase positively.
      *  @param {Vector2} dir - A Vector2 whose elements are in {-1, 0, 1}. */
     incrementVelocity(dir) { 
-        const buffer = this.#acceleration.copy();
-        buffer.mul(dir);
-        this.#velocity.add(buffer);
-        this.#maxSpeed.copyTo(buffer);
-        buffer.mul(dir);
-        buffer.selectIfZero(this.#velocity);
-        this.#velocity.select(buffer, dir.x > 0, dir.y > 0);
+        const delta = this.#acceleration.copy().mul(dir);
+        this.#velocity.add(delta);
+        const clamp = this.#maxSpeed.copy().mul(dir).selectIfZero(this.#velocity);
+        this.#velocity.select(clamp, dir.x > 0, dir.y > 0);
     }
 
     /** Decrement the velocity so that the chosen axis velocity goes to 0.
      *  @param {number} axis - The velocity axis to zero out. Is in {0, 1, 2}. */
     decrementVelocity(axis) {
-        const buffer = new Vector2(-Math.sign(this.#velocity.x) * ((axis === 0 || axis === 2) ? 1 : 0),
+        const delta = new Vector2(-Math.sign(this.#velocity.x) * ((axis === 0 || axis === 2) ? 1 : 0),
                                    -Math.sign(this.#velocity.y) * ((axis === 1 || axis === 2) ? 1 : 0));
-        buffer.mul(this.#deceleration);
-        buffer.add(this.#velocity);
-        buffer.selectWithZero(this.#velocity.x < 0, this.#velocity.y < 0);
-        buffer.copyTo(this.#velocity);
+        delta.mul(this.#deceleration).add(this.#velocity).selectWithZero(this.#velocity.x < 0, this.#velocity.y < 0);
+        delta.copyTo(this.#velocity);
     }
 }
 
