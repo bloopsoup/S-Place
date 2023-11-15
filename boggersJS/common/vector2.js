@@ -286,6 +286,11 @@ class Vector2 {
      *  @returns {number} The angle in radians. */
     toAngle() { return Math.atan2(this.#y, this.#x); }
 
+    /** Calculate the dot product between this and the other vector.
+     *  @param {Vector2} other - The other vector. 
+     *  @returns {number} The dot product. */
+    dotProduct(other) { return (this.#x * other.#x) + (this.#y * other.#y); }
+
     /** Blend this vector with another. A convenience function used for interpolation.
      *  @param {Vector2} other - The other vector.
      *  @param {number} alpha - The blending factor which is in [0, 1].

@@ -24,7 +24,7 @@ class Collider {
 
     /** Checks whether a ray collides with this collider.
      * @param {Vector2} origin - The origin of the ray. 
-     * @param {Vector2} direction - The direction of the ray.
+     * @param {Vector2} direction - The direction of the ray (brings origin to end).
      * @returns {ColliderResult | null} The result or null if no hit. */
     collidesWithRay(origin, direction) { throw new Error('Implement!'); }
 }

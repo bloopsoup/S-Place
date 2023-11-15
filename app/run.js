@@ -37,7 +37,7 @@ async function run() {
     });
 
     /** Write your state class names along with a starting state here. */
-    const start = 'test';
+    const start = 'test-colliders';
     const states = {
         'test': Test,
         'test-colliders': TestColliders

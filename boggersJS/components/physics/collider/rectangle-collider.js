@@ -18,7 +18,7 @@ class RectangleCollider extends Collider {
 
     /** Checks whether a ray collides with this rectangle.
      *  @param {Vector2} origin - The origin of the ray. 
-     *  @param {Vector2} direction - The direction of the ray.
+     *  @param {Vector2} direction - The direction of the ray (brings origin to end).
      *  @returns {ColliderResult | null} The result or null if no hit. */
     collidesWithRay(origin, direction) {
         const aabbMaxPos = this.aabb.maxPos;
@@ -42,7 +42,7 @@ class RectangleCollider extends Collider {
         const contactPoint = direction.copy().mulScalar(tEntry).add(origin);
         const delta = contactPoint.subCopy(this.aabb.centerPos);
         const p = this.aabb.halfDimensions.subCopy(delta.absCopy());
-        let contactNormal = new Vector2(
+        const contactNormal = new Vector2(
             p.x < p.y ? Math.sign(delta.x) : 0, 
             p.x >= p.y ? Math.sign(delta.y) : 0
         );
