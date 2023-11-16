@@ -55,9 +55,18 @@ class Rectangle {
      *  @return {Vector2} The position of the bottom right corner. */
     get maxPos() { return this.#pos.addCopy(this.#dimensions); }
 
+    /** Gets the implicit velocity of the rectangle, found as the difference
+     *  between the current and old positions.
+     *  @return {Vector2} The implicit velocity. */
+    get implicitVelocity() { return this.#pos.subCopy(this.#oldPos); }
+
     /** Sets the position.
      *  @param {Vector2} pos - The new position. */
-    set pos(pos) {
+    set pos(pos) { pos.copyTo(this.#pos); }
+
+    /** Update the old position and move the current position.
+     *  @param {Vector2} pos - The new position. */
+    movePos(pos) {
         this.#pos.copyTo(this.#oldPos);
         pos.copyTo(this.#pos);
     }

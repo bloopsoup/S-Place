@@ -194,6 +194,14 @@ class Vector2 {
      *  @returns {Vector2} The result. */
     floorDivCopy(other) { return new Vector2(Math.floor(this.#x / other.#x), Math.floor(this.#y / other.#y)); }
 
+    /** Take the absolute values of the vector.
+     *  @returns {Vector2} The vector itself for chaining. */
+    abs() {
+        this.#x = Math.abs(this.#x);
+        this.#y = Math.abs(this.#y);
+        return this;
+    }
+
     /** Make a copy and take the absolute values.
      *  @returns {Vector2} The result. */
     absCopy() { return new Vector2(Math.abs(this.#x), Math.abs(this.#y)); }
