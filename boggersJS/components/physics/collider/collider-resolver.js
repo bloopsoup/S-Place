@@ -22,11 +22,11 @@ class ColliderResolver {
      *  @returns {ColliderResult | null} The result. */
     static checkSweptRectToRectCollides(a, b) {
         // Assume A is moving
-        const relativeVelocity = b.aabb.implicitVelocity.sub(a.aabb.implicitVelocity);
+        const relativeVelocity = a.aabb.implicitVelocity.sub(b.aabb.implicitVelocity);
         if (relativeVelocity.isZero()) return null;
 
         const expandedRectangle = new RectangleCollider(new Rectangle(a.aabb.dimensions.addCopy(b.aabb.dimensions), b.aabb.pos.subCopy(a.aabb.halfDimensions)));    
-        return expandedRectangle.collidesWithRay(a.aabb.centerPos, relativeVelocity);
+        return expandedRectangle.collidesWithRay(a.aabb.oldCenterPos, relativeVelocity);
     }
 
     /** Finds an MTV to resolve collision between two rectangle colliders.
@@ -47,12 +47,9 @@ class ColliderResolver {
      *  @returns {Vector2} The minimum translation vector to apply to A. */
     static findSweptRectToRectMTV(a, b) {
         const result = this.checkSweptRectToRectCollides(a, b);
-        if (result == null) return new Vector2(0, 0);
-
-        const overlap = a.aabb.halfDimensions.subCopy(result.contactPoint.subCopy(a.aabb.centerPos).abs());
-        const relativeVelocity = b.aabb.implicitVelocity.sub(a.aabb.implicitVelocity).mulScalar(result.hitTime);
-        if (relativeVelocity.dotProduct(result.contactNormal) < 0) overlap.sub(relativeVelocity);
-        return new Vector2(overlap.x < overlap.y ? overlap.x * result.contactNormal.x : 0, overlap.x >= overlap.y ? overlap.y * result.contactNormal.y : 0);
+        // Try a static test if sweep fails
+        if (result == null) return this.findRectToRectMTV(a, b);
+        return result.contactPoint.subCopy(a.aabb.centerPos);
     }
 
     /** Checks for a collision between two circle colliders.

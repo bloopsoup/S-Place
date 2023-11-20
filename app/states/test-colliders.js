@@ -79,7 +79,6 @@ class TestColliders extends State {
         context.strokeStyle = 'Green';
         if (this.rectColliderResult) {
             context.strokeStyle = 'Red';
-
             context.fillRect(this.rectColliderResult.contactPoint.x, this.rectColliderResult.contactPoint.y, 10, 10);
             
             context.beginPath();
@@ -87,8 +86,8 @@ class TestColliders extends State {
             const normalLine = this.rectColliderResult.contactPoint.addCopy(this.rectColliderResult.contactNormal.mulCopy(new Vector2(30, 30)));
             context.lineTo(normalLine.x, normalLine.y);
             context.stroke();
-            // const newPos = this.endCollider.aabb.pos.addCopy(this.rectColliderMTV);
-            // context.strokeRect(newPos.x, newPos.y, this.endCollider.aabb.dimensions.x, this.endCollider.aabb.dimensions.y);
+            const newPos = this.endCollider.aabb.pos.addCopy(this.rectColliderMTV);
+            context.strokeRect(newPos.x, newPos.y, this.endCollider.aabb.dimensions.x, this.endCollider.aabb.dimensions.y);
         }
         context.strokeRect(this.rectCollider1.aabb.pos.x, this.rectCollider1.aabb.pos.y, this.rectCollider1.aabb.dimensions.x, this.rectCollider1.aabb.dimensions.y);
     }
