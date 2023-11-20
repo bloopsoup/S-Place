@@ -1,6 +1,6 @@
 import { Vector2 } from '../../common/index.js';
 
-/** A rectangle that bundles position and dimension data.
+/** A rectangle that bundles position, dimension, and velocity.
  *  @memberof Components.Physics */
 class Rectangle {
     /** @type {Vector2} */
@@ -8,18 +8,22 @@ class Rectangle {
     /** @type {Vector2} */
     #halfDimensions
     /** @type {Vector2} */
-    #oldPos
+    #prevPos
     /** @type {Vector2} */
     #pos
+    /** @type {Vector2} */
+    #velocity
 
     /** Create the rectangle.
      *  @param {Vector2} dimensions - The dimensions of the rectangle. 
-     *  @param {Vector2} pos - The position of the rectangle. */
-    constructor(dimensions, pos) {
+     *  @param {Vector2} pos - The position of the rectangle.
+     *  @param {Vector2} velocity - The initial velocity of the rectangle. */
+    constructor(dimensions, pos, velocity = new Vector2(0, 0)) {
         this.#dimensions = dimensions;
         this.#halfDimensions = dimensions.copy().mulScalar(0.5);
-        this.#oldPos = pos;
+        this.#prevPos = pos;
         this.#pos = pos.copy();
+        this.#velocity = velocity;
     }
 
     /** Get the dimensions.
@@ -30,57 +34,56 @@ class Rectangle {
      *  @return {Vector2} The half-dimensions. */
     get halfDimensions() { return this.#halfDimensions; }
 
-    /** Get the old position. This is used with the current position
-     *  to calculate direction, making it useful for tile-based collisions.
-     *  @return {Vector2} The old position. */
-    get oldPos() { return this.#oldPos; }
+    /** Get the previous position. This is solely used for interpolation
+     *  in rendering graphics.
+     *  @return {Vector2} The previous position. */
+    get prevPos() { return this.#prevPos; }
 
     /** Get the current position.
      *  @return {Vector2} The current position. */
     get pos() { return this.#pos; }
 
-    /** Get the old center of the rectangle.
-     *  @return {Vector2} The old center. */
-    get oldCenterPos() { return this.#oldPos.addCopy(this.#halfDimensions); }
-
     /** Get the center of the rectangle.
      *  @return {Vector2} The center. */
     get centerPos() { return this.#pos.addCopy(this.#halfDimensions); }
-
-    /** Get the old position of the rectangle's bottom right corner.
-     *  @return {Vector2} The old position of the bottom right corner. */
-    get oldMaxPos() { return this.#oldPos.addCopy(this.#dimensions); }
 
     /** Get the position of the rectangle's bottom right corner.
      *  @return {Vector2} The position of the bottom right corner. */
     get maxPos() { return this.#pos.addCopy(this.#dimensions); }
 
-    /** Gets the implicit velocity of the rectangle, found as the difference
-     *  between the current and old positions.
-     *  @return {Vector2} The implicit velocity. */
-    get implicitVelocity() { return this.#pos.subCopy(this.#oldPos); }
+    /** Gets the next position.
+     *  @returns {Vector2} The next position. */
+    get nextPos() { return this.#pos.addCopy(this.#velocity); }
+
+    /** Gets the next center position.
+     *  @returns {Vector2} The next center position. */
+    get nextCenterPos() { return this.nextPos.add(this.#halfDimensions); }
+
+    /** Gets the rectangle's velocity.
+     *  This is the endpoint that the MOVER operates on.
+     *  @returns {Vector2} The velocity. */
+    get velocity() { return this.#velocity; }
 
     /** Sets the position.
      *  @param {Vector2} pos - The new position. */
     set pos(pos) { pos.copyTo(this.#pos); }
 
-    /** Update the old position and move the current position.
+    /** Update the previous position and move the current position.
      *  @param {Vector2} pos - The new position. */
     movePos(pos) {
-        this.#pos.copyTo(this.#oldPos);
+        this.#pos.copyTo(this.#prevPos);
         pos.copyTo(this.#pos);
     }
 
-    /** Update the old position and increment the current position.
-     *  @param {Vector2} pos - The increment. */
-    incrementPos(pos) {
-        this.#pos.copyTo(this.#oldPos);
-        this.#pos.add(pos); 
+    /** Update the previous position and increment the current position by the current velocity. */
+    incrementPos() {
+        this.#pos.copyTo(this.#prevPos);
+        this.#pos.add(this.#velocity); 
     }
 
     /** Gets the interpolated position.
      *  @param {number} alpha - Used for interpolation when rendering between two states. */
-    interpolatePos(alpha) { return this.#oldPos.blend(this.#pos, alpha); }
+    interpolatePos(alpha) { return this.#prevPos.blend(this.#pos, alpha); }
 }
 
 export default Rectangle;

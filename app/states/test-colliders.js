@@ -35,7 +35,7 @@ class TestColliders extends State {
     update(inputs) {
         if (inputs.has('MouseMove')) {
             inputs.get('MouseMove').pos.copyTo(this.end);
-            inputs.get('MouseMove').pos.copyTo(this.endCollider.aabb.pos);
+            inputs.get('MouseMove').pos.subCopy(this.endCollider.aabb.pos).copyTo(this.endCollider.aabb.velocity);
         }
         
         if (inputs.consumeInput('w')) this.origin.addToY(-10);
@@ -45,7 +45,7 @@ class TestColliders extends State {
         if (inputs.consumeInput('m')) this.currentMode = (this.currentMode + 1) % this.modes.length;
 
         // Reset results
-        this.origin.copyTo(this.endCollider.aabb.oldPos);
+        this.origin.copyTo(this.endCollider.aabb.pos);
         this.rectColliderResult = null;
         this.rectColliderMTV = null;
         this.circleColliderResult = null;
@@ -65,11 +65,11 @@ class TestColliders extends State {
     drawRectangle(context) {
         context.strokeStyle = 'Black';
         context.beginPath();
-        context.moveTo(this.endCollider.aabb.oldCenterPos.x, this.endCollider.aabb.oldCenterPos.y);
-        context.lineTo(this.endCollider.aabb.centerPos.x, this.endCollider.aabb.centerPos.y);
+        context.moveTo(this.endCollider.aabb.centerPos.x, this.endCollider.aabb.centerPos.y);
+        context.lineTo(this.endCollider.aabb.nextCenterPos.x, this.endCollider.aabb.nextCenterPos.y);
         context.stroke();
-        context.strokeRect(this.endCollider.aabb.oldPos.x, this.endCollider.aabb.oldPos.y, this.endCollider.aabb.dimensions.x, this.endCollider.aabb.dimensions.y);
         context.strokeRect(this.endCollider.aabb.pos.x, this.endCollider.aabb.pos.y, this.endCollider.aabb.dimensions.x, this.endCollider.aabb.dimensions.y);
+        context.strokeRect(this.endCollider.aabb.nextPos.x, this.endCollider.aabb.nextPos.y, this.endCollider.aabb.dimensions.x, this.endCollider.aabb.dimensions.y);
     }
 
     /** Draws the colliders in relation to the testing rectangle.
@@ -77,7 +77,7 @@ class TestColliders extends State {
     drawCollidersToRectangle(context) {
         // Draw the rectangle WITH collision information if available
         context.strokeStyle = 'Green';
-        if (this.rectColliderResult) {
+        if (this.rectColliderResult && this.rectColliderMTV) {
             context.strokeStyle = 'Red';
             context.fillRect(this.rectColliderResult.contactPoint.x, this.rectColliderResult.contactPoint.y, 10, 10);
             
@@ -86,7 +86,7 @@ class TestColliders extends State {
             const normalLine = this.rectColliderResult.contactPoint.addCopy(this.rectColliderResult.contactNormal.mulCopy(new Vector2(30, 30)));
             context.lineTo(normalLine.x, normalLine.y);
             context.stroke();
-            const newPos = this.endCollider.aabb.pos.addCopy(this.rectColliderMTV);
+            const newPos = this.endCollider.aabb.nextPos.addCopy(this.rectColliderMTV);
             context.strokeRect(newPos.x, newPos.y, this.endCollider.aabb.dimensions.x, this.endCollider.aabb.dimensions.y);
         }
         context.strokeRect(this.rectCollider1.aabb.pos.x, this.rectCollider1.aabb.pos.y, this.rectCollider1.aabb.dimensions.x, this.rectCollider1.aabb.dimensions.y);

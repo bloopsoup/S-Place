@@ -22,11 +22,11 @@ class ColliderResolver {
      *  @returns {ColliderResult | null} The result. */
     static checkSweptRectToRectCollides(a, b) {
         // Assume A is moving
-        const relativeVelocity = a.aabb.implicitVelocity.sub(b.aabb.implicitVelocity);
+        const relativeVelocity = a.aabb.velocity.subCopy(b.aabb.velocity);
         if (relativeVelocity.isZero()) return null;
 
         const expandedRectangle = new RectangleCollider(new Rectangle(a.aabb.dimensions.addCopy(b.aabb.dimensions), b.aabb.pos.subCopy(a.aabb.halfDimensions)));    
-        return expandedRectangle.collidesWithRay(a.aabb.oldCenterPos, relativeVelocity);
+        return expandedRectangle.collidesWithRay(a.aabb.centerPos, relativeVelocity);
     }
 
     /** Finds an MTV to resolve collision between two rectangle colliders.
@@ -49,7 +49,7 @@ class ColliderResolver {
         const result = this.checkSweptRectToRectCollides(a, b);
         // Try a static test if sweep fails
         if (result == null) return this.findRectToRectMTV(a, b);
-        return result.contactPoint.subCopy(a.aabb.centerPos);
+        return result.contactPoint.subCopy(a.aabb.nextCenterPos);
     }
 
     /** Checks for a collision between two circle colliders.

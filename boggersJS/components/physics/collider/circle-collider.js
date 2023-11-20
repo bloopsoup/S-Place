@@ -24,10 +24,6 @@ class CircleCollider extends Collider {
      *  @returns {number} The radius. */
     get radius() { return this.#radius; }
 
-    /** Gets the old position of the center.
-     *  @returns {Vector2} The old center position. */
-    get oldCenterPos() { return this.aabb.oldPos.addCopy(this.#offset); }
-
     /** Gets the position of the center.
      *  @returns {Vector2} The center position. */
     get centerPos() { return this.aabb.pos.addCopy(this.#offset); }
