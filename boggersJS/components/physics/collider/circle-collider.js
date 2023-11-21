@@ -28,6 +28,10 @@ class CircleCollider extends Collider {
      *  @returns {Vector2} The center position. */
     get centerPos() { return this.aabb.pos.addCopy(this.#offset); }
 
+    /** Gets the next position of the center.
+     *  @returns {Vector2} The center position. */
+    get nextCenterPos() { return this.aabb.nextPos.addCopy(this.#offset); }
+
     /** Checks whether a point collides with this circle.
      *  @param {Vector2} point - The point. 
      *  @returns {boolean} The result. */
