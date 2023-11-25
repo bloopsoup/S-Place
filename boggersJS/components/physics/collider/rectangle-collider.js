@@ -21,13 +21,15 @@ class RectangleCollider extends Collider {
      *  @param {Vector2} direction - The direction of the ray (brings origin to end).
      *  @returns {ColliderResult | null} The result or null if no hit. */
     collidesWithRay(origin, direction) {
-        const aabbMaxPos = this.aabb.maxPos;
+        const pos = this.aabb.pos;
+        const centerPos = this.aabb.centerPos;
+        const maxPos = this.aabb.maxPos;
     
         // Find potential entry and exit points for the ray
-        const t1 = this.aabb.pos.subCopy(origin).div(direction);
+        const t1 = this.aabb.pos.sub(origin).div(direction);
         const t2 = this.aabb.maxPos.sub(origin).div(direction);
-        if (direction.x === 0 && (origin.x <= this.aabb.pos.x || origin.x >= aabbMaxPos.x)) return null;
-        if (direction.y === 0 && (origin.y <= this.aabb.pos.y || origin.y >= aabbMaxPos.y)) return null;
+        if (direction.x === 0 && (origin.x <= pos.x || origin.x >= maxPos.x)) return null;
+        if (direction.y === 0 && (origin.y <= pos.y || origin.y >= maxPos.y)) return null;
         
         const tmp = t1.copy();
         t1.select(t2, true, true);
@@ -40,8 +42,8 @@ class RectangleCollider extends Collider {
 
         // Calculate hit information
         const contactPoint = direction.copy().mulScalar(tEntry).add(origin);
-        const delta = contactPoint.subCopy(this.aabb.centerPos);
-        const p = this.aabb.halfDimensions.subCopy(delta.absCopy());
+        const delta = contactPoint.subCopy(centerPos);
+        const p = this.aabb.halfDimensions.sub(delta.absCopy());
         const contactNormal = new Vector2(
             p.x < p.y ? Math.sign(delta.x) : 0, 
             p.x >= p.y ? Math.sign(delta.y) : 0

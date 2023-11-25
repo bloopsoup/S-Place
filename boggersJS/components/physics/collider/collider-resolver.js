@@ -21,12 +21,12 @@ class ColliderResolver {
      *  @param {RectangleCollider} b - The second.
      *  @returns {ColliderResult | null} The result. */
     static checkSweptRectToRectCollides(a, b) {
-        const relativeVelocity = a.aabb.velocity.subCopy(b.aabb.velocity);
+        const relativeVelocity = a.aabb.velocity.sub(b.aabb.velocity);
         if (relativeVelocity.isZero()) return null;
 
         const expandedRectangle = new RectangleCollider(new Rectangle(
-            a.aabb.dimensions.addCopy(b.aabb.dimensions), 
-            b.aabb.pos.subCopy(a.aabb.halfDimensions)
+            a.aabb.dimensions.add(b.aabb.dimensions), 
+            b.aabb.pos.sub(a.aabb.halfDimensions)
         ));
         return expandedRectangle.collidesWithRay(a.aabb.centerPos, relativeVelocity);
     }
@@ -36,14 +36,17 @@ class ColliderResolver {
      *  @param {RectangleCollider} b - The second.
      *  @returns {Vector2} The minimum translation vector to apply to A. */
     static findRectToRectMTV(a, b) {
+        const aPos = a.aabb.pos;
+        const bPos = b.aabb.pos;
+        const bMaxPos = b.aabb.maxPos;
+
         if (!this.checkRectToRectCollides(a, b)) return new Vector2(0, 0);
         const overlap = a.aabb.maxPos
-            .select(b.aabb.maxPos, true, true)
-            .sub(a.aabb.pos.copy()
-            .select(b.aabb.pos, false, false));
+            .select(bMaxPos, true, true)
+            .sub(a.aabb.pos.select(bPos, false, false));
 
-        if (overlap.x < overlap.y) return a.aabb.pos.x < b.aabb.pos.x ? new Vector2(-overlap.x, 0) : new Vector2(overlap.x, 0);
-        else return a.aabb.pos.y < b.aabb.pos.y ? new Vector2(0, -overlap.y) : new Vector2(0, overlap.y);
+        if (overlap.x < overlap.y) return aPos.x < bPos.x ? new Vector2(-overlap.x, 0) : new Vector2(overlap.x, 0);
+        else return aPos.y < bPos.y ? new Vector2(0, -overlap.y) : new Vector2(0, overlap.y);
     }
 
     /** Finds an MTV to resolve collision between two MOVING rectangle colliders.
@@ -55,28 +58,28 @@ class ColliderResolver {
         if (!mtv.isZero()) return mtv;
 
         const result = this.checkSweptRectToRectCollides(a, b);
-        return result ? result.contactPoint.subCopy(a.aabb.centerPos) : new Vector2(0, 0);
+        return result ? result.contactPoint.sub(a.aabb.centerPos) : new Vector2(0, 0);
     }
 
     /** Checks for a collision between two circle colliders.
      *  @param {CircleCollider} a - The first.
      *  @param {CircleCollider} b - The second.
      *  @returns {boolean} The result. */
-    static checkCircleToCircleCollides(a, b) { return a.centerPos.sub(b.centerPos).magnitude() < a.radius + b.radius; }
+    static checkCircleToCircleCollides(a, b) { return a.aabb.centerPos.sub(b.aabb.centerPos).magnitude() < a.radius + b.radius; }
 
     /** Checks for a collision between two MOVING circle colliders.
      *  @param {CircleCollider} a - The first (treated as moving).
      *  @param {CircleCollider} b - The second.
      *  @returns {ColliderResult | null} The result. */
     static checkSweptCircleToCircleCollides(a, b) {
-        const relativeVelocity = a.aabb.velocity.subCopy(b.aabb.velocity);
+        const relativeVelocity = a.aabb.velocity.sub(b.aabb.velocity);
         if (relativeVelocity.isZero()) return null;
 
         const expandedCircle = new CircleCollider(new Rectangle(
-            a.aabb.dimensions.addCopy(b.aabb.dimensions), 
-            b.aabb.pos.subCopy(a.aabb.halfDimensions)
+            a.aabb.dimensions.add(b.aabb.dimensions),
+            b.aabb.pos.sub(a.aabb.halfDimensions)
         ));
-        return expandedCircle.collidesWithRay(a.centerPos, relativeVelocity);
+        return expandedCircle.collidesWithRay(a.aabb.centerPos, relativeVelocity);
     }
 
     /** Finds an MTV to resolve collision between two circle colliders.
@@ -86,7 +89,7 @@ class ColliderResolver {
     static findCircleToCircleMTV(a, b) {
         if (!this.checkCircleToCircleCollides(a, b)) return new Vector2(0, 0);
 
-        const mtv = a.centerPos.sub(b.centerPos);
+        const mtv = a.aabb.centerPos.sub(b.aabb.centerPos);
         const distance = mtv.magnitude();
         return mtv.normalize().mulScalar(a.radius + b.radius - distance);
     }
@@ -100,7 +103,7 @@ class ColliderResolver {
         if (!mtv.isZero()) return mtv;
 
         const result = this.checkSweptCircleToCircleCollides(a, b);
-        return result ? result.contactPoint.subCopy(a.centerPos) : new Vector2(0, 0);
+        return result ? result.contactPoint.subCopy(a.aabb.centerPos) : new Vector2(0, 0);
     }
 
     /** Checks for a collision between a rectangle and a circle collider.
@@ -108,11 +111,12 @@ class ColliderResolver {
      *  @param {CircleCollider} b - The second.
      *  @returns {boolean} The result. */
     static checkRectToCircleCollides(a, b) {
+        const bCenterPos = b.aabb.centerPos;
         const distance = a.aabb.pos
             .addCopy(a.aabb.dimensions)
-            .select(b.centerPos, true, true)
+            .select(bCenterPos, true, true)
             .select(a.aabb.pos, false, false)
-            .sub(b.centerPos)
+            .sub(bCenterPos)
             .magnitude();
         return distance < b.radius;
     }
@@ -122,12 +126,13 @@ class ColliderResolver {
      * @param {CircleCollider} b - The second.
      * @returns {Vector2} The minimum translation vector to apply to A. */
     static findRectToCircleMTV(a, b) {
+        const bCenterPos = b.aabb.centerPos;
         if (!this.checkRectToCircleCollides(a, b)) return new Vector2(0, 0);
 
-        const mtv = a.aabb.pos.addCopy(a.aabb.dimensions)
-            .select(b.centerPos, true, true)
+        const mtv = a.aabb.pos.add(a.aabb.dimensions)
+            .select(bCenterPos, true, true)
             .select(a.aabb.pos, false, false)
-            .sub(b.centerPos);
+            .sub(bCenterPos);
         const distance = mtv.magnitude();
 
         // If you want to apply it to a circle, negate the scalar

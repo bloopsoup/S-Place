@@ -269,13 +269,21 @@ class Vector2 {
         return this;
     }
 
+    /** Checks if any element in the vector is zero.
+     *  @returns {boolean} The result. */
+    isPartZero() { return this.#x === 0 || this.#y === 0; }
+
     /** Checks if both elements in the vector are zero.
      *  @returns {boolean} The result. */
     isZero() { return this.#x === 0 && this.#y === 0; }
 
-    /** Checks if either element in the vector is negative.
+    /** Checks if any element in the vector is negative.
+     *  @returns {boolean} The result. */
+    isPartNegative() { return this.#x < 0 || this.#y < 0; }
+
+    /** Checks if both elements in the vector are negative.
      *  @return {boolean} The result. */
-    isNegative() { return this.#x < 0 || this.#y < 0; }
+    isNegative() { return this.#x < 0 && this.#y < 0; }
 
     /** Gets the vector's magnitude.
      *  @returns {number} The magnitude. */

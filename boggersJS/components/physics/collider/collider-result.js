@@ -22,11 +22,11 @@ class ColliderResult {
 
     /** Gets the contact point. 
      *  @returns {Vector2} The contact point. */
-    get contactPoint() { return this.#contactPoint; }
+    get contactPoint() { return this.#contactPoint.copy(); }
 
     /** Gets the contact normal. 
      *  @returns {Vector2} The normal. */
-    get contactNormal() { return this.#contactNormal; }
+    get contactNormal() { return this.#contactNormal.copy(); }
 
     /** Gets the hit time.
      *  @returns {number} The hit time. */

@@ -36,9 +36,9 @@ class TestColliders extends State {
      *  @param {InputTracker} inputs - The currently tracked inputs. */
     update(inputs) {
         if (inputs.has('MouseMove')) {
-            inputs.get('MouseMove').pos.copyTo(this.end);
-            inputs.get('MouseMove').pos.subCopy(this.endCollider.aabb.pos).copyTo(this.endCollider.aabb.velocity);
-            inputs.get('MouseMove').pos.subCopy(this.endCircleCollider.aabb.pos).copyTo(this.endCircleCollider.aabb.velocity);
+            this.end = inputs.get('MouseMove').pos.copy();
+            this.endCollider.aabb.velocity = inputs.get('MouseMove').pos.subCopy(this.endCollider.aabb.pos);
+            this.endCircleCollider.aabb.velocity = inputs.get('MouseMove').pos.subCopy(this.endCircleCollider.aabb.pos);
         }
         
         if (inputs.consumeInput('w')) this.origin.addToY(-10);
@@ -48,8 +48,8 @@ class TestColliders extends State {
         if (inputs.consumeInput('m')) this.currentMode = (this.currentMode + 1) % this.modes.length;
 
         // Reset results
-        this.origin.copyTo(this.endCollider.aabb.pos);
-        this.origin.copyTo(this.endCircleCollider.aabb.pos);
+        this.endCollider.aabb.pos = this.origin.copy();
+        this.endCircleCollider.aabb.pos = this.origin.copy();
         this.rectColliderResult = null;
         this.rectColliderMTV = null;
         this.circleColliderResult = null;
@@ -73,14 +73,14 @@ class TestColliders extends State {
     drawCircle(context) {
         context.strokeStyle = 'Black';
         context.beginPath();
-        context.moveTo(this.endCircleCollider.centerPos.x, this.endCircleCollider.centerPos.y);
-        context.lineTo(this.endCircleCollider.nextCenterPos.x, this.endCircleCollider.nextCenterPos.y);
+        context.moveTo(this.endCircleCollider.aabb.centerPos.x, this.endCircleCollider.aabb.centerPos.y);
+        context.lineTo(this.endCircleCollider.aabb.nextCenterPos.x, this.endCircleCollider.aabb.nextCenterPos.y);
         context.stroke();
         context.beginPath();
-        context.arc(this.endCircleCollider.centerPos.x, this.endCircleCollider.centerPos.y, this.endCircleCollider.radius, 0, 2 * Math.PI);
+        context.arc(this.endCircleCollider.aabb.centerPos.x, this.endCircleCollider.aabb.centerPos.y, this.endCircleCollider.radius, 0, 2 * Math.PI);
         context.stroke();
         context.beginPath();
-        context.arc(this.endCircleCollider.nextCenterPos.x, this.endCircleCollider.nextCenterPos.y, this.endCircleCollider.radius, 0, 2 * Math.PI);
+        context.arc(this.endCircleCollider.aabb.nextCenterPos.x, this.endCircleCollider.aabb.nextCenterPos.y, this.endCircleCollider.radius, 0, 2 * Math.PI);
         context.stroke();
     }
 
@@ -95,16 +95,16 @@ class TestColliders extends State {
 
             context.beginPath();
             context.moveTo(this.circleColliderResult.contactPoint.x, this.circleColliderResult.contactPoint.y);
-            const normalLine = this.circleColliderResult.contactPoint.addCopy(this.circleColliderResult.contactNormal.mulCopy(new Vector2(30, 30)));
+            const normalLine = this.circleColliderResult.contactPoint.add(this.circleColliderResult.contactNormal.mul(new Vector2(30, 30)));
             context.lineTo(normalLine.x, normalLine.y);
             context.stroke();
-            const newPos = this.endCircleCollider.aabb.centerPos.addCopy(this.circleColliderMTV);
+            const newPos = this.endCircleCollider.aabb.centerPos.add(this.circleColliderMTV);
             context.beginPath();
             context.arc(newPos.x, newPos.y, this.endCircleCollider.radius, 0, 2 * Math.PI);
             context.stroke();
         }
         context.beginPath();
-        context.arc(this.circleCollider1.centerPos.x, this.circleCollider1.centerPos.y, this.circleCollider1.radius, 0, 2 * Math.PI);
+        context.arc(this.circleCollider1.aabb.centerPos.x, this.circleCollider1.aabb.centerPos.y, this.circleCollider1.radius, 0, 2 * Math.PI);
         context.stroke();
     }
 
@@ -131,10 +131,10 @@ class TestColliders extends State {
             
             context.beginPath();
             context.moveTo(this.rectColliderResult.contactPoint.x, this.rectColliderResult.contactPoint.y);
-            const normalLine = this.rectColliderResult.contactPoint.addCopy(this.rectColliderResult.contactNormal.mulCopy(new Vector2(30, 30)));
+            const normalLine = this.rectColliderResult.contactPoint.add(this.rectColliderResult.contactNormal.mul(new Vector2(30, 30)));
             context.lineTo(normalLine.x, normalLine.y);
             context.stroke();
-            const newPos = this.endCollider.aabb.pos.addCopy(this.rectColliderMTV);
+            const newPos = this.endCollider.aabb.pos.add(this.rectColliderMTV);
             context.strokeRect(newPos.x, newPos.y, this.endCollider.aabb.dimensions.x, this.endCollider.aabb.dimensions.y);
         }
         context.strokeRect(this.rectCollider1.aabb.pos.x, this.rectCollider1.aabb.pos.y, this.rectCollider1.aabb.dimensions.x, this.rectCollider1.aabb.dimensions.y);
@@ -161,7 +161,7 @@ class TestColliders extends State {
             
             context.beginPath();
             context.moveTo(this.rectColliderResult.contactPoint.x, this.rectColliderResult.contactPoint.y);
-            const normalLine = this.rectColliderResult.contactPoint.addCopy(this.rectColliderResult.contactNormal.mulCopy(new Vector2(30, 30)));
+            const normalLine = this.rectColliderResult.contactPoint.add(this.rectColliderResult.contactNormal.mul(new Vector2(30, 30)));
             context.lineTo(normalLine.x, normalLine.y);
             context.stroke();
         }
@@ -175,12 +175,12 @@ class TestColliders extends State {
 
             context.beginPath();
             context.moveTo(this.circleColliderResult.contactPoint.x, this.circleColliderResult.contactPoint.y);
-            const normalLine = this.circleColliderResult.contactPoint.addCopy(this.circleColliderResult.contactNormal.mulCopy(new Vector2(30, 30)));
+            const normalLine = this.circleColliderResult.contactPoint.add(this.circleColliderResult.contactNormal.mul(new Vector2(30, 30)));
             context.lineTo(normalLine.x, normalLine.y);
             context.stroke();
         }
         context.beginPath();
-        context.arc(this.circleCollider1.centerPos.x, this.circleCollider1.centerPos.y, this.circleCollider1.radius, 0, 2 * Math.PI);
+        context.arc(this.circleCollider1.aabb.centerPos.x, this.circleCollider1.aabb.centerPos.y, this.circleCollider1.radius, 0, 2 * Math.PI);
         context.stroke();
     }
 

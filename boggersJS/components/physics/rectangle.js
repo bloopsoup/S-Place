@@ -19,6 +19,8 @@ class Rectangle {
      *  @param {Vector2} pos - The position of the rectangle.
      *  @param {Vector2} velocity - The initial velocity of the rectangle. */
     constructor(dimensions, pos, velocity = new Vector2(0, 0)) {
+        if (dimensions.isPartNegative() || dimensions.isPartZero()) throw new Error('dimensions should be positive');
+
         this.#dimensions = dimensions;
         this.#halfDimensions = dimensions.copy().mulScalar(0.5);
         this.#prevPos = pos;
@@ -28,20 +30,20 @@ class Rectangle {
 
     /** Get the dimensions.
      *  @return {Vector2} The dimensions. */
-    get dimensions() { return this.#dimensions; }
+    get dimensions() { return this.#dimensions.copy(); }
 
     /** Get the half-dimensions.
      *  @return {Vector2} The half-dimensions. */
-    get halfDimensions() { return this.#halfDimensions; }
+    get halfDimensions() { return this.#halfDimensions.copy(); }
 
     /** Get the previous position. This is solely used for interpolation
      *  in rendering graphics.
      *  @return {Vector2} The previous position. */
-    get prevPos() { return this.#prevPos; }
+    get prevPos() { return this.#prevPos.copy(); }
 
     /** Get the current position.
      *  @return {Vector2} The current position. */
-    get pos() { return this.#pos; }
+    get pos() { return this.#pos.copy(); }
 
     /** Get the center of the rectangle.
      *  @return {Vector2} The center. */
@@ -57,16 +59,23 @@ class Rectangle {
 
     /** Gets the next center position.
      *  @returns {Vector2} The next center position. */
-    get nextCenterPos() { return this.nextPos.add(this.#halfDimensions); }
+    get nextCenterPos() { return this.#pos.addCopy(this.#velocity).add(this.#halfDimensions); }
 
     /** Gets the rectangle's velocity.
-     *  This is the endpoint that the MOVER operates on.
      *  @returns {Vector2} The velocity. */
-    get velocity() { return this.#velocity; }
+    get velocity() { return this.#velocity.copy(); }
 
     /** Sets the position.
      *  @param {Vector2} pos - The new position. */
-    set pos(pos) { pos.copyTo(this.#pos); }
+    set pos(pos) { this.#pos = pos; }
+
+    /** Sets the velocity.
+     *  @param {Vector2} velocity - The new velocity. */
+    set velocity(velocity) { this.#velocity = velocity; }
+
+    /** Checks whether this rectangle is a square.
+     *  @return {boolean} The result. */
+    isSquare() { return this.#dimensions.x === this.#dimensions.y; }
 
     /** Update the previous position and move the current position.
      *  @param {Vector2} pos - The new position. */
