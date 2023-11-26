@@ -51,9 +51,9 @@ class Mover {
      *  @param {Vector2} dir - A Vector2 whose elements are in {-1, 0, 1}. */
     incrementVelocity(dir) { 
         const velocity = this.#target.velocity;
-        const delta = this.#acceleration.copy().mul(dir);
+        const delta = this.#acceleration.mulCopy(dir);
         velocity.add(delta);
-        const clamp = this.#maxSpeed.copy().mul(dir).selectIfZero(velocity);
+        const clamp = this.#maxSpeed.mulCopy(dir).selectIfZero(velocity);
         velocity.select(clamp, dir.x > 0, dir.y > 0);
         this.#target.velocity = velocity;
     }

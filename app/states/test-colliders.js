@@ -12,17 +12,17 @@ class TestColliders extends State {
         this.modes = ['ray', 'rect', 'circle'];
         this.currentMode = 0;
     
-        this.origin = new Vector2(20, 20);
+        this.origin = new Vector2(200, 50);
         this.end = this.origin.copy();
         this.endCollider = new RectangleCollider(new Rectangle(new Vector2(30, 30), this.origin.copy()));
         this.endCircleCollider = new CircleCollider(new Rectangle(new Vector2(30, 30), this.origin.copy()));
 
-        this.aabb1 = new Rectangle(new Vector2(50, 60), new Vector2(200, 200));
+        this.aabb1 = new Rectangle(new Vector2(50, 60), new Vector2(500, 200));
         this.rectCollider1 = new RectangleCollider(this.aabb1);
         this.rectColliderResult = null;
         this.rectColliderMTV = null;
 
-        this.aabb2 = new Rectangle(new Vector2(70, 70), new Vector2(100, 200));
+        this.aabb2 = new Rectangle(new Vector2(270, 270), new Vector2(100, 200));
         this.circleCollider1 = new CircleCollider(this.aabb2);
         this.circleColliderResult = null;
         this.circleColliderMTV = null;
@@ -41,10 +41,10 @@ class TestColliders extends State {
             this.endCircleCollider.aabb.velocity = inputs.get('MouseMove').pos.subCopy(this.endCircleCollider.aabb.pos);
         }
         
-        if (inputs.consumeInput('w')) this.origin.addToY(-10);
-        if (inputs.consumeInput('a')) this.origin.addToX(-10);
-        if (inputs.consumeInput('s')) this.origin.addToY(10);
-        if (inputs.consumeInput('d')) this.origin.addToX(10);
+        if (inputs.has('w')) this.origin.addToY(-2);
+        if (inputs.has('a')) this.origin.addToX(-2);
+        if (inputs.has('s')) this.origin.addToY(2);
+        if (inputs.has('d')) this.origin.addToX(2);
         if (inputs.consumeInput('m')) this.currentMode = (this.currentMode + 1) % this.modes.length;
 
         // Reset results
@@ -62,7 +62,11 @@ class TestColliders extends State {
         } else if (this.modes[this.currentMode] == 'rect') {
             this.rectColliderResult = ColliderResolver.checkSweptRectToRectCollides(this.endCollider, this.rectCollider1);
             this.rectColliderMTV = ColliderResolver.findSweptRectToRectMTV(this.endCollider, this.rectCollider1);
+            this.circleColliderResult = ColliderResolver.checkSweptRectToCircleCollides(this.endCollider, this.circleCollider1);
+            this.circleColliderMTV = ColliderResolver.findSweptRectToCircleMTV(this.endCollider, this.circleCollider1);
         } else if (this.modes[this.currentMode] == 'circle') {
+            this.rectColliderResult = ColliderResolver.checkSweptRectToCircleCollides(this.rectCollider1, this.endCircleCollider, true);
+            this.rectColliderMTV = ColliderResolver.findSweptRectToCircleMTV(this.rectCollider1, this.endCircleCollider, true);
             this.circleColliderResult = ColliderResolver.checkSweptCircleToCircleCollides(this.endCircleCollider, this.circleCollider1);
             this.circleColliderMTV = ColliderResolver.findSweptCircleToCircleMTV(this.endCircleCollider, this.circleCollider1);
         }
@@ -87,6 +91,24 @@ class TestColliders extends State {
     /** Draws the colliders in relation to the testing circle
      *  @param {CanvasRenderingContext2D} context - The context to draw on. */
     drawCollidersToCircle(context) {
+        // Draw the rectangle WITH collision information if available
+        context.strokeStyle = 'Green';
+        if (this.rectColliderResult && this.rectColliderMTV) {
+            context.strokeStyle = 'Red';
+            context.fillRect(this.rectColliderResult.contactPoint.x, this.rectColliderResult.contactPoint.y, 10, 10);
+            
+            context.beginPath();
+            context.moveTo(this.rectColliderResult.contactPoint.x, this.rectColliderResult.contactPoint.y);
+            const normalLine = this.rectColliderResult.contactPoint.add(this.rectColliderResult.contactNormal.mul(new Vector2(30, 30)));
+            context.lineTo(normalLine.x, normalLine.y);
+            context.stroke();
+            const newPos = this.endCollider.aabb.centerPos.add(this.rectColliderMTV);
+            context.beginPath();
+            context.arc(newPos.x, newPos.y, this.endCircleCollider.radius, 0, 2 * Math.PI);
+            context.stroke();
+        }
+        context.strokeRect(this.rectCollider1.aabb.pos.x, this.rectCollider1.aabb.pos.y, this.rectCollider1.aabb.dimensions.x, this.rectCollider1.aabb.dimensions.y);
+
         // Draw the circle WITH collision information if available
         context.strokeStyle = 'Green';
         if (this.circleColliderResult && this.circleColliderMTV) {
@@ -138,6 +160,24 @@ class TestColliders extends State {
             context.strokeRect(newPos.x, newPos.y, this.endCollider.aabb.dimensions.x, this.endCollider.aabb.dimensions.y);
         }
         context.strokeRect(this.rectCollider1.aabb.pos.x, this.rectCollider1.aabb.pos.y, this.rectCollider1.aabb.dimensions.x, this.rectCollider1.aabb.dimensions.y);
+
+        // Draw the circle WITH collision information if available
+        context.strokeStyle = 'Green';
+        if (this.circleColliderResult && this.circleColliderMTV) {
+            context.strokeStyle = 'Red';
+            context.fillRect(this.circleColliderResult.contactPoint.x, this.circleColliderResult.contactPoint.y, 10, 10);
+
+            context.beginPath();
+            context.moveTo(this.circleColliderResult.contactPoint.x, this.circleColliderResult.contactPoint.y);
+            const normalLine = this.circleColliderResult.contactPoint.add(this.circleColliderResult.contactNormal.mul(new Vector2(30, 30)));
+            context.lineTo(normalLine.x, normalLine.y);
+            context.stroke();
+            const newPos = this.endCollider.aabb.pos.add(this.circleColliderMTV);
+            context.strokeRect(newPos.x, newPos.y, this.endCollider.aabb.dimensions.x, this.endCollider.aabb.dimensions.y);
+        }
+        context.beginPath();
+        context.arc(this.circleCollider1.aabb.centerPos.x, this.circleCollider1.aabb.centerPos.y, this.circleCollider1.radius, 0, 2 * Math.PI);
+        context.stroke();
     }
 
     /** Draws the testing ray.
