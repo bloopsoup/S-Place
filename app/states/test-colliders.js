@@ -1,6 +1,6 @@
 import { State, Settings, Loader } from '../../boggersJS/core/index.js';
 import { Vector2, InputTracker } from '../../boggersJS/common/index.js';
-import { RectangleCollider, CircleCollider, Rectangle, ColliderResolver } from '../../boggersJS/components/index.js';
+import { RectangleCollider, CircleCollider, Rectangle, ColliderResolver, Collider } from '../../boggersJS/components/physics/index.js';
 
 /** A state for testing colliders. */
 class TestColliders extends State {
@@ -11,21 +11,103 @@ class TestColliders extends State {
         super(settings, loader);
         this.modes = ['ray', 'rect', 'circle'];
         this.currentMode = 0;
+
+        this.targets = {
+            'rect1': { 'collider': new RectangleCollider(new Rectangle(new Vector2(120, 140), new Vector2(500, 200))), 'result': null, 'mtv': null },
+            'circle1': { 'collider': new CircleCollider(new Rectangle(new Vector2(100, 100), new Vector2(100, 200))), 'result': null, 'mtv': null }
+        };
     
         this.origin = new Vector2(200, 50);
-        this.end = this.origin.copy();
-        this.endCollider = new RectangleCollider(new Rectangle(new Vector2(30, 30), this.origin.copy()));
-        this.endCircleCollider = new CircleCollider(new Rectangle(new Vector2(30, 30), this.origin.copy()));
+        this.inputRay = this.origin.copy();
+        this.inputRect = new RectangleCollider(new Rectangle(new Vector2(40, 30), this.origin.copy()));
+        this.inputCircle = new CircleCollider(new Rectangle(new Vector2(40, 40), this.origin.copy()));
+    }
 
-        this.aabb1 = new Rectangle(new Vector2(50, 60), new Vector2(500, 200));
-        this.rectCollider1 = new RectangleCollider(this.aabb1);
-        this.rectColliderResult = null;
-        this.rectColliderMTV = null;
+    /** Draws a rectangle collider.
+     *  @param {RectangleCollider} collider - The collider to draw.
+     *  @param {Vector2} offset - Position offset.
+     *  @param {CanvasRenderingContext2D} context - The context to draw on. */
+    #drawRectangleCollider(collider, offset, context) {
+        const newPos = collider.aabb.pos.add(offset);
+        const dimensions = collider.aabb.dimensions;
+        context.strokeRect(newPos.x, newPos.y, dimensions.x, dimensions.y);
+    }
 
-        this.aabb2 = new Rectangle(new Vector2(270, 270), new Vector2(100, 200));
-        this.circleCollider1 = new CircleCollider(this.aabb2);
-        this.circleColliderResult = null;
-        this.circleColliderMTV = null;
+    /** Draws a circle collider.
+     *  @param {CircleCollider} collider - The collider to draw.
+     *  @param {Vector2} offset - Position offset.
+     *  @param {CanvasRenderingContext2D} context - The context to draw on. */
+    #drawCircleCollider(collider, offset, context) {
+        const newPos = collider.aabb.centerPos.add(offset);
+        context.beginPath();
+        context.arc(newPos.x, newPos.y, collider.radius, 0, 2 * Math.PI);
+        context.stroke();
+    }
+
+    /** Draws the ray.
+     *  @param {CanvasRenderingContext2D} context - The context to draw on. */
+    #drawInputRay(context) {
+        context.strokeStyle = 'Black';
+        context.beginPath();
+        context.moveTo(this.origin.x, this.origin.y);
+        context.lineTo(this.inputRay.x, this.inputRay.y);
+        context.stroke();
+    }
+
+    /** Draws the input collider including it's NEXT position.
+     *  @param {Collider} inputCollider - The input collider. 
+     *  @param {CanvasRenderingContext2D} context - The context to draw on. */
+    #drawInputCollider(inputCollider, context) {
+        const centerPos = inputCollider.aabb.centerPos;
+        const nextCenterPos = inputCollider.aabb.nextCenterPos;
+
+        // Draw the line segment denoting the velocity
+        context.strokeStyle = 'Black';
+        context.beginPath();
+        context.moveTo(centerPos.x, centerPos.y);
+        context.lineTo(nextCenterPos.x, nextCenterPos.y);
+        context.stroke();
+
+        // Draw the before and after
+        if (RectangleCollider.prototype.isPrototypeOf(inputCollider)) {
+            this.#drawRectangleCollider(inputCollider, new Vector2(0, 0), context);
+            this.#drawRectangleCollider(inputCollider, inputCollider.aabb.velocity, context);
+        } else {
+            this.#drawCircleCollider(inputCollider, new Vector2(0, 0), context);
+            this.#drawCircleCollider(inputCollider, inputCollider.aabb.velocity, context);
+        }
+    }
+
+    /** Draws the target collider with collision information if available.
+     *  @param {string} name - The name of the target collider.
+     *  @param {Collider | null} inputCollider - The input collider. Null if it's a ray.
+     *  @param {CanvasRenderingContext2D} context - The context to draw on. */
+    #drawTargetCollider(name, inputCollider, context) {
+        const { collider, result, mtv } = this.targets[name];
+        context.strokeStyle = !result ? 'Green' : 'Red';
+        
+        // Draw the collider
+        if (RectangleCollider.prototype.isPrototypeOf(collider)) this.#drawRectangleCollider(collider, new Vector2(0, 0), context);
+        if (CircleCollider.prototype.isPrototypeOf(collider)) this.#drawCircleCollider(collider, new Vector2(0, 0), context);
+
+        // Draw the collision
+        if (!result) return;
+        const contactPoint = result.contactPoint;
+        const normalLine = result.contactNormal.mulScalar(50).add(contactPoint);
+
+        // Draw the contact point
+        context.fillRect(contactPoint.x, contactPoint.y, 10, 10);
+
+        // Draw the normal
+        context.beginPath();
+        context.moveTo(contactPoint.x, contactPoint.y);
+        context.lineTo(normalLine.x, normalLine.y);
+        context.stroke();
+
+        // Draw the shifted input collider
+        if (!inputCollider) return;
+        if (RectangleCollider.prototype.isPrototypeOf(inputCollider)) this.#drawRectangleCollider(inputCollider, mtv, context);
+        if (CircleCollider.prototype.isPrototypeOf(inputCollider)) this.#drawCircleCollider(inputCollider, mtv, context);
     }
 
     // IGNORE
@@ -34,194 +116,53 @@ class TestColliders extends State {
 
     /** Processes the inputs given by the InputHandler and updates components. 
      *  @param {InputTracker} inputs - The currently tracked inputs. */
-    update(inputs) {
-        if (inputs.has('MouseMove')) {
-            this.end = inputs.get('MouseMove').pos.copy();
-            this.endCollider.aabb.velocity = inputs.get('MouseMove').pos.subCopy(this.endCollider.aabb.pos);
-            this.endCircleCollider.aabb.velocity = inputs.get('MouseMove').pos.subCopy(this.endCircleCollider.aabb.pos);
-        }
-        
+    update(inputs) {        
+        // Keyboard controls
         if (inputs.has('w')) this.origin.addToY(-2);
         if (inputs.has('a')) this.origin.addToX(-2);
         if (inputs.has('s')) this.origin.addToY(2);
         if (inputs.has('d')) this.origin.addToX(2);
         if (inputs.consumeInput('m')) this.currentMode = (this.currentMode + 1) % this.modes.length;
 
+        // Update input collider positions
+        if (inputs.has('MouseMove')) {
+            this.inputRay = inputs.get('MouseMove').pos.copy();
+            this.inputRect.aabb.velocity = inputs.get('MouseMove').pos.subCopy(this.inputRect.aabb.pos);
+            this.inputCircle.aabb.velocity = inputs.get('MouseMove').pos.subCopy(this.inputCircle.aabb.pos);
+        }
+        this.inputRect.aabb.pos = this.origin.copy();
+        this.inputCircle.aabb.pos = this.origin.copy();
+
         // Reset results
-        this.endCollider.aabb.pos = this.origin.copy();
-        this.endCircleCollider.aabb.pos = this.origin.copy();
-        this.rectColliderResult = null;
-        this.rectColliderMTV = null;
-        this.circleColliderResult = null;
-        this.circleColliderMTV = null;
+        for (const name in this.targets) {
+            this.targets[name].result = null;
+            this.targets[name].mtv = null;
+        }
         
         // Check collisions depending on mode
-        if (this.modes[this.currentMode] == 'ray') {
-            this.rectColliderResult = this.rectCollider1.collidesWithRay(this.origin, this.end.subCopy(this.origin));
-            this.circleColliderResult = this.circleCollider1.collidesWithRay(this.origin, this.end.subCopy(this.origin));
-        } else if (this.modes[this.currentMode] == 'rect') {
-            this.rectColliderResult = ColliderResolver.checkSweptRectToRectCollides(this.endCollider, this.rectCollider1);
-            this.rectColliderMTV = ColliderResolver.findSweptRectToRectMTV(this.endCollider, this.rectCollider1);
-            this.circleColliderResult = ColliderResolver.checkSweptRectToCircleCollides(this.endCollider, this.circleCollider1);
-            this.circleColliderMTV = ColliderResolver.findSweptRectToCircleMTV(this.endCollider, this.circleCollider1);
-        } else if (this.modes[this.currentMode] == 'circle') {
-            this.rectColliderResult = ColliderResolver.checkSweptRectToCircleCollides(this.rectCollider1, this.endCircleCollider, true);
-            this.rectColliderMTV = ColliderResolver.findSweptRectToCircleMTV(this.rectCollider1, this.endCircleCollider, true);
-            this.circleColliderResult = ColliderResolver.checkSweptCircleToCircleCollides(this.endCircleCollider, this.circleCollider1);
-            this.circleColliderMTV = ColliderResolver.findSweptCircleToCircleMTV(this.endCircleCollider, this.circleCollider1);
+        let collider = null;
+        switch (this.modes[this.currentMode]) {
+            case 'ray': 
+                for (const name in this.targets) {
+                    collider = this.targets[name].collider;
+                    this.targets[name].result = collider.collidesWithRay(this.origin, this.inputRay.subCopy(this.origin));
+                }
+                break;
+            case 'rect': 
+                for (const name in this.targets) {
+                    collider = this.targets[name].collider;
+                    this.targets[name].result = ColliderResolver.checkSweptCollides(this.inputRect, collider);
+                    this.targets[name].mtv = ColliderResolver.findMTV(this.inputRect, collider);
+                }
+                break;
+            case 'circle':
+                for (const name in this.targets) {
+                    collider = this.targets[name].collider;
+                    this.targets[name].result = ColliderResolver.checkSweptCollides(this.inputCircle, collider);
+                    this.targets[name].mtv = ColliderResolver.findMTV(this.inputCircle, collider);
+                }
+                break;
         }
-    }
-
-    /** Draws the testing circle.
-     *  @param {CanvasRenderingContext2D} context - The context to draw on. */
-    drawCircle(context) {
-        context.strokeStyle = 'Black';
-        context.beginPath();
-        context.moveTo(this.endCircleCollider.aabb.centerPos.x, this.endCircleCollider.aabb.centerPos.y);
-        context.lineTo(this.endCircleCollider.aabb.nextCenterPos.x, this.endCircleCollider.aabb.nextCenterPos.y);
-        context.stroke();
-        context.beginPath();
-        context.arc(this.endCircleCollider.aabb.centerPos.x, this.endCircleCollider.aabb.centerPos.y, this.endCircleCollider.radius, 0, 2 * Math.PI);
-        context.stroke();
-        context.beginPath();
-        context.arc(this.endCircleCollider.aabb.nextCenterPos.x, this.endCircleCollider.aabb.nextCenterPos.y, this.endCircleCollider.radius, 0, 2 * Math.PI);
-        context.stroke();
-    }
-
-    /** Draws the colliders in relation to the testing circle
-     *  @param {CanvasRenderingContext2D} context - The context to draw on. */
-    drawCollidersToCircle(context) {
-        // Draw the rectangle WITH collision information if available
-        context.strokeStyle = 'Green';
-        if (this.rectColliderResult && this.rectColliderMTV) {
-            context.strokeStyle = 'Red';
-            context.fillRect(this.rectColliderResult.contactPoint.x, this.rectColliderResult.contactPoint.y, 10, 10);
-            
-            context.beginPath();
-            context.moveTo(this.rectColliderResult.contactPoint.x, this.rectColliderResult.contactPoint.y);
-            const normalLine = this.rectColliderResult.contactPoint.add(this.rectColliderResult.contactNormal.mul(new Vector2(30, 30)));
-            context.lineTo(normalLine.x, normalLine.y);
-            context.stroke();
-            const newPos = this.endCollider.aabb.centerPos.add(this.rectColliderMTV);
-            context.beginPath();
-            context.arc(newPos.x, newPos.y, this.endCircleCollider.radius, 0, 2 * Math.PI);
-            context.stroke();
-        }
-        context.strokeRect(this.rectCollider1.aabb.pos.x, this.rectCollider1.aabb.pos.y, this.rectCollider1.aabb.dimensions.x, this.rectCollider1.aabb.dimensions.y);
-
-        // Draw the circle WITH collision information if available
-        context.strokeStyle = 'Green';
-        if (this.circleColliderResult && this.circleColliderMTV) {
-            context.strokeStyle = 'Red';
-            context.fillRect(this.circleColliderResult.contactPoint.x, this.circleColliderResult.contactPoint.y, 10, 10);
-
-            context.beginPath();
-            context.moveTo(this.circleColliderResult.contactPoint.x, this.circleColliderResult.contactPoint.y);
-            const normalLine = this.circleColliderResult.contactPoint.add(this.circleColliderResult.contactNormal.mul(new Vector2(30, 30)));
-            context.lineTo(normalLine.x, normalLine.y);
-            context.stroke();
-            const newPos = this.endCircleCollider.aabb.centerPos.add(this.circleColliderMTV);
-            context.beginPath();
-            context.arc(newPos.x, newPos.y, this.endCircleCollider.radius, 0, 2 * Math.PI);
-            context.stroke();
-        }
-        context.beginPath();
-        context.arc(this.circleCollider1.aabb.centerPos.x, this.circleCollider1.aabb.centerPos.y, this.circleCollider1.radius, 0, 2 * Math.PI);
-        context.stroke();
-    }
-
-    /** Draws the testing rectangle.
-     *  @param {CanvasRenderingContext2D} context - The context to draw on. */
-    drawRectangle(context) {
-        context.strokeStyle = 'Black';
-        context.beginPath();
-        context.moveTo(this.endCollider.aabb.centerPos.x, this.endCollider.aabb.centerPos.y);
-        context.lineTo(this.endCollider.aabb.nextCenterPos.x, this.endCollider.aabb.nextCenterPos.y);
-        context.stroke();
-        context.strokeRect(this.endCollider.aabb.pos.x, this.endCollider.aabb.pos.y, this.endCollider.aabb.dimensions.x, this.endCollider.aabb.dimensions.y);
-        context.strokeRect(this.endCollider.aabb.nextPos.x, this.endCollider.aabb.nextPos.y, this.endCollider.aabb.dimensions.x, this.endCollider.aabb.dimensions.y);
-    }
-
-    /** Draws the colliders in relation to the testing rectangle.
-     *  @param {CanvasRenderingContext2D} context - The context to draw on. */
-    drawCollidersToRectangle(context) {
-        // Draw the rectangle WITH collision information if available
-        context.strokeStyle = 'Green';
-        if (this.rectColliderResult && this.rectColliderMTV) {
-            context.strokeStyle = 'Red';
-            context.fillRect(this.rectColliderResult.contactPoint.x, this.rectColliderResult.contactPoint.y, 10, 10);
-            
-            context.beginPath();
-            context.moveTo(this.rectColliderResult.contactPoint.x, this.rectColliderResult.contactPoint.y);
-            const normalLine = this.rectColliderResult.contactPoint.add(this.rectColliderResult.contactNormal.mul(new Vector2(30, 30)));
-            context.lineTo(normalLine.x, normalLine.y);
-            context.stroke();
-            const newPos = this.endCollider.aabb.pos.add(this.rectColliderMTV);
-            context.strokeRect(newPos.x, newPos.y, this.endCollider.aabb.dimensions.x, this.endCollider.aabb.dimensions.y);
-        }
-        context.strokeRect(this.rectCollider1.aabb.pos.x, this.rectCollider1.aabb.pos.y, this.rectCollider1.aabb.dimensions.x, this.rectCollider1.aabb.dimensions.y);
-
-        // Draw the circle WITH collision information if available
-        context.strokeStyle = 'Green';
-        if (this.circleColliderResult && this.circleColliderMTV) {
-            context.strokeStyle = 'Red';
-            context.fillRect(this.circleColliderResult.contactPoint.x, this.circleColliderResult.contactPoint.y, 10, 10);
-
-            context.beginPath();
-            context.moveTo(this.circleColliderResult.contactPoint.x, this.circleColliderResult.contactPoint.y);
-            const normalLine = this.circleColliderResult.contactPoint.add(this.circleColliderResult.contactNormal.mul(new Vector2(30, 30)));
-            context.lineTo(normalLine.x, normalLine.y);
-            context.stroke();
-            const newPos = this.endCollider.aabb.pos.add(this.circleColliderMTV);
-            context.strokeRect(newPos.x, newPos.y, this.endCollider.aabb.dimensions.x, this.endCollider.aabb.dimensions.y);
-        }
-        context.beginPath();
-        context.arc(this.circleCollider1.aabb.centerPos.x, this.circleCollider1.aabb.centerPos.y, this.circleCollider1.radius, 0, 2 * Math.PI);
-        context.stroke();
-    }
-
-    /** Draws the testing ray.
-     *  @param {CanvasRenderingContext2D} context - The context to draw on. */
-    drawRay(context) {
-        context.strokeStyle = 'Black';
-        context.beginPath();
-        context.moveTo(this.origin.x, this.origin.y);
-        context.lineTo(this.end.x, this.end.y);
-        context.stroke();
-    }
-
-    /** Draws the colliders in relation to the testing ray.
-     *  @param {CanvasRenderingContext2D} context - The context to draw on. */
-    drawCollidersToRay(context) {
-        // Draw the rectangle WITH collision information if available
-        context.strokeStyle = 'Green';
-        if (this.rectColliderResult) {
-            context.strokeStyle = 'Red';
-            context.fillRect(this.rectColliderResult.contactPoint.x, this.rectColliderResult.contactPoint.y, 10, 10);
-            
-            context.beginPath();
-            context.moveTo(this.rectColliderResult.contactPoint.x, this.rectColliderResult.contactPoint.y);
-            const normalLine = this.rectColliderResult.contactPoint.add(this.rectColliderResult.contactNormal.mul(new Vector2(30, 30)));
-            context.lineTo(normalLine.x, normalLine.y);
-            context.stroke();
-        }
-        context.strokeRect(this.rectCollider1.aabb.pos.x, this.rectCollider1.aabb.pos.y, this.rectCollider1.aabb.dimensions.x, this.rectCollider1.aabb.dimensions.y);
-
-        // Draw the circle WITH collision information if available
-        context.strokeStyle = 'Green';
-        if (this.circleColliderResult) {
-            context.strokeStyle = 'Red';
-            context.fillRect(this.circleColliderResult.contactPoint.x, this.circleColliderResult.contactPoint.y, 10, 10);
-
-            context.beginPath();
-            context.moveTo(this.circleColliderResult.contactPoint.x, this.circleColliderResult.contactPoint.y);
-            const normalLine = this.circleColliderResult.contactPoint.add(this.circleColliderResult.contactNormal.mul(new Vector2(30, 30)));
-            context.lineTo(normalLine.x, normalLine.y);
-            context.stroke();
-        }
-        context.beginPath();
-        context.arc(this.circleCollider1.aabb.centerPos.x, this.circleCollider1.aabb.centerPos.y, this.circleCollider1.radius, 0, 2 * Math.PI);
-        context.stroke();
     }
 
     /** Draws state elements and game objects onto the canvas.
@@ -230,17 +171,25 @@ class TestColliders extends State {
     draw(context, alpha) {
         context.save();
         context.lineWidth = 3;
-        
-        if (this.modes[this.currentMode] == 'ray') {
-            this.drawRay(context);
-            this.drawCollidersToRay(context);
-        } else if (this.modes[this.currentMode] == 'rect') {
-            this.drawRectangle(context);
-            this.drawCollidersToRectangle(context);
-        } else if (this.modes[this.currentMode] == 'circle') {
-            this.drawCircle(context);
-            this.drawCollidersToCircle(context);
+
+        // Pick the current input collider
+        let currentInputCollider = null;
+        switch (this.modes[this.currentMode]) {
+            case 'ray': 
+                this.#drawInputRay(context); 
+                break;
+            case 'rect': 
+                this.#drawInputCollider(this.inputRect, context);
+                currentInputCollider = this.inputRect;
+                break;
+            case 'circle': 
+                this.#drawInputCollider(this.inputCircle, context); 
+                currentInputCollider = this.inputCircle;
+                break;
         }
+
+        // Draw the input collider interacting with the targets
+        for (const name in this.targets) this.#drawTargetCollider(name, currentInputCollider, context);
 
         context.restore();
     }

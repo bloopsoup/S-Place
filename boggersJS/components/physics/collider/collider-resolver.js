@@ -31,20 +31,42 @@ class ColliderResolver {
         return expandedRectangle.collidesWithRay(a.aabb.centerPos, relativeVelocity);
     }
 
+    /** Finds an MTV to resolve collision between two COMPLETELY OVERLAPPING rectangle colliders.
+     *  This serves to fallback from a pathological case, so it's not precise.
+     *  @param {RectangleCollider} a - The first.
+     *  @param {RectangleCollider} b - The second.
+     *  @returns {Vector2} The minimum translation vector to apply to A. */
+    static #findCompletelyOverlappingRectToRectMTV(a, b) {
+        const aDimensions = a.aabb.dimensions;
+        const topLeftDiff = a.aabb.pos.sub(b.aabb.pos);
+        const bottomRightDiff = b.aabb.maxPos.sub(a.aabb.maxPos);
+        const topLeftMTV = topLeftDiff.x < topLeftDiff.y ? new Vector2(-topLeftDiff.x - aDimensions.x, 0) : new Vector2(0, -topLeftDiff.y - aDimensions.y);
+        const bottomRightMTV = bottomRightDiff.x < bottomRightDiff.y ? new Vector2(bottomRightDiff.x + aDimensions.x, 0) : new Vector2(0, bottomRightDiff.y + aDimensions.y);
+        return topLeftMTV.magnitude() < bottomRightMTV.magnitude() ? topLeftMTV : bottomRightMTV;
+    }
+
     /** Finds an MTV to resolve collision between two rectangle colliders.
      *  @param {RectangleCollider} a - The first.
      *  @param {RectangleCollider} b - The second.
      *  @returns {Vector2} The minimum translation vector to apply to A. */
     static findRectToRectMTV(a, b) {
+        if (!this.checkRectToRectCollides(a, b)) return new Vector2(0, 0);
+        
+        // Caching position data
         const aPos = a.aabb.pos;
         const bPos = b.aabb.pos;
+        const aMaxPos = a.aabb.maxPos;
         const bMaxPos = b.aabb.maxPos;
 
-        if (!this.checkRectToRectCollides(a, b)) return new Vector2(0, 0);
+        // Handle cases of complete overlap
+        if (aPos.greaterThan(bPos) && bMaxPos.greaterThan(aMaxPos)) return this.#findCompletelyOverlappingRectToRectMTV(a, b);
+        if (aPos.lessThan(bPos) && bMaxPos.lessThan(aMaxPos)) return this.#findCompletelyOverlappingRectToRectMTV(b, a).mulScalar(-1);
+        
+        // Calculate the overlap
         const overlap = a.aabb.maxPos
             .select(bMaxPos, true, true)
             .sub(a.aabb.pos.select(bPos, false, false));
-
+        
         if (overlap.x < overlap.y) return aPos.x < bPos.x ? new Vector2(-overlap.x, 0) : new Vector2(overlap.x, 0);
         else return aPos.y < bPos.y ? new Vector2(0, -overlap.y) : new Vector2(0, overlap.y);
     }
@@ -164,6 +186,23 @@ class ColliderResolver {
         return result;
     }
 
+    /** Finds an MTV to resolve collision between a COMPLETELY OVERLAPPING rectangle and 
+     *  circle collider. This occurs when the center of the circle is INSIDE the AABB.
+     *  This serves to fallback from a pathological case, so it's not precise.
+     *  @param {RectangleCollider} a - The first.
+     *  @param {CircleCollider} b - The second.
+     *  @param {boolean} flipped - Whether to treat A as the circle instead.
+     *  @returns {Vector2} The minimum translation vector to apply to A. */
+    static #findCompletelyOverlappingRectToCircleMTV(a, b, flipped = false) {
+        const bCenterPos = b.aabb.centerPos;
+        const modifier = !flipped ? -1 : 1;
+        const topLeftDiff = bCenterPos.subCopy(a.aabb.pos);
+        const bottomRightDiff = a.aabb.maxPos.sub(bCenterPos);
+        const topLeftMTV = topLeftDiff.x < topLeftDiff.y ? new Vector2(-topLeftDiff.x - b.radius, 0) : new Vector2(0, -topLeftDiff.y - b.radius);
+        const bottomRightMTV = bottomRightDiff.x < bottomRightDiff.y ? new Vector2(bottomRightDiff.x + b.radius, 0) : new Vector2(0, bottomRightDiff.y + b.radius);
+        return topLeftMTV.magnitude() < bottomRightMTV.magnitude() ? topLeftMTV.mulScalar(modifier) : bottomRightMTV.mulScalar(modifier);
+    }
+
     /** Finds an MTV to resolve collision between a rectangle and circle collider.
      *  @param {RectangleCollider} a - The first.
      *  @param {CircleCollider} b - The second.
@@ -180,22 +219,12 @@ class ColliderResolver {
             .sub(bCenterPos);
         const distance = mtv.magnitude();
 
-        // If the center of the circle is inside the AABB
-        // Serves to fallback from a pathological case, so it's not precise
-        if (distance === 0) {
-            const modifier = !flipped ? -1 : 1;
-            const topLeftDiff = bCenterPos.subCopy(a.aabb.pos);
-            const bottomRightDiff = a.aabb.maxPos.sub(bCenterPos);
-            const topLeftMTV = topLeftDiff.x < topLeftDiff.y ? new Vector2(-topLeftDiff.x - b.radius, 0) : new Vector2(0, -topLeftDiff.y - b.radius);
-            const bottomRightMTV = bottomRightDiff.x < bottomRightDiff.y ? new Vector2(bottomRightDiff.x + b.radius, 0) : new Vector2(0, bottomRightDiff.y + b.radius);
-            return topLeftMTV.magnitude() < bottomRightMTV.magnitude() ? topLeftMTV.mulScalar(modifier) : bottomRightMTV.mulScalar(modifier);
-        }
-
+        if (distance === 0) return this.#findCompletelyOverlappingRectToCircleMTV(a, b, flipped);
         const scalar = !flipped ? -distance + b.radius : distance - b.radius
         return mtv.normalize().mulScalar(scalar);
     }
 
-    /** Finds an MTV to resolve collision between moving rectangle and circle collidera.
+    /** Finds an MTV to resolve collision between moving rectangle and circle colliders.
      *  @param {RectangleCollider} a - The first (treated as moving).
      *  @param {CircleCollider} b - The second.
      *  @param {boolean} flipped - Whether to treat A as the circle instead.
@@ -207,6 +236,40 @@ class ColliderResolver {
         const result = this.checkSweptRectToCircleCollides(a, b, flipped);
         if (result === null) return new Vector2(0, 0);
         return !flipped ? result.contactPoint.sub(a.aabb.centerPos) : result.contactPoint.sub(b.aabb.centerPos);
+    }
+
+    /** Checks for a collision between two colliders.
+     *  @param {Collider} a - The first.
+     *  @param {Collider} b - The second.
+     *  @returns {ColliderResult | null} The result. */
+    static checkSweptCollides(a, b) {
+        const aIsRect = RectangleCollider.prototype.isPrototypeOf(a);
+        const bIsRect = RectangleCollider.prototype.isPrototypeOf(b);
+        const aIsCircle = CircleCollider.prototype.isPrototypeOf(a);
+        const bIsCircle = CircleCollider.prototype.isPrototypeOf(b);
+
+        if (aIsRect && bIsRect) return this.checkSweptRectToRectCollides(a, b);
+        if (aIsRect && bIsCircle) return this.checkSweptRectToCircleCollides(a, b);
+        if (aIsCircle && bIsRect) return this.checkSweptRectToCircleCollides(b, a, true);
+        if (aIsCircle && bIsCircle) return this.checkSweptCircleToCircleCollides(a, b);
+        return null;
+    }
+
+    /** Finds an MTV to resolve collision between two colliders.
+     *  @param {Collider} a - The first. 
+     *  @param {Collider} b - The second.
+     *  @returns {Vector2} The minimum translation vector to apply to A. */
+    static findMTV(a, b) {
+        const aIsRect = RectangleCollider.prototype.isPrototypeOf(a);
+        const bIsRect = RectangleCollider.prototype.isPrototypeOf(b);
+        const aIsCircle = CircleCollider.prototype.isPrototypeOf(a);
+        const bIsCircle = CircleCollider.prototype.isPrototypeOf(b);
+
+        if (aIsRect && bIsRect) return this.findSweptRectToRectMTV(a, b);
+        if (aIsRect && bIsCircle) return this.findSweptRectToCircleMTV(a, b);
+        if (aIsCircle && bIsRect) return this.findSweptRectToCircleMTV(b, a, true);
+        if (aIsCircle && bIsCircle) return this.findSweptCircleToCircleMTV(a, b);
+        return new Vector2(0, 0);
     }
 }
 
