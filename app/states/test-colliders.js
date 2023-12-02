@@ -23,6 +23,18 @@ class TestColliders extends State {
         this.inputCircle = new CircleCollider(new Rectangle(new Vector2(40, 40), this.origin.copy()));
     }
 
+    /** Draws the background.
+     *  @param {CanvasRenderingContext2D} context - The context to draw on. */
+    #drawBackground(context) {
+        const grd = context.createLinearGradient(0, 0, this.settings.canvasDimensions.x, 0);
+        grd.addColorStop(0,   '#ff5252');
+        grd.addColorStop(0.5, '#ffad78')
+        grd.addColorStop(1,   '#ffaf30');
+        context.fillStyle = grd;
+        context.fillRect(0, 0, this.settings.canvasDimensions.x, this.settings.canvasDimensions.y);
+        context.fillStyle = 'Black';
+    }
+
     /** Draws a rectangle collider.
      *  @param {RectangleCollider} collider - The collider to draw.
      *  @param {Vector2} offset - Position offset.
@@ -30,6 +42,15 @@ class TestColliders extends State {
     #drawRectangleCollider(collider, offset, context) {
         const newPos = collider.aabb.pos.add(offset);
         const dimensions = collider.aabb.dimensions;
+
+        context.shadowOffsetX = 10;
+        context.shadowOffsetY = 10;
+        context.shadowBlur = 15;
+        context.shadowColor = '#dc5858';
+        context.fillStyle = '#ff7171';
+        context.strokeStyle = '#ffe9e9';
+
+        context.fillRect(newPos.x, newPos.y, dimensions.x, dimensions.y);
         context.strokeRect(newPos.x, newPos.y, dimensions.x, dimensions.y);
     }
 
@@ -39,6 +60,17 @@ class TestColliders extends State {
      *  @param {CanvasRenderingContext2D} context - The context to draw on. */
     #drawCircleCollider(collider, offset, context) {
         const newPos = collider.aabb.centerPos.add(offset);
+
+        context.shadowOffsetX = 10;
+        context.shadowOffsetY = 10;
+        context.shadowBlur = 15;
+        context.shadowColor = '#dc5858';
+        context.fillStyle = '#ff7171';
+        context.strokeStyle = '#ffe9e9';
+
+        context.beginPath();
+        context.arc(newPos.x, newPos.y, collider.radius, 0, 2 * Math.PI);
+        context.fill();
         context.beginPath();
         context.arc(newPos.x, newPos.y, collider.radius, 0, 2 * Math.PI);
         context.stroke();
@@ -99,6 +131,7 @@ class TestColliders extends State {
         context.fillRect(contactPoint.x, contactPoint.y, 10, 10);
 
         // Draw the normal
+        context.strokeStyle = '#ffe9e9';
         context.beginPath();
         context.moveTo(contactPoint.x, contactPoint.y);
         context.lineTo(normalLine.x, normalLine.y);
@@ -171,6 +204,8 @@ class TestColliders extends State {
     draw(context, alpha) {
         context.save();
         context.lineWidth = 3;
+
+        this.#drawBackground(context);
 
         // Pick the current input collider
         let currentInputCollider = null;
