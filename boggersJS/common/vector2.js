@@ -307,6 +307,11 @@ class Vector2 {
      *  @returns {number} The dot product. */
     dotProduct(other) { return (this.#x * other.#x) + (this.#y * other.#y); }
 
+    /** Calculate the cross product between this and the other vector.
+     *  @param {Vector2} other - The other vector.
+     *  @returns {number} The cross product. */
+    crossProduct(other) { return (this.#x * other.#y) - (this.#y * other.#x); }
+
     /** Blend this vector with another. A convenience function used for interpolation.
      *  @param {Vector2} other - The other vector.
      *  @param {number} alpha - The blending factor which is in [0, 1].

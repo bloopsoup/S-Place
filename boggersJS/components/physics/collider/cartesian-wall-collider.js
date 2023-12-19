@@ -4,10 +4,10 @@ import RectangleCollider from './rectangle-collider.js';
 import ColliderResult from './collider-result.js';
 import Rectangle from '../rectangle.js';
 
-/** A wall collider.
+/** A wall collider along the cartesian directions.
  *  @augments Collider
  *  @memberof Components.Physics.Collider */
-class WallCollider extends Collider {
+class CartesianWallCollider extends Collider {
     /** @type {Array<Vector2>} */
     #sides = [new Vector2(0, -1), new Vector2(1, 0), new Vector2(0, 1), new Vector2(-1, 0)]
     /** @type {RectangleCollider} */
@@ -32,7 +32,7 @@ class WallCollider extends Collider {
         const normalized = direction.copy().normalize();
         for (let i = 0; i < this.#toggledSides.length; i++) {
             if (!this.#toggledSides[i]) continue;
-            if (Math.acos(normalized.dotProduct(this.#sides[i])) <= Math.PI) return true;
+            if (normalized.dotProduct(this.#sides[i]) < 0) return true;
         }
         return false;
     }
@@ -52,4 +52,4 @@ class WallCollider extends Collider {
     }    
 }
 
-export default WallCollider;
+export default CartesianWallCollider;
