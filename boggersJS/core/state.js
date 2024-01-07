@@ -38,19 +38,19 @@ class State {
     get loader() { return this.#loader; }
 
     /** Check if the state is done running.
-     *  @return {boolean} The result. */
+     *  @returns {boolean} The result. */
     get isDone() { return this.#isDone; }
 
     /** Check if the state wants the application to quit.
-     *  @return {boolean} The result. */
+     *  @returns {boolean} The result. */
     get isQuitting() { return this.#isQuitting; }
 
     /** Get the name of the state that the manager will transition to. 
-     *  @return {string} The name of the next state. */
+     *  @returns {string} The name of the next state. */
     get next() { return this.#next; }
 
     /** Get the name of the state that the manager transitioned from.
-     *  @return {string} The name of the previous state. */
+     *  @returns {string} The name of the previous state. */
     get previous() { return this.#previous; }
 
     /** Sets the name of the previous state.

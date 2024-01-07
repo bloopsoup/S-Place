@@ -28,7 +28,7 @@ class InputTracker {
     add(name, pos) {
         if (name in this.#inputs) this.#inputs[name].basePos = pos.copy();
         else this.#inputs[name] = new Input(name, pos);
-        if (name === 'MouseMove' && 'MouseHold' in this.#inputs)
+        if (name === 'MouseMove' && 'MouseHold' in this.#inputs) 
             this.#inputs['MouseHold'] = new Input('MouseHold', pos);
     }
 
@@ -38,6 +38,7 @@ class InputTracker {
 
     /** Removes the specified input and returns a boolean indicating
      *  if the input was originally being tracked. 
+     *  @param {string} name - The name of the input to consume.
      *  @returns {boolean} The result. */
     consumeInput(name) {
         if (!(name in this.#inputs)) return false;

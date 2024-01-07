@@ -34,11 +34,11 @@ class Label {
     }
 
     /** Get the label's dimensions.
-     *  @return {Vector2} The label's dimensions. */
+     *  @returns {Vector2} The label's dimensions. */
     get dimensions() { return new Vector2(this.#textCanvas.width, this.#textCanvas.height); }
 
     /** Gets the label's text as one string.
-     *  @return {string} The text. */
+     *  @returns {string} The text. */
     get text() { return this.#lines.map(line => line.join('')).join(''); }
 
     /** Sets the label's text. This also formats the text being displayed.
@@ -52,7 +52,7 @@ class Label {
     }
 
     /** Gets the height of a label's line of text. M is typically a good approximation.
-     *  @return {number} The height. */
+     *  @returns {number} The height. */
     get #lineHeight() {
         const metric = this.#textContext.measureText('M');
         return metric.actualBoundingBoxAscent + metric.actualBoundingBoxDescent;
@@ -60,7 +60,7 @@ class Label {
 
     /** Gets the label's ith line of text as a complete string.
      *  @param {number} i - The ith line of text to get.
-     *  @return {string} The string. */
+     *  @returns {string} The string. */
     #getLineText(i) { return this.#lines[i].join(''); }
 
     /** Determines whether the label is empty.

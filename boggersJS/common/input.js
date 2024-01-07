@@ -20,15 +20,15 @@ class Input {
     }
 
     /** Get the input name.
-     *  @return {string} The input name. */
+     *  @returns {string} The input name. */
     get name() { return this.#name; }
 
     /** Get the input mouse's base position.
-     *  @return {Vector2} The input's base position. */
-    get basePos() { return this.#basePos; }
+     *  @returns {Vector2} The input's base position. */
+    get basePos() { return this.#basePos.copy(); }
 
     /** Get the input's mouse position with offsets applied.
-     *  @return {Vector2} The input's mouse position. */
+     *  @returns {Vector2} The input's mouse position. */
     get pos() { return this.#basePos.subCopy(this.#offset); }
 
     /** Sets the base position. This overwrites any offset

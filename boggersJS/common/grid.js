@@ -50,20 +50,22 @@ class Grid {
     }
 
     /** Get the unit dimensions of the grid.
-     *  @return {Vector2} The unit dimensions of the grid. */
-    get unitDimensions() { return this.#unitDimensions; }
+     *  @returns {Vector2} The unit dimensions of the grid. */
+    get unitDimensions() { return this.#unitDimensions.copy(); }
 
     /** Get the total dimensions of the grid.
-      * @return {Vector2} The dimensions of the grid. */
-    get dimensions() { return this.#dimensions; }
+      * @returns {Vector2} The dimensions of the grid. */
+    get dimensions() { return this.#dimensions.copy(); }
 
     /** Convert a real position to the grid position.
-     *  @param {Vector2} realPos - The real position. */
-    toGridPos(realPos) { realPos.floorDiv(this.#unitDimensions); }
+     *  @param {Vector2} realPos - The real position.
+     *  @returns {Vector2} The grid position. */
+    toGridPos(realPos) { return realPos.floorDivCopy(this.#unitDimensions); }
 
     /** Convert a grid position to the real position.
-     *  @param {Vector2} gridPos - The grid position. */
-    toRealPos(gridPos) { gridPos.mul(this.#unitDimensions); }
+     *  @param {Vector2} gridPos - The grid position.
+     *  @returns {Vector2} The real position. */
+    toRealPos(gridPos) { return gridPos.mulCopy(this.#unitDimensions); }
 }
 
 export default Grid;

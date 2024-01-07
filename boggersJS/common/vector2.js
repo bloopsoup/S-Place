@@ -19,11 +19,11 @@ class Vector2 {
     }
 
     /** Get the x value.
-     *  @return {number} The x value. */
+     *  @returns {number} The x value. */
     get x() { return this.#x; }
 
     /** Get the y value.
-     *  @return {number} The y value. */
+     *  @returns {number} The y value. */
     get y() { return this.#y; }
 
     /** Sets the x value.
@@ -67,7 +67,7 @@ class Vector2 {
 
     /** Make a copy and add to the x value.
      *  @param {number} x - The x value to add.
-     *  @return {Vector2} The result. */
+     *  @returns {Vector2} The result. */
     addToXCopy(x) { return new Vector2(this.#x + x, this.#y); }
 
     /** Add to the y value.
@@ -80,7 +80,7 @@ class Vector2 {
 
     /** Make a copy and add to the y value.
      *  @param {number} y - The y value to add.
-     *  @return {Vector2} The result. */
+     *  @returns {Vector2} The result. */
     addToYCopy(y) { return new Vector2(this.#x, this.#y + y); }
 
     /** Add to both the x and y values.
@@ -315,7 +315,7 @@ class Vector2 {
     /** Blend this vector with another. A convenience function used for interpolation.
      *  @param {Vector2} other - The other vector.
      *  @param {number} alpha - The blending factor which is in [0, 1].
-     *  @return {Vector2} The result. */
+     *  @returns {Vector2} The result. */
     blend(other, alpha) {
         const aX = this.#x * (1 - alpha), aY = this.#y * (1 - alpha);
         const bX = other.#x * alpha, bY = other.#y * alpha;

@@ -36,12 +36,12 @@ class Sprite {
     }
 
     /** Get a copy of the sprite's dimensions.
-     *  @return {Vector2} The sprite's dimensions. */
-    get dimensions() { return this.#dimensions; }
+     *  @returns {Vector2} The sprite's dimensions. */
+    get dimensions() { return this.#dimensions.copy(); }
 
     /** Get a copy of the current frame.
-     *  @return {Vector2} The current frame. */
-    get frame() { return this.#frame; }
+     *  @returns {Vector2} The current frame. */
+    get frame() { return this.#frame.copy(); }
 
     /** Sets the current frame.
      *  @param {Vector2} frame - The new frame. */

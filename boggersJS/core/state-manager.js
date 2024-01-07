@@ -31,7 +31,7 @@ class StateManager {
     }
 
     /** Check if the StateManager is quitting.
-     *  @return {boolean} The result. */
+     *  @returns {boolean} The result. */
     get isQuitting() { return this.#isQuitting; }
 
     /** Transitions from one state to another. */

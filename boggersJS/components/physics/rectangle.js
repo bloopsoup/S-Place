@@ -29,28 +29,28 @@ class Rectangle {
     }
 
     /** Get the dimensions.
-     *  @return {Vector2} The dimensions. */
+     *  @returns {Vector2} The dimensions. */
     get dimensions() { return this.#dimensions.copy(); }
 
     /** Get the half-dimensions.
-     *  @return {Vector2} The half-dimensions. */
+     *  @returns {Vector2} The half-dimensions. */
     get halfDimensions() { return this.#halfDimensions.copy(); }
 
     /** Get the previous position. This is solely used for interpolation
      *  in rendering graphics.
-     *  @return {Vector2} The previous position. */
+     *  @returns {Vector2} The previous position. */
     get prevPos() { return this.#prevPos.copy(); }
 
     /** Get the current position.
-     *  @return {Vector2} The current position. */
+     *  @returns {Vector2} The current position. */
     get pos() { return this.#pos.copy(); }
 
     /** Get the center of the rectangle.
-     *  @return {Vector2} The center. */
+     *  @returns {Vector2} The center. */
     get centerPos() { return this.#pos.addCopy(this.#halfDimensions); }
 
     /** Get the position of the rectangle's bottom right corner.
-     *  @return {Vector2} The position of the bottom right corner. */
+     *  @returns {Vector2} The position of the bottom right corner. */
     get maxPos() { return this.#pos.addCopy(this.#dimensions); }
 
     /** Gets the next position.
@@ -74,7 +74,7 @@ class Rectangle {
     set velocity(velocity) { this.#velocity = velocity; }
 
     /** Checks whether this rectangle is a square.
-     *  @return {boolean} The result. */
+     *  @returns {boolean} The result. */
     isSquare() { return this.#dimensions.x === this.#dimensions.y; }
 
     /** Update the previous position and move the current position.

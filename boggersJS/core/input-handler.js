@@ -23,7 +23,7 @@ class InputHandler {
     }
 
     /** Get the InputHandler's currently tracked inputs.
-     *  @return {InputTracker} A copy of the InputHandler's currently tracked inputs. */
+     *  @returns {InputTracker} A copy of the InputHandler's currently tracked inputs. */
     get inputs() { return this.#inputs; }
 
     /** Converts a client position into a real position (which uses the coordinate system
@@ -38,10 +38,11 @@ class InputHandler {
      *  system resizes along with it but uses the same numbers. A 1 unit distance in the
      *  real coordinate system may have a different size than a 1 unit distance in the client
      *  coordinate system, which means you also have to scale the canvas-relative position.
-     *  @param {Vector2} clientPos - The client position. */
-    #toRealPos(clientPos) {
+     *  @param {Vector2} pos - The client position.
+     *  @returns {Vector2} The real position. */
+    #toRealPos(pos) {
         const rect = this.#canvas.getBoundingClientRect();
-        clientPos.sub(new Vector2(rect.left, rect.top)).mul(new Vector2(this.#canvas.width / rect.width,  this.#canvas.height / rect.height));
+        return pos.subCopy(new Vector2(rect.left, rect.top)).mul(new Vector2(this.#canvas.width / rect.width,  this.#canvas.height / rect.height));
     }
 
     /** Add an input to the handler's currently tracked inputs. This function is used
@@ -52,9 +53,7 @@ class InputHandler {
      *  @param {Vector2} pos - The mouse position of the input. */
     addInput(name, pos = new Vector2(0, 0)) {
         switch (name) {
-            default:
-                this.#toRealPos(pos);
-                this.#inputs.add(name, pos);
+            default: this.#inputs.add(name, this.#toRealPos(pos));
         }
     }
 }
