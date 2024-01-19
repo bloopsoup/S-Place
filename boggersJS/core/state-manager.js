@@ -3,7 +3,10 @@ import Settings from './settings.js';
 import Loader from './loader.js';
 import { InputTracker } from '../common/index.js';
 
-/** Runs one state at a time, switching out states when prompted. 
+/** Runs one state at a time, switching out states when prompted.
+ *  
+ *  The state machine architecture seen here is based on this tutorial
+ *  {@link https://python-forum.io/thread-336.html Creating a state machine}
  *  @memberof Core */
 class StateManager {
     /** @type {boolean} */

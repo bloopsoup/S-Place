@@ -3,8 +3,11 @@ import Loader from './loader.js';
 import { InputTracker } from '../common/index.js';
 
 /** A state abstract class that is managed by a StateManager. Actual game states 
- *  should be implemented outside of the engine. 
- *  @memberof Common */
+ *  should be implemented outside of the engine.
+ *  
+ *  The state machine architecture seen here is based on this tutorial
+ *  {@link https://python-forum.io/thread-336.html Creating a state machine}
+ *  @memberof Core */
 class State {
     /** @type {Settings} */
     #settings
